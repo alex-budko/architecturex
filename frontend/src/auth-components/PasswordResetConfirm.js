@@ -6,29 +6,20 @@ import {
 import axios from "axios";
 import { useParams } from "react-router";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import FormCreator from "../utils/FormCreator";
 
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 function PasswordResetConfirm() {
   const dispatch = useDispatch();
 
-  const [passwordUpdated, setPasswordUpdated] = useState(false);
+
+  const [invalid, setValidPassword] = useState(false);
 
   const { uid, token } = useParams();
 
   const [formData, setFormData] = useState({ password: "", re_password: "" });
 
   const { password, re_password } = formData;
-
-  if (passwordUpdated) {
-    <Navigate to="/" />;
-  }
 
   const changeInfo = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,11 +29,9 @@ function PasswordResetConfirm() {
     e.preventDefault();
     if (password === re_password) {
       reset_password_confirm(uid, token, password, re_password);
-      console.log("Confirm");
-      setPasswordUpdated(true);
     } else {
       setFormData({ password: "", re_password: "" });
-      console.log("Passwords did not match");
+      setValidPassword(true)
     }
   };
 
@@ -72,50 +61,35 @@ function PasswordResetConfirm() {
     }
   }
 
+  const groups = {
+    password: {
+      name: 'password',
+      controlId: 'Password',
+      label: 'Password',
+      isInvalid: invalid,
+      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      value: password,
+      muted: true,
+      mutedText: 'Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.'
+    },
+    re_password: {
+      name: 're_password',
+      controlId: 'Re_Password',
+      label: 'Repeat Password',
+      isInvalid: invalid,
+      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      value: re_password,
+      muted: false,
+    },
+  }
+  
   return (
-    <Container className="mt-5">
-    <Row>
-      <Col />
-      <Col xs={6}>
-        <Form onSubmit={onSubmit}>
-          <Form.Group className="mb-4" controlId="formBasicPassword">
-            <FloatingLabel controlId="floatingInput" label="Password">
-              <Form.Control
-                required
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                value={password}
-                onChange={(e) => changeInfo(e)}
-                name="password"
-                type="password"
-                placeholder="Enter Password"
-              />
-            </FloatingLabel>
-          </Form.Group>
-
-          <Form.Group className="mb-4" controlId="formBasicPassword">
-            <FloatingLabel controlId="floatingInput" label="Repeat Password">
-              <Form.Control
-                required
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                value={re_password}
-                onChange={(e) => changeInfo(e)}
-                name="re_password"
-                type="password"
-                placeholder="Repeat Password"
-              />
-            </FloatingLabel>
-          </Form.Group>
-
-          <div className="d-grid gap-2">
-            <Button variant="primary" size="md" type="submit">
-              Confirm Reset Password
-            </Button>
-          </div>
-        </Form>
-      </Col>
-      <Col />
-    </Row>
-  </Container>
+    <FormCreator
+      groups={groups}
+      onSubmit={onSubmit}
+      submit={'Confirm Reset Password'}
+      changeInfo={changeInfo}
+    />
   );
 }
 

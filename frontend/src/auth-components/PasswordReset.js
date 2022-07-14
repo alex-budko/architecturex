@@ -3,19 +3,11 @@ import { useState } from "react";
 import { password_reset_fail, password_reset_success } from "../features/user";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-
-
+import FormCreator from "../utils/FormCreator";
 
 function PasswordReset() {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({ email: "" });
+  const [ formData, setFormData ] = useState({ email: "" });
   const [requestSent, setRequestSent] = useState(false);
   const { email } = formData;
   
@@ -54,40 +46,25 @@ function PasswordReset() {
       dispatch(password_reset_fail());
     }
   }
-
+  const groups = {
+    email: {
+      name: 'email',
+      controlId: 'Email',
+      label: 'Email',
+      isInvalid: 'false',
+      pattern: '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
+      value: email,
+      muted: true,
+      mutedText: `We'll never share your email with anyone else`
+    },
+  }
   return (
-    <Container className="mt-5">
-      <Row>
-        <Col />
-        <Col xs={6}>
-          <Form onSubmit={onSubmit}>
-            <Form.Group className="mb-4" controlId="formBasicEmail">
-              <FloatingLabel controlId="floatingInput" label="Email">
-                <Form.Control
-                  required
-                  value={email}
-                  onChange={(e) => changeInfo(e)}
-                  name="email"
-                  type="email"
-                  placeholder="Enter email"
-                />
-              </FloatingLabel>
-
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-
-            <div className="d-grid gap-2">
-              <Button variant="primary" size="md" type="submit">
-                Reset Password
-              </Button>
-            </div>
-          </Form>
-        </Col>
-        <Col />
-      </Row>
-    </Container>
+    <FormCreator 
+      groups={groups}
+      onSubmit={onSubmit}
+      submit={'Reset Password'}
+      changeInfo={changeInfo}
+    />
   );
 }
 

@@ -2,16 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { loadin, loadin_fail, login, login_fail } from "../features/user";
 import axios from "axios";
-import { Link, Navigate } from "react-router-dom";
-
-
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import FloatingLabel from "react-bootstrap/esm/FloatingLabel";
-
+import { Navigate } from "react-router-dom";
+import FormCreator from "../utils/FormCreator";
 
 function Login() {
   const dispatch = useDispatch();
@@ -34,10 +26,10 @@ function Login() {
     setInvalid(false);
     log_user(email, password);
     if (!isAuthenticated) {
-      setTimeout(()=> {
-        setFormData({ email: "", password: "" })
+      setTimeout(() => {
+        setFormData({ email: "", password: "" });
         setInvalid(true);
-      }, 500)
+      }, 500);
     }
   };
 
@@ -86,71 +78,34 @@ function Login() {
       dispatch(loadin_fail());
     }
   }
-
+  const groups = {
+    email: {
+      name: 'email',
+      controlId: 'Email',
+      label: 'Email',
+      isInvalid: 'false',
+      pattern: 'r/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
+      value: email,
+      muted: true,
+      mutedText: `We'll never share your email with anyone else`
+    },
+    password: {
+      name: 'password',
+      controlId: 'Password',
+      label: 'Password',
+      isInvalid: invalid,
+      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      value: password,
+      muted: false,
+    },
+  }
   return (
-    <Container className="mt-5">
-      <Row>
-        <Col />
-        <Col xs={6}>
-          <Form onSubmit={onSubmit}>
-            <Form.Group className="mb-4" controlId="formBasicEmail">
-              <FloatingLabel controlId="floatingInput" label="Email">
-                <Form.Control
-                  isInvalid={invalid}
-                  required
-                  value={email}
-                  onChange={(e) => changeInfo(e)}
-                  name="email"
-                  type="email"
-                  placeholder="Enter email"
-                />
-              </FloatingLabel>
-
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-
-            <Form.Group className="mb-4" controlId="formBasicPassword">
-              <FloatingLabel controlId="floatingInput" label="Password">
-                <Form.Control
-                  required
-                  isInvalid={invalid}
-                  value={password}
-                  onChange={(e) => changeInfo(e)}
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Row>
-              <Col>
-                <Form.Group className="mb-4" controlId="formBasicCheckbox">
-                  <Form.Check type="checkbox" label="Remember Me" />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group
-                  className="mb-4 text-end"
-                  controlId="formBasicCheckbox"
-                >
-                  <Link to="/password/reset/">Forgot Password</Link>
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <div className="d-grid gap-2">
-              <Button variant="primary" size="md" type="submit">
-                Sign In
-              </Button>
-            </div>
-          </Form>
-        </Col>
-        <Col />
-      </Row>
-    </Container>
+    <FormCreator
+      groups={groups}
+      onSubmit={onSubmit}
+      submit='Sign In'
+      changeInfo={changeInfo}
+    />
   );
 }
 
