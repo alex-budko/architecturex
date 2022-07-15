@@ -8,6 +8,7 @@ import FormCreator from "../utils/FormCreator";
 
 
 function Signup() {
+  
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
@@ -75,8 +76,9 @@ function Signup() {
     email: {
       name: 'email',
       controlId: 'Email',
+      type: 'email',
       label: 'Email',
-      isInvalid: 'false',
+      isInvalid: false,
       pattern: '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
       value: email,
       muted: true,
@@ -85,17 +87,18 @@ function Signup() {
     name: {
       name: 'name',
       controlId: 'Name',
+      type: 'text',
       label: 'Name',
-      isInvalid: 'false',
+      isInvalid: false,
       pattern: '^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$',
       value: name,
-      muted: true,
-      mutedText: 'Your name must be 8-20 characters long, and only contain alphanumeric characters, underscores, and periods; however, it may not begin with or have adjacent underscores or periods (e.g. _john or john_._ are not allowed).'
+      muted: false,
     },
     password: {
       name: 'password',
       controlId: 'Password',
       label: 'Password',
+      type: 'password',
       isInvalid: invalid,
       pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
       value: password,
@@ -105,6 +108,7 @@ function Signup() {
     re_password: {
       name: 're_password',
       controlId: 'Re_Password',
+      type: 'password',
       label: 'Repeat Password',
       isInvalid: invalid,
       pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',

@@ -1,3 +1,8 @@
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
 import os
 from pathlib import Path
 from datetime import timedelta
@@ -6,7 +11,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-bt%%s@z1)p2$$$t_hd83il90n^%txv!x)8+ns^q^7woua_qzs6'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -69,8 +74,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'alexalex.budko2017@gmail.com'
-EMAIL_HOST_PASSWORD = 'kqlcdzzulchvygef'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD =  env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 
@@ -79,9 +84,9 @@ EMAIL_USE_TLS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'auth_system',
-        'USER': 'postgres',
-        'PASSWORD': 'Qwertyu7!',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASS'),
         'HOST': 'localhost'
     }
 }

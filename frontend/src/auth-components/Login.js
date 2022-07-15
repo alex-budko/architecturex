@@ -5,6 +5,7 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import FormCreator from "../utils/FormCreator";
 
+
 function Login() {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -83,7 +84,8 @@ function Login() {
       name: 'email',
       controlId: 'Email',
       label: 'Email',
-      isInvalid: 'false',
+      type: 'email',
+      isInvalid: false,
       pattern: 'r/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
       value: email,
       muted: true,
@@ -93,6 +95,7 @@ function Login() {
       name: 'password',
       controlId: 'Password',
       label: 'Password',
+      type: 'password',
       isInvalid: invalid,
       pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
       value: password,
@@ -101,6 +104,7 @@ function Login() {
   }
   return (
     <FormCreator
+      login={true}
       groups={groups}
       onSubmit={onSubmit}
       submit='Sign In'
