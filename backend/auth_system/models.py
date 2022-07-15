@@ -3,7 +3,6 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 
-
 class UserAccountManager(BaseUserManager):
     """
         Creates and saves a user with the given email, name, and password.
@@ -75,4 +74,14 @@ class UserAccount(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    
+class Profile(models.Model):
+    user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, primary_key=True)
+    description = models.CharField(default='Description', max_length=300)
+
+    def __str__(self):
+        return self.user.email
+    # image = models.imageField
+
+# class Chart(models.Model):
+#     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+
