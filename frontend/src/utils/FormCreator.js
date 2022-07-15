@@ -28,7 +28,7 @@ function FormCreator(props) {
                       isInvalid={group.isInvalid}
                       required
                       value={group.value}
-                      pattern={group.pattern}
+                      pattern = {group.pattern}
                       onChange={(e) => props.changeInfo(e)}
                       name={`${group.name}`}
                       type={`${group.type}`}

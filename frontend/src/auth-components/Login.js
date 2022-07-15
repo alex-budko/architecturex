@@ -85,8 +85,8 @@ function Login() {
       controlId: 'Email',
       label: 'Email',
       type: 'email',
+      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$',
       isInvalid: false,
-      pattern: 'r/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
       value: email,
       muted: true,
       mutedText: `We'll never share your email with anyone else`
@@ -97,7 +97,7 @@ function Login() {
       label: 'Password',
       type: 'password',
       isInvalid: invalid,
-      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      pattern: "[A-Za-z0-9_!]{8,29}",
       value: password,
       muted: false,
     },

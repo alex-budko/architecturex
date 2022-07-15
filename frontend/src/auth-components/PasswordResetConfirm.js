@@ -68,7 +68,7 @@ function PasswordResetConfirm() {
       label: 'Password',
       isInvalid: invalid,
       type: 'password',
-      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      pattern: '[A-Za-z0-9_!]{8,29}',
       value: password,
       muted: true,
       mutedText: 'Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.'
@@ -79,7 +79,7 @@ function PasswordResetConfirm() {
       label: 'Repeat Password',
       type: 'password',
       isInvalid: invalid,
-      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      pattern: '[A-Za-z0-9_!]{8,29}',
       value: re_password,
       muted: false,
     },

@@ -45,7 +45,7 @@ function Activate() {
               height={"60%"}
               alt="Welcome!"
               className="mb-4"
-              src="/images/welcome.png"
+              src={require("../images/welcome.png")}
             />
           <div className="d-grid gap-2">
             <Button

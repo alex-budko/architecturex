@@ -78,8 +78,8 @@ function Signup() {
       controlId: 'Email',
       type: 'email',
       label: 'Email',
+      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$',
       isInvalid: false,
-      pattern: '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
       value: email,
       muted: true,
       mutedText: `We'll never share your email with anyone else`
@@ -87,12 +87,13 @@ function Signup() {
     name: {
       name: 'name',
       controlId: 'Name',
+      pattern: '[A-Za-z0-9_]{4,29}',
       type: 'text',
       label: 'Name',
       isInvalid: false,
-      pattern: '^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$',
       value: name,
-      muted: false,
+      muted: true,
+      mutedText: `Your username must be at least 4 characters long`
     },
     password: {
       name: 'password',
@@ -100,7 +101,7 @@ function Signup() {
       label: 'Password',
       type: 'password',
       isInvalid: invalid,
-      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      pattern: '[A-Za-z0-9_!]{8,29}',
       value: password,
       muted: true,
       mutedText: 'Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.'
@@ -111,7 +112,7 @@ function Signup() {
       type: 'password',
       label: 'Repeat Password',
       isInvalid: invalid,
-      pattern: '(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      pattern: '[A-Za-z0-9_!]{8,29}',
       value: re_password,
       muted: false,
     },

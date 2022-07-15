@@ -22,41 +22,44 @@ import PasswordResetConfirm from "./auth-components/PasswordResetConfirm";
 import Login from "./auth-components/Login";
 import Activate from "./auth-components/Activate";
 import Signup from "./auth-components/Signup";
+import Profile from "./pages/Profile";
 
 function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    async function check_auth() {
-      console.log("Authentication Check")
-      if (localStorage.getItem("access")) {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        };
+  const check_auth = async () => {
+    console.log("Authentication Check");
+    if (localStorage.getItem("access")) {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      };
 
-        const body = JSON.stringify({ token: localStorage.getItem("access") });
-        try {
-          const res = await axios.post(
-            `${process.env.REACT_APP_API_URL}/auth/jwt/verify/`,
-            body,
-            config
-          );
-          if (res.data.code !== "token_not_valid") {
-            dispatch(authenticated_success());
-            load_user()
-          } else {
-            dispatch(authenticated_fail());
-          }
-        } catch (err) {
+      const body = JSON.stringify({ token: localStorage.getItem("access") });
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/auth/jwt/verify/`,
+          body,
+          config
+        );
+        if (res.data.code !== "token_not_valid") {
+          dispatch(authenticated_success());
+          load_user();
+        } else {
           dispatch(authenticated_fail());
         }
-      } else {
-        console.log("Authentication Error");
+      } catch (err) {
+        dispatch(authenticated_fail());
       }
+    } else {
+      console.log("Authentication Error");
     }
+  };
+
+  //checks authentications
+  useEffect(() => {
     check_auth();
   });
 
@@ -88,7 +91,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/activate/:uid/:token" element={<Activate />} />
+        <Route path="activate/:uid/:token" element={<Activate />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
         <Route path="password/reset" element={<PasswordReset />} />
@@ -96,6 +99,7 @@ function App() {
           path="password/reset/confirm/:uid/:token"
           element={<PasswordResetConfirm />}
         />
+        <Route path="profile/:name" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
