@@ -43,7 +43,7 @@ class UserAccount(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True, primary_key=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -75,13 +75,13 @@ class UserAccount(AbstractBaseUser):
         return self.email
 
 class Profile(models.Model):
+
     user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, primary_key=True)
-    description = models.CharField(default='Description', max_length=300)
+    description = models.CharField(blank=True, default='Description', max_length=300)
+    avatar = models.ImageField(blank=True, upload_to='avatars')
+    
 
     def __str__(self):
         return self.user.email
-    # image = models.imageField
 
-# class Chart(models.Model):
-#     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
 

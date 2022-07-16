@@ -10,9 +10,15 @@ User = get_user_model()
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'name', 'password')
+        fields = ('name', 'email', 'password')
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(
+        many=False,
+        read_only=True,
+        slug_field='name',
+    )
+
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ('user', 'description', 'avatar')

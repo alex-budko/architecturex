@@ -1,16 +1,15 @@
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 
 from .serializers import ProfileSerializer
 from .models import Profile
+from .models import UserAccount
 
 class ProfileCreateView(generics.CreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
-class ProfileRetrieveView(generics.RetrieveAPIView):
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
-
-class ProfileUpdateView(generics.UpdateAPIView):
+class ProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    lookup_field = 'user'
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
