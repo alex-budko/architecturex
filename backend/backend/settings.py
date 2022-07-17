@@ -133,6 +133,7 @@ USE_TZ = True
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
+   'USER_ID_FIELD': 'name',
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
@@ -159,6 +160,7 @@ MEDIA_URL = os.path.join(BASE_DIR, '/build/static/media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'auth_system.UserAccount'
+
 
 DJOSER = {
     'LOGIN_FIELD': 'email',

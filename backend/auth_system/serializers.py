@@ -21,4 +21,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('user', 'description', 'avatar')
+        fields = '__all__'

@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 
 from .serializers import ProfileSerializer
 from .models import Profile
-from .models import UserAccount
 
 class ProfileCreateView(generics.CreateAPIView):
     serializer_class = ProfileSerializer

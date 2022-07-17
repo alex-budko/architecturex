@@ -38,12 +38,14 @@ class UserAccountManager(BaseUserManager):
 
 
 class UserAccount(AbstractBaseUser):
+    
     email = models.EmailField(
         verbose_name='email address',
-        max_length=255,
+        max_length=265,
         unique=True,
     )
-    name = models.CharField(max_length=255, unique=True, primary_key=True)
+
+    name = models.CharField(max_length=265, primary_key=True, unique=True, blank=False)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
