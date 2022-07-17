@@ -1,12 +1,11 @@
 import { useDispatch } from "react-redux";
-import {
-  password_reset_confirm_success,
-  password_reset_confirm_fail,
-} from "../features/user";
-import axios from "axios";
+
 import { useParams } from "react-router";
 import { useState } from "react";
 import FormCreator from "../utils/FormCreator";
+
+import {reset_password_confirm} from '../auth-reducers/AuthReducers'
+
 
 
 function PasswordResetConfirm() {
@@ -28,38 +27,12 @@ function PasswordResetConfirm() {
   const onSubmit = (e) => {
     e.preventDefault();
     if (password === re_password) {
-      reset_password_confirm(uid, token, password, re_password);
+      reset_password_confirm(dispatch, uid, token, password, re_password);
     } else {
       setFormData({ password: "", re_password: "" });
       setValidPassword(true)
     }
   };
-
-  async function reset_password_confirm(
-    uid,
-    token,
-    new_password,
-    re_new_password
-  ) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const body = JSON.stringify({ uid, token, new_password, re_new_password });
-
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/users/reset_password_confirm/`,
-        body,
-        config
-      );
-      dispatch(password_reset_confirm_success());
-    } catch (err) {
-      dispatch(password_reset_confirm_fail());
-    }
-  }
 
   const groups = {
     password: {

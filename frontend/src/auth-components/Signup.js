@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { signup, signup_fail } from "../features/user";
-import axios from "axios";
+
 import { Navigate } from "react-router-dom";
 
 import FormCreator from "../utils/FormCreator";
-
+import {sign_up} from '../auth-reducers/AuthReducers'
 
 function Signup() {
-  
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
   //validation
@@ -44,33 +42,9 @@ function Signup() {
       });
     } else {
       setValidPassword(false);
-      sign_up(name, email, password, re_password);
+      sign_up(dispatch, name, email, password, re_password);
     }
   };
-
-  async function sign_up(name, email, password, re_password) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const body = JSON.stringify({
-      name,
-      email,
-      password,
-      re_password,
-    });
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/users/`,
-        body,
-        config
-      );
-      dispatch(signup(res.data));
-    } catch (err) {
-      dispatch(signup_fail());
-    }
-  }
 
   const groups = {
     email: {

@@ -15,10 +15,10 @@ class UserCreateSerializer(UserCreateSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         many=False,
-        read_only=True,
+        queryset = User.objects.all(),
         slug_field='name',
     )
 
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ('user', 'description', 'avatar')

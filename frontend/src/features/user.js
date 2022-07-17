@@ -56,12 +56,30 @@ export const userSlice = createSlice({
     authenticated_fail: (state, action) => {
       state.isAuthenticated = false;
     },
-    activation_success: (state, action) => {},
-    activation_fail: (state, action) => {},
-    password_reset_success: (state, action) => {},
-    password_reset_fail: (state, action) => {},
-    password_reset_confirm_success: (state, action) => {},
-    password_reset_confirm_fail: (state, action) => {},
+    profilecreate: (state,action) => {
+      state = state;
+    },
+    profilecreate_fail: (state,action) => {
+      state = state;
+    },
+    activation_success: (state, action) => {
+      state = state;
+    },
+    activation_fail: (state, action) => {
+      state = state;
+    },
+    password_reset_success: (state, action) => {
+      state = state;
+    },
+    password_reset_fail: (state, action) => {
+      state = state;
+    },
+    password_reset_confirm_success: (state, action) => {
+      state = state;
+    },
+    password_reset_confirm_fail: (state, action) => {
+      state = state;
+    },
   },
 });
 
@@ -81,6 +99,8 @@ export const {
   signup_fail,
   activation_success,
   activation_fail,
+  profilecreate,
+  profilecreate_fail,
 } = userSlice.actions;
 
 export default userSlice.reducer;

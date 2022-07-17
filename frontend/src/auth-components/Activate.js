@@ -1,7 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { activation_fail, activation_success } from "../features/user";
-import axios from "axios";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -9,31 +7,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
 
+import {verify} from '../auth-reducers/AuthReducers'
+
 function Activate() {
   const { uid, token } = useParams();
 
   const dispatch = useDispatch;
   const navigate = useNavigate()
-
-  async function verify(uid, token) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const body = JSON.stringify({ uid: uid, token: token });
-
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/users/activation/`,
-        body,
-        config
-      );
-      dispatch(activation_success());
-    } catch (err) {
-      dispatch(activation_fail());
-    }
-  }
 
   return (
     <Container className="mt-5">
@@ -51,7 +31,7 @@ function Activate() {
             <Button
               variant="primary"
               onClick={() => {
-                verify(uid, token)
+                verify(dispatch, uid, token)
                 navigate('/login')
               }
             }

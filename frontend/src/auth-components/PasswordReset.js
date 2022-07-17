@@ -1,9 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { password_reset_fail, password_reset_success } from "../features/user";
-import axios from "axios";
+
 import { Navigate } from "react-router-dom";
 import FormCreator from "../utils/FormCreator";
+
+import {reset_password} from '../auth-reducers/AuthReducers'
+
 
 function PasswordReset() {
   const dispatch = useDispatch();
@@ -21,31 +23,11 @@ function PasswordReset() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    reset_password(email);
+    reset_password(dispatch, email);
     setRequestSent(true);
     console.log("Surely");
   };
 
-  async function reset_password(email) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const body = JSON.stringify({ email });
-
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/users/reset_password/`,
-        body,
-        config
-      );
-      dispatch(password_reset_success());
-    } catch (err) {
-      dispatch(password_reset_fail());
-    }
-  }
   const groups = {
     email: {
       name: 'email',
