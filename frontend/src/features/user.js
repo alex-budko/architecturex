@@ -19,8 +19,8 @@ export const userSlice = createSlice({
     },
     login_fail: (state, action) => {
       console.log("Login Fail");
-      localStorage.removeItem("access", action.payload.access);
-      localStorage.removeItem("refresh", action.payload.access);
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
       state.isAuthenticated = false;
     },
     signup: (state, action) => {
@@ -31,8 +31,8 @@ export const userSlice = createSlice({
     },
     signup_fail: (state, action) => {
       console.log("Sign Up Fail");
-      localStorage.removeItem("access", action.payload.access);
-      localStorage.removeItem("refresh", action.payload.access);
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
       state.isAuthenticated = false;
     },
     logout: (state, action) => {
@@ -56,12 +56,6 @@ export const userSlice = createSlice({
     authenticated_fail: (state, action) => {
       state.isAuthenticated = false;
     },
-    profilecreate: (state,action) => {
-      state = state;
-    },
-    profilecreate_fail: (state,action) => {
-      state = state;
-    },
     activation_success: (state, action) => {
       state = state;
     },
@@ -80,6 +74,12 @@ export const userSlice = createSlice({
     password_reset_confirm_fail: (state, action) => {
       state = state;
     },
+    profilecreate: (state, action) => {
+      state = state;
+    },
+    profilecreate_fail: (state, action) => {
+      state = state;
+    },
   },
 });
 
@@ -95,12 +95,12 @@ export const {
   password_reset_success,
   password_reset_confirm_success,
   password_reset_confirm_fail,
+  profilecreate,
+  profilecreate_fail,
   signup,
   signup_fail,
   activation_success,
   activation_fail,
-  profilecreate,
-  profilecreate_fail,
 } = userSlice.actions;
 
 export default userSlice.reducer;

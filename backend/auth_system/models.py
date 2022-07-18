@@ -79,6 +79,11 @@ class UserAccount(AbstractBaseUser):
 class Profile(models.Model):
 
     user = models.OneToOneField(UserAccount, on_delete=models.CASCADE, primary_key=True)
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=265,
+        unique=True,
+    )
     description = models.CharField(blank=True, default='Description', max_length=300)
     avatar = models.ImageField(blank=True, upload_to='avatars')
     

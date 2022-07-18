@@ -2,8 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import FormCreator from "../utils/FormCreator";
-import {log_user} from '../auth-reducers/AuthReducers'
-
+import { log_user } from "../auth-reducers/AuthReducers";
 
 function Login() {
   const dispatch = useDispatch();
@@ -33,36 +32,35 @@ function Login() {
     }
   };
 
-  
   const groups = {
     email: {
-      name: 'email',
-      controlId: 'Email',
-      label: 'Email',
-      type: 'email',
-      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$',
+      name: "email",
+      controlId: "Email",
+      label: "Email",
+      type: "email",
+      pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
       isInvalid: false,
       value: email,
       muted: true,
-      mutedText: `We'll never share your email with anyone else`
+      mutedText: `We'll never share your email with anyone else`,
     },
     password: {
-      name: 'password',
-      controlId: 'Password',
-      label: 'Password',
-      type: 'password',
+      name: "password",
+      controlId: "Password",
+      label: "Password",
+      type: "password",
       isInvalid: invalid,
       pattern: "[A-Za-z0-9_!]{8,29}",
       value: password,
       muted: false,
     },
-  }
+  };
   return (
     <FormCreator
       login={true}
       groups={groups}
       onSubmit={onSubmit}
-      submit='Sign In'
+      submit="Sign In"
       changeInfo={changeInfo}
     />
   );

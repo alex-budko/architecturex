@@ -37,6 +37,9 @@ export async function sign_up(dispatch, name, email, password, re_password) {
       body,
       config
     );
+    localStorage.setItem("name", name);
+    localStorage.setItem("email", email);
+
     dispatch(signup(res.data));
   } catch (err) {
     dispatch(signup_fail());
@@ -44,6 +47,7 @@ export async function sign_up(dispatch, name, email, password, re_password) {
 }
 
 export async function verify(dispatch, uid, token) {
+  console.log("verifying");
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -57,7 +61,15 @@ export async function verify(dispatch, uid, token) {
       body,
       config
     );
+
+    try {
+      profile_create(dispatch);
+    } catch (err) {
+      dispatch(activation_fail());
+    }
+
     dispatch(activation_success());
+
   } catch (err) {
     dispatch(activation_fail());
   }
@@ -79,8 +91,14 @@ export async function log_user(dispatch, email, password) {
       body,
       config
     );
+
     dispatch(login(res.data));
-    load_user(dispatch);
+
+    try {
+      load_user(dispatch);
+    } catch (err) {
+      dispatch(login_fail());
+    }
   } catch (err) {
     dispatch(login_fail());
   }
@@ -101,7 +119,6 @@ export async function load_user(dispatch) {
         config
       );
       dispatch(loadin(res.data));
-      profile_create(dispatch, res.data.name)
     } catch (err) {
       dispatch(loadin_fail());
     }
@@ -189,7 +206,31 @@ export async function check_auth(dispatch) {
   }
 }
 
-async function profile_create(dispatch, name) {
+async function profile_create(dispatch) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const body = JSON.stringify({
+    user: localStorage.getItem("name"),
+    email: localStorage.getItem('email'),
+  });
+  localStorage.removeItem('name')
+  localStorage.removeItem('email')
+  try {
+    await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/create/profile/`,
+      body,
+      config
+    )
+    dispatch(profilecreate());
+  } catch (err) {
+    dispatch(profilecreate_fail());
+  }
+}
+
+export async function profile_view(name) {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -199,13 +240,12 @@ async function profile_create(dispatch, name) {
     user: name,
   });
   try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/create/profile/`,
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/profile/${name}/`,
       body,
       config
-    );
-    dispatch(profilecreate());
+    )
+    return res
   } catch (err) {
-    dispatch(profilecreate_fail());
   }
 }
