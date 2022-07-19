@@ -249,3 +249,25 @@ export async function profile_view(name) {
   } catch (err) {
   }
 }
+
+export async function profile_update(name, email, description) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const body = JSON.stringify({
+    user: name,
+    email: email, 
+    description: description
+  });
+  try {
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/profile/${name}/`,
+      body,
+      config
+    )
+    return res
+  } catch (err) {
+  }
+}

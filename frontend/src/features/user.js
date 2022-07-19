@@ -39,8 +39,8 @@ export const userSlice = createSlice({
       console.log("Logout");
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
-      state.access = null
-      state.refresh = null
+      state.access = null;
+      state.refresh = null;
       state.user = null;
       state.isAuthenticated = false;
     },
@@ -56,30 +56,14 @@ export const userSlice = createSlice({
     authenticated_fail: (state, action) => {
       state.isAuthenticated = false;
     },
-    activation_success: (state, action) => {
-      state = state;
-    },
-    activation_fail: (state, action) => {
-      state = state;
-    },
-    password_reset_success: (state, action) => {
-      state = state;
-    },
-    password_reset_fail: (state, action) => {
-      state = state;
-    },
-    password_reset_confirm_success: (state, action) => {
-      state = state;
-    },
-    password_reset_confirm_fail: (state, action) => {
-      state = state;
-    },
-    profilecreate: (state, action) => {
-      state = state;
-    },
-    profilecreate_fail: (state, action) => {
-      state = state;
-    },
+    activation_success: (state, action) => {},
+    activation_fail: (state, action) => {},
+    password_reset_success: (state, action) => {},
+    password_reset_fail: (state, action) => {},
+    password_reset_confirm_success: (state, action) => {},
+    password_reset_confirm_fail: (state, action) => {},
+    profilecreate: (state, action) => {},
+    profilecreate_fail: (state, action) => {},
   },
 });
 

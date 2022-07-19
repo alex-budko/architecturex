@@ -15,16 +15,18 @@ import Activate from "./auth-components/Activate";
 import Signup from "./auth-components/Signup";
 import Profile from "./pages/Profile";
 
+
+import BarChart from "./pages/charts/BarChart";
+import LineChart from "./pages/charts/LineChart";
+
+
 import {check_auth} from './auth-reducers/AuthReducers'
+import Chart from "./pages/charts/Chart";
+
 
 
 function App() {
   const dispatch = useDispatch();
-
-  //checks authentication
-  useEffect(() => {
-    // check_auth(dispatch);
-  });
 
   return (
     <BrowserRouter>
@@ -39,6 +41,10 @@ function App() {
           path="password/reset/confirm/:uid/:token"
           element={<PasswordResetConfirm />}
         />
+        <Route path='chart' >
+          <Route path='line' element={<LineChart />} />
+          <Route path='bar' element={<BarChart />}/>
+        </Route>
         <Route path="profile/:name" element={<Profile />} />
       </Routes>
     </BrowserRouter>

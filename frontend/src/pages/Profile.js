@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 
 import Button from "react-bootstrap/Button";
@@ -8,28 +6,48 @@ import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Image from "react-bootstrap/Image";
+import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
 
-import { profile_view } from "../auth-reducers/AuthReducers";
+import { profile_update, profile_view } from "../auth-reducers/AuthReducers";
 import { useParams } from "react-router-dom";
 
+import { BiUpload } from "react-icons/bi";
+
+import Uploady from "@rpldy/uploady";
+import UploadButton from "@rpldy/upload-button";
+
 function Profile() {
+  const [data, setData] = useState({
+    user: "UNDEFINED",
+    description: "",
+    email: "",
+    avatar: null,
+  });
 
-  const [data, setData] = useState({name: 'UNDEFINED', description: '', email: '', avatar: null})
+  const [description, setDescription] = useState({
+    description: "",
+  });
 
-  const dispatch = useDispatch()
+  const [updating, setUpdating] = useState(false);
+
   const { name } = useParams();
 
   useEffect(() => {
-    profile_view(name).then((res)=> setData(res.data))
-  }, []);
+    profile_view(name).then((res) => setData(res.data));
+  }, [updating, name]);
 
-  const CARD_WIDTH = "42vw";
+  useEffect(() => {
+    setDescription(data.description);
+  }, [data]);
+
+  const CARD_WIDTH = "30vw";
   const CARD_HEIGHT = "85vh";
   const CARD_MARGIN = "30px";
   return (
     <Container>
       <Row>
+        <Col width={"1px"} />
         <Col>
           <Card
             style={{
@@ -38,19 +56,29 @@ function Profile() {
               height: CARD_HEIGHT,
             }}
           >
-            <Image src={require("../images/pfp.png")} marginLeft={'auto'} height={'40%'} width={'40%'} />
+            <Card>
+              <Uploady style={{ cursor: "pointer", width: "30px" }} destination={{ url: "/C:/build/static/media/avatars/",  }}>
+                <UploadButton
+                  onClick={(e) => console.log(e)}
+                >
+                  <BiUpload />
+                </UploadButton>
+              </Uploady>
+              <Card.Img display={"inline"} src={require("../images/pfp.png")} />
+            </Card>
+
             <Card.Body align="center">
-              <Card.Title>{data.user}</Card.Title>
-              <Card.Text style={{ marginTop: "10px", padding: "5px", fontSize: 'smaller' }}>
-                {data.email}
+              <Card.Title>Username: {data.user}</Card.Title>
+              <Card.Text
+                style={{
+                  marginTop: "5px",
+                  fontSize: "smaller",
+                }}
+              >
+                Email: {data.email}
               </Card.Text>
-              <Card>
-                <Card.Text style={{ marginTop: "10px", padding: "1px", fontSize: 'smaller' }}>
-                  {data.description}
-                </Card.Text>
-              </Card>
-              <Button style={{ marginTop: "10px" }} variant="primary">
-                Update Profile
+              <Button style={{ marginTop: "0px" }} variant="primary">
+                Follow
               </Button>
             </Card.Body>
           </Card>
@@ -59,8 +87,8 @@ function Profile() {
           <Card
             style={{
               marginTop: CARD_MARGIN,
-              width: CARD_WIDTH,
-              height: CARD_HEIGHT,
+              width: "40vw",
+              height: "40vh",
             }}
           >
             <Card.Body align="center">
@@ -78,7 +106,58 @@ function Profile() {
               </Button>
             </Card.Body>
           </Card>
+          <Card
+            style={{
+              marginTop: CARD_MARGIN,
+              width: "40vw",
+              height: "40vh",
+            }}
+          >
+            <Card.Body align="center">
+              <Card.Title>Description</Card.Title>
+
+              <InputGroup
+                style={{
+                  marginTop: "10px",
+                  padding: "1px",
+                  marginBottom: "10px",
+                  height: "20vh",
+                }}
+              >
+                <Form.Control
+                  className="text-dark bg-light"
+                  value={description}
+                  size="sm"
+                  aria-label="Description"
+                  as="textarea"
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                  disabled={!updating}
+                />
+              </InputGroup>
+              {!updating ? (
+                <Button
+                  onClick={() => setUpdating(!updating)}
+                  variant="primary"
+                >
+                  Update
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setUpdating(!updating);
+                    profile_update(data.user, data.email, description);
+                  }}
+                  variant="primary"
+                >
+                  Confirm
+                </Button>
+              )}
+            </Card.Body>
+          </Card>
         </Col>
+        <Col width={"1px"} />
       </Row>
     </Container>
   );
