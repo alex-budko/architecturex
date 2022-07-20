@@ -42,8 +42,8 @@ function Profile() {
   }, [data]);
 
   const CARD_WIDTH = "30vw";
-  const CARD_HEIGHT = "85vh";
-  const CARD_MARGIN = "30px";
+  const CARD_HEIGHT = "80vh";
+  const CARD_MARGIN = "4vh";
   return (
     <Container>
       <Row>
