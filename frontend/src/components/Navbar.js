@@ -10,7 +10,7 @@ import { logout } from "../features/user";
 
 function CustomNavbar() {
   const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -31,11 +31,11 @@ function CustomNavbar() {
                 Contact
               </Nav.Link>
               <NavDropdown title="Create" id="collasible-nav-dropdown">
-                <NavDropdown.Item as={Link} to="/">
-                  Bar Chart
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/">
+                <NavDropdown.Item as={Link} to="/chart/line">
                   Line Chart
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/chart/bar">
+                  Bar Chart
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item as={Link} to="/">
@@ -58,7 +58,12 @@ function CustomNavbar() {
                   <Nav.Link as={Link} to={`/profile/${user.name}`}>
                     Hey {user.name}!
                   </Nav.Link>
-                  <Nav.Link eventKey={2} as={Link} to="/" onClick={()=> dispatch(logout())}>
+                  <Nav.Link
+                    eventKey={2}
+                    as={Link}
+                    to="/"
+                    onClick={() => dispatch(logout())}
+                  >
                     Log Out
                   </Nav.Link>
                 </Fragment>
