@@ -3,6 +3,8 @@ import 'chart.js/auto'
 
 import { Bar } from "react-chartjs-2";
 
+
+
 export const options = {
   responsive: true,
   plugins: {
@@ -39,7 +41,8 @@ function BarChart() {
   };
 
   return (<div style={{width: '50vw', height: '50vh'}}>
-    <Bar options={options} data={data} />
+    {/* <Bar options={options} data={data} /> */}
+    <div className="color-picker"></div>
     </div>);
 }
 

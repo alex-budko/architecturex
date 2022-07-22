@@ -2,7 +2,9 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { HexColorPicker } from "react-colorful";
+
 
 //bootstrap imports
 import {
@@ -21,51 +23,49 @@ import {
 
 import { ImCross } from "react-icons/im";
 import { sortedIndex } from "../../utils/sortedIndex";
-// import { ColorPicker } from "../../chart-components/ColorPicker";
 
 function LineChart() {
   const [started, setStarted] = useState(false);
-  const [datasetTabs, setDatasetTabs] = useState([]);
   const [menuTabs, setMenuTabs] = useState([]);
 
   const [currentDataset, setCurrentDataset] = useState(0);
 
+  const [main, setMain] = useState(false);
+
   //dataset data
   const [chartData, setChartData] = useState([]);
+
+  const [color, setColor] = useState("#aabbcc");
+
 
   //chart options
   const [chartOptions, setChartOptions] = useState([]);
 
   //chart titles
-  const [datasetTitles, setDatasetTitles] = useState([
-    {
-      title: "Dataset",
-      x: "X-Axis",
-      y: "Y-Axis",
-    },
-  ]);
+  const [datasetTitles, setDatasetTitles] = useState(["Dataset"]);
 
-  const [chartLabels, setChartLabels] = useState([]);
+  const [axisTitles, setAxisTitles] = useState({
+    x: "X-Axis",
+    y: "Y-Axis",
+  });
 
   useEffect(() => {
     if (!started) {
-      setChartLabels([]);
       setCurrentDataset(0);
 
-      setDatasetTitles([
-        {
-          title: "Dataset",
-          x: "X-Axis",
-          y: "Y-Axis",
-        },
-      ]);
+      setAxisTitles({
+        x: "X-Axis",
+        y: "Y-Axis",
+      });
+
+      setDatasetTitles(["Dataset"]);
 
       setChartOptions({
         scales: {
           x: {
             title: {
               display: "true",
-              text: datasetTitles[currentDataset].x,
+              text: axisTitles.x,
             },
             type: "linear",
             display: true,
@@ -75,22 +75,20 @@ function LineChart() {
             display: true,
             title: {
               display: true,
-              text: datasetTitles[currentDataset].y,
+              text: axisTitles.y,
             },
           },
         },
       });
       setChartData([
         {
-          label: datasetTitles[currentDataset].title,
+          label: datasetTitles[currentDataset],
           data: [],
           fill: false,
           borderColor: "rgb(75, 192, 192)",
           tension: 0.1,
         },
       ]);
-
-      setChartLabels([]);
 
       setStarted(true);
     }
@@ -122,52 +120,51 @@ function LineChart() {
   const addPoint = (e) => {
     e.preventDefault();
 
-    //x-value
-    let newChartLabels = [...chartLabels];
-    const pos = sortedIndex(
-      newChartLabels,
-      e.target[0].value,
-      0,
-      chartLabels.length
-    );
-    newChartLabels.splice(pos, 0, e.target[0].value);
-    setChartLabels(newChartLabels);
-
-    //y-value
     let newChartData = [...chartData];
-    newChartData[0]["data"].splice(pos, 0, e.target[1].value);
+
+    //get array of all x-values
+    let xA = [
+      newChartData[currentDataset]["data"].map((dataPoint) => {
+        return dataPoint.x;
+      }),
+    ];
+
+    const pos = sortedIndex(xA, e.target[0].value, 0, xA.length);
+
+    newChartData[currentDataset]["data"].splice(pos, 0, {
+      x: e.target[0].value,
+      y: e.target[1].value,
+    });
     setChartData(newChartData);
   };
 
   const deleteDataPoint = (i) => {
-    //x-value
-    let newChartLabels = [...chartLabels];
-    newChartLabels.splice(i, 1);
-    setChartLabels(newChartLabels);
-
-    //y-value
     let newChartData = [...chartData];
     newChartData[currentDataset]["data"].splice(i, 1);
     setChartData(newChartData);
   };
 
   const changeTitle = (e) => {
-    let newTitles = [...datasetTitles];
-    newTitles[currentDataset][e.target.name] = e.target.value;
-    setDatasetTitles(newTitles);
-
     //update data in the chart in-real-time
     if (e.target.name === "title") {
+      let newTitles = [...datasetTitles];
+      newTitles[currentDataset] = e.target.value;
+      setDatasetTitles(newTitles);
+
       let newChartData = [...chartData];
-      newChartData[currentDataset].label = datasetTitles[currentDataset].title;
+      newChartData[currentDataset].label = datasetTitles[currentDataset];
       setChartData(newChartData);
     } else {
+      let newAxisTitles = axisTitles;
+      newAxisTitles[e.target.name] = e.target.value;
+      setAxisTitles(newAxisTitles);
+
       setChartOptions({
         scales: {
           x: {
             title: {
               display: "true",
-              text: datasetTitles[currentDataset].x,
+              text: axisTitles.x,
             },
             type: "linear",
             display: true,
@@ -177,7 +174,7 @@ function LineChart() {
             display: true,
             title: {
               display: true,
-              text: datasetTitles[currentDataset].y,
+              text: axisTitles.y,
             },
           },
         },
@@ -185,13 +182,35 @@ function LineChart() {
     }
   };
 
+  const addDataset = () => {
+    let newDatasetTitles = [...datasetTitles];
+    newDatasetTitles.push("Dataset");
+    setDatasetTitles(newDatasetTitles);
+
+    let newChartData = [...chartData];
+    newChartData.push({
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderColor: "rgb(75, 192, 192)",
+      tension: 0.1,
+    });
+    setChartData(newChartData);
+  };
+
+  const changeDatasetNum = (e) => {
+    setCurrentDataset(e.target.name);
+  };
+
   const data = {
-    labels: chartLabels,
     datasets: chartData,
   };
 
+  console.log(color)
+
   return (
     <Container align="center">
+      <HexColorPicker color={color} onChange={setColor} />
       {started && (
         <Row>
           <Col>
@@ -236,15 +255,27 @@ function LineChart() {
               align="center"
             >
               <Card.Title>Data Panel</Card.Title>
-              <Nav variant="tabs" defaultActiveKey="1">
+
+              <Nav variant="tabs" defaultActiveKey="0">
+                <Nav.Link onClick={() => setMain(true)} eventKey="main">
+                  Main
+                </Nav.Link>
+                {datasetTitles.map((dataset, i) => {
+                  return (
+                    <Nav.Item
+                      onClick={(e) => {
+                        setMain(false);
+                        changeDatasetNum(e);
+                      }}
+                    >
+                      <Nav.Link name={i} key={i} eventKey={i}>
+                        {dataset}
+                      </Nav.Link>
+                    </Nav.Item>
+                  );
+                })}
                 <Nav.Item>
-                  <Nav.Link eventKey="1">Dataset 1</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="2">Dataset 2</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="disabled" disabled>
+                  <Nav.Link onClick={() => addDataset()} eventKey="add">
                     Add Dataset
                   </Nav.Link>
                 </Nav.Item>
@@ -260,65 +291,71 @@ function LineChart() {
                 </Form.Group>
 
                 <hr />
+                {main ? (
+                  <>
+                    <Form.Group className="mb-3">
+                      <Form.Label>X-Axis Title</Form.Label>
+                      <Form.Control
+                        onChange={(e) => changeTitle(e)}
+                        type="text"
+                        name="x"
+                        value={axisTitles.x}
+                      />
+                    </Form.Group>
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Dataset Title</Form.Label>
-                  <Form.Control
-                    onChange={(e) => changeTitle(e)}
-                    type="text"
-                    name="title"
-                    value={datasetTitles[currentDataset].title}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>X-Axis Title</Form.Label>
-                  <Form.Control
-                    onChange={(e) => changeTitle(e)}
-                    type="text"
-                    name="x"
-                    value={datasetTitles[currentDataset].x}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Y-Axis Title</Form.Label>
-                  <Form.Control
-                    onChange={(e) => changeTitle(e)}
-                    name="y"
-                    type="text"
-                    value={datasetTitles[currentDataset].y}
-                  />
-                </Form.Group>
-
-                <Dropdown as={ButtonGroup}>
-                  <OverlayTrigger
-                    trigger="click"
-                    placement="left"
-                    overlay={pointForm}
-                  >
-                    <Button variant="info">Add Datapoint</Button>
-                  </OverlayTrigger>
-                  <Dropdown.Toggle
-                    split
-                    variant="primary"
-                    id="dropdown-split-basic"
-                  />
-
-                  <Dropdown.Menu>
-                    {chartData[currentDataset].data.map((dataPoint, i) => {
-                      return (
-                        <Dropdown.Item key={i}>
-                          Point: ({chartLabels[i]}, {dataPoint})
-                          <ImCross
-                            onClick={() => deleteDataPoint(i)}
-                            style={{ color: "red", margin: "0 0 0 15" }}
-                          />
-                        </Dropdown.Item>
-                      );
-                    })}
-                  </Dropdown.Menu>
-                </Dropdown>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Y-Axis Title</Form.Label>
+                      <Form.Control
+                        onChange={(e) => changeTitle(e)}
+                        name="y"
+                        type="text"
+                        value={axisTitles.y}
+                      />
+                    </Form.Group>
+                  </>
+                ) : (
+                  <>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Dataset Title</Form.Label>
+                      <Form.Control
+                        onChange={(e) => changeTitle(e)}
+                        type="text"
+                        name="title"
+                        value={datasetTitles[currentDataset]}
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Point Color</Form.Label>
+                    </Form.Group>
+                    <Dropdown as={ButtonGroup}>
+                      <OverlayTrigger
+                        trigger="click"
+                        placement="left"
+                        overlay={pointForm}
+                      >
+                        <Button variant="info">Add Datapoint</Button>
+                      </OverlayTrigger>
+                      <Dropdown.Toggle
+                        split
+                        variant="primary"
+                        id="dropdown-split-basic"
+                      />
+                      <Dropdown.Menu>
+                        {chartData[currentDataset].data.map((dataPoint, i) => {
+                          return (
+                            <Dropdown.Item key={i}>
+                              Point: ({dataPoint.x}, {dataPoint.y})
+                              <ImCross
+                                onClick={() => deleteDataPoint(i)}
+                                style={{ color: "red", margin: "0 0 0 15" }}
+                              />
+                            </Dropdown.Item>
+                          );
+                        })}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </>
+                )}
               </Card.Body>
             </Card>
           </Col>
