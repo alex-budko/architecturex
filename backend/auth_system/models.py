@@ -1,3 +1,6 @@
+from ctypes.wintypes import CHAR
+from email.policy import default
+from secrets import choice
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -87,6 +90,28 @@ class Profile(models.Model):
     description = models.CharField(blank=True, default='Description', max_length=300)
     avatar = models.ImageField(blank=True, upload_to='avatars')
     
+
+    def __str__(self):
+        return self.user.email
+
+class Chart(models.Model):
+    LINE = 'L'
+    BAR = 'B'
+    CHART_TYPES = [
+        (LINE, 'Line'),
+        (BAR, 'B'),
+    ]
+
+    def default_options():
+        return {"options": "none"}
+
+    def default_data():
+        return {"data": "none"}
+
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    chartType = models.CharField(max_length=1, choices=CHART_TYPES, default=LINE)
+    options = models.JSONField(default=default_options)
+    data = models.JSONField(default=default_data)
 
     def __str__(self):
         return self.user.email

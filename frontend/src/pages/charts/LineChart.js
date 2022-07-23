@@ -2,9 +2,8 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
-
 
 //bootstrap imports
 import {
@@ -23,6 +22,7 @@ import {
 
 import { ImCross } from "react-icons/im";
 import { sortedIndex } from "../../utils/sortedIndex";
+import { current } from "@reduxjs/toolkit";
 
 function LineChart() {
   const [started, setStarted] = useState(false);
@@ -35,8 +35,7 @@ function LineChart() {
   //dataset data
   const [chartData, setChartData] = useState([]);
 
-  const [color, setColor] = useState("#aabbcc");
-
+  const [colors, setColors] = useState(["#aabbcc"]);
 
   //chart options
   const [chartOptions, setChartOptions] = useState([]);
@@ -44,48 +43,58 @@ function LineChart() {
   //chart titles
   const [datasetTitles, setDatasetTitles] = useState(["Dataset"]);
 
-  const [axisTitles, setAxisTitles] = useState({
+  const [chartTitle, setChartTitle] = useState("My Line Chart");
+
+  const basicAxisTitles = {
     x: "X-Axis",
     y: "Y-Axis",
-  });
+  }
+
+  const [axisTitles, setAxisTitles] = useState(basicAxisTitles);
+
+  const basicChartOptions = {
+    scales: {
+      x: {
+        title: {
+          display: "true",
+          text: axisTitles.x,
+        },
+        type: "linear",
+        display: true,
+        beginAtZero: true,
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: axisTitles.y,
+        },
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: chartTitle,
+      },
+    },
+  }
 
   useEffect(() => {
     if (!started) {
       setCurrentDataset(0);
 
-      setAxisTitles({
-        x: "X-Axis",
-        y: "Y-Axis",
-      });
+      setAxisTitles(basicAxisTitles);
 
       setDatasetTitles(["Dataset"]);
 
-      setChartOptions({
-        scales: {
-          x: {
-            title: {
-              display: "true",
-              text: axisTitles.x,
-            },
-            type: "linear",
-            display: true,
-            beginAtZero: true,
-          },
-          y: {
-            display: true,
-            title: {
-              display: true,
-              text: axisTitles.y,
-            },
-          },
-        },
-      });
+      setChartOptions(basicChartOptions);
+
       setChartData([
         {
           label: datasetTitles[currentDataset],
           data: [],
           fill: false,
-          borderColor: "rgb(75, 192, 192)",
+          borderColor: colors[currentDataset],
           tension: 0.1,
         },
       ]);
@@ -93,6 +102,18 @@ function LineChart() {
       setStarted(true);
     }
   }, [started]);
+
+  //update data in the chart in-real-time
+  useEffect(() => {
+    const upd = () => {
+      let newChartData = [...chartData];
+      newChartData[currentDataset].label = datasetTitles[currentDataset];
+      setChartData(newChartData);
+    };
+    if (started) {
+      upd();
+    }
+  }, [started, chartTitle, datasetTitles, currentDataset]);
 
   const pointForm = (
     <Popover>
@@ -122,12 +143,15 @@ function LineChart() {
 
     let newChartData = [...chartData];
 
-    //get array of all x-values
-    let xA = [
-      newChartData[currentDataset]["data"].map((dataPoint) => {
-        return dataPoint.x;
-      }),
-    ];
+    let xA = []
+
+    if (newChartData[currentDataset]["data"][0]) {
+      xA = [
+        newChartData[currentDataset]["data"].map((dataPoint) => {
+          return dataPoint.x;
+        }),
+      ];
+    }
 
     const pos = sortedIndex(xA, e.target[0].value, 0, xA.length);
 
@@ -145,41 +169,35 @@ function LineChart() {
   };
 
   const changeTitle = (e) => {
-    //update data in the chart in-real-time
+    let cT = null;
     if (e.target.name === "title") {
       let newTitles = [...datasetTitles];
       newTitles[currentDataset] = e.target.value;
       setDatasetTitles(newTitles);
-
-      let newChartData = [...chartData];
-      newChartData[currentDataset].label = datasetTitles[currentDataset];
-      setChartData(newChartData);
     } else {
-      let newAxisTitles = axisTitles;
-      newAxisTitles[e.target.name] = e.target.value;
-      setAxisTitles(newAxisTitles);
-
-      setChartOptions({
-        scales: {
-          x: {
-            title: {
-              display: "true",
-              text: axisTitles.x,
-            },
-            type: "linear",
-            display: true,
-            beginAtZero: true,
-          },
-          y: {
-            display: true,
-            title: {
-              display: true,
-              text: axisTitles.y,
-            },
-          },
-        },
-      });
+      if (e.target.name === "chartTitle") {
+        cT = e.target.value;
+        setChartTitle(e.target.value);
+      } else {
+        let newAxisTitles = axisTitles;
+        newAxisTitles[e.target.name] = e.target.value;
+        setAxisTitles(newAxisTitles);
+      }
     }
+    if (!cT) {
+      cT = chartTitle;
+    }
+    setChartOptions(basicChartOptions);
+  };
+
+  const changeColor = (e) => {
+    let newColors = [...colors];
+    newColors[currentDataset] = e;
+    setColors(newColors);
+
+    let newChartData = [...chartData];
+    newChartData[currentDataset].borderColor = colors[currentDataset];
+    setChartData(newChartData);
   };
 
   const addDataset = () => {
@@ -196,6 +214,8 @@ function LineChart() {
       tension: 0.1,
     });
     setChartData(newChartData);
+
+    setColors([...colors, "rgb(75, 192, 192)"]);
   };
 
   const changeDatasetNum = (e) => {
@@ -206,11 +226,23 @@ function LineChart() {
     datasets: chartData,
   };
 
-  console.log(color)
+  const mainTitles = 
+    [{
+      title: "Chart",
+      name: "chartTitle", 
+      value: chartTitle
+    },{
+      title: "X-Axis",
+      name: "x", 
+      value: axisTitles.x
+    },{
+      title: "Y-Axis",
+      name: "y", 
+      value: axisTitles.y
+    }]
 
   return (
     <Container align="center">
-      <HexColorPicker color={color} onChange={setColor} />
       {started && (
         <Row>
           <Col>
@@ -225,7 +257,6 @@ function LineChart() {
               <Card.Title>Line Chart</Card.Title>
               <Card.Body className="m-5">
                 <Line options={chartOptions} data={data} />
-
                 <Button
                   style={{
                     fontSize: "1vw",
@@ -275,44 +306,23 @@ function LineChart() {
                   );
                 })}
                 <Nav.Item>
-                  <Nav.Link onClick={() => addDataset()} eventKey="add">
-                    Add Dataset
-                  </Nav.Link>
+                  <Nav.Link onClick={() => addDataset()}>Add Dataset</Nav.Link>
                 </Nav.Item>
               </Nav>
               <Card.Body className="me-5 ms-5">
-                <Form.Group className="mb-3">
-                  <Form.Label htmlFor="disabledSelect">Menu</Form.Label>
-                  <Form.Select id="disabledSelect">
-                    <option>Regular Properties</option>
-                    <option>Hover Over Properties</option>
-                    <option>Color Properties</option>
-                  </Form.Select>
-                </Form.Group>
-
                 <hr />
                 {main ? (
-                  <>
-                    <Form.Group className="mb-3">
-                      <Form.Label>X-Axis Title</Form.Label>
-                      <Form.Control
-                        onChange={(e) => changeTitle(e)}
-                        type="text"
-                        name="x"
-                        value={axisTitles.x}
-                      />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                      <Form.Label>Y-Axis Title</Form.Label>
-                      <Form.Control
-                        onChange={(e) => changeTitle(e)}
-                        name="y"
-                        type="text"
-                        value={axisTitles.y}
-                      />
-                    </Form.Group>
-                  </>
+                  mainTitles.map((groupItem) => {
+                    return (<Form.Group className="mb-3">
+                    <Form.Label>{groupItem.title} Title</Form.Label>
+                    <Form.Control
+                      onChange={(e) => changeTitle(e)}
+                      type="text"
+                      name={groupItem.name}
+                      value={groupItem.value}
+                    />
+                  </Form.Group>)
+                  })
                 ) : (
                   <>
                     <Form.Group className="mb-3">
@@ -325,7 +335,12 @@ function LineChart() {
                       />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                      <Form.Label>Point Color</Form.Label>
+                      <Form.Label>Line Color</Form.Label>
+                      <HexColorPicker
+                        style={{ width: "8vw", height: "8vw" }}
+                        color={colors[currentDataset]}
+                        onChange={(e) => changeColor(e)}
+                      />
                     </Form.Group>
                     <Dropdown as={ButtonGroup}>
                       <OverlayTrigger

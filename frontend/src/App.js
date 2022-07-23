@@ -21,8 +21,6 @@ import LineChart from "./pages/charts/LineChart";
 
 
 import {check_auth} from './auth-reducers/AuthReducers'
-import Chart from "./pages/charts/Chart";
-
 
 
 function App() {
