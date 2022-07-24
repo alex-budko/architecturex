@@ -37,11 +37,16 @@ function BarChart() {
         data: [12, 19, 3, 5, 2, 3],
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
+      {
+        label: "Dataset 2",
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
     ],
   };
 
   return (<div style={{width: '50vw', height: '50vh'}}>
-    {/* <Bar options={options} data={data} /> */}
+    <Bar options={options} data={data} />
     <div className="color-picker"></div>
     </div>);
 }

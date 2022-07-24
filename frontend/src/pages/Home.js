@@ -11,7 +11,7 @@ function Home() {
       <div className='container'>
         <div className="jumbotron mt-5">
             <h1 className="display-4">Welcome To Architecturex!</h1>
-            <p className="lead">A free website to architecture your charts</p>
+            <p className="lead">A free website to design your charts</p>
             <hr className="my-4"/>
             <p>Get Started</p>
             <p className="lead">

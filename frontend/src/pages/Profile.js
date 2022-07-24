@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { useMediaQuery } from "react-responsive";
+
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
@@ -23,6 +25,11 @@ import UploadButton from "@rpldy/upload-button";
 import { Line } from "react-chartjs-2";
 
 function Profile() {
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1824px)" });
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
+
   const [data, setData] = useState({
     user: "UNDEFINED",
     description: "",
@@ -50,91 +57,46 @@ function Profile() {
   }, [data]);
 
   console.log(charts);
-
-  const CARD_WIDTH = "30vw";
-  const CARD_HEIGHT = "80vh";
-  const CARD_MARGIN = "4vh";
   return (
     <Container>
       <Row>
-        <Col width={"1px"} />
-        <Col>
+        <Col fluid="sm">
           <Card
             style={{
-              marginTop: CARD_MARGIN,
-              width: CARD_WIDTH,
-              height: CARD_HEIGHT,
+              marginTop: "30px",
+              width: !isTabletOrMobile ? `500px` : `250px`,
+              height: !isTabletOrMobile ? `80vh` : `350px`,
             }}
           >
-            <Card>
-              <Uploady
-                style={{ cursor: "pointer", width: "30px" }}
-                destination={{ url: "/C:/build/static/media/avatars/" }}
-              >
-                <UploadButton onClick={(e) => console.log(e)}>
-                  <BiUpload />
-                </UploadButton>
-              </Uploady>
-              <Card.Img display={"inline"} src={require("../images/pfp.png")} />
-            </Card>
+            {/* profile picture */}
+            <Row>
+              <Col></Col>
+              <Col>
+                <Container
+                  align="center"
+                  style={{
+                    width: !isTabletOrMobile ? `250px` : `150px`,
+                    height: !isTabletOrMobile ? `250px` : `150px`,
+                  }}
+                >
+                  <Uploady
+                    style={{ cursor: "pointer", width: "30px" }}
+                    destination={{ url: "/C:/build/static/media/avatars/" }}
+                  >
+                    <UploadButton onClick={(e) => console.log(e)}>
+                      <BiUpload />
+                    </UploadButton>
+                  </Uploady>
+
+                  <Card.Img align="center" src={require("../images/pfp.png")} />
+                </Container>
+              </Col>
+              <Col></Col>
+            </Row>
 
             <Card.Body align="center">
-              <Card.Title>Username: {data.user}</Card.Title>
-              <Card.Text
-                style={{
-                  marginTop: "5px",
-                  fontSize: "smaller",
-                }}
-              >
-                Email: {data.email}
-              </Card.Text>
-              <Button style={{ marginTop: "0px" }} variant="primary">
-                Follow
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col>
-          <Card
-            style={{
-              marginTop: CARD_MARGIN,
-              width: "40vw",
-              height: "40vh",
-              overflow: "scroll"
-            }}
-          >
-            <Card.Body  align="center">
-              <Card.Title>Charts</Card.Title>
-              <Row>
-                {charts &&
-                  charts.map((chart) => {
-                    return (
-                      <Col>
-                        <Line
-                          style={{width: "250px", height: "100px"}}
-                          options={chart.options}
-                          data={chart.data}
-                          key={chart.id}
-                        />
-                      </Col>
-                    );
-                  })}
-              </Row>
-              <Button as={Link} to={`/charts/${name}`} variant="primary">
-                View All
-              </Button>
-            </Card.Body>
-          </Card>
-          <Card
-            style={{
-              marginTop: CARD_MARGIN,
-              width: "40vw",
-              height: "40vh",
-            }}
-          >
-            <Card.Body align="center">
-              <Card.Title>Description</Card.Title>
-
+              <Card.Title xs={6}>Username: {data.user}</Card.Title>
+              <Card.Title xs={6}> Email: {data.email}</Card.Title>
               <InputGroup
                 style={{
                   marginTop: "10px",
@@ -176,7 +138,40 @@ function Profile() {
             </Card.Body>
           </Card>
         </Col>
-        <Col width={"1px"} />
+        <Col fluid="sm">
+          <Card
+            style={{
+              marginTop: "30px",
+              width: !isTabletOrMobile ? `500px` : `250px`,
+              height: !isTabletOrMobile ? `80vh` : `100px`,
+              overflowX: "hidden",
+              overflowY: "scroll",
+            }}
+          >
+            <Card.Body align="center">
+              <Card.Title>Charts</Card.Title>
+              <Row>
+                {charts &&
+                  !isTabletOrMobile &&
+                  charts.map((chart) => {
+                    return (
+                      <Col>
+                        <Line
+                          style={{ width: "250px", height: "100px" }}
+                          options={chart.options}
+                          data={chart.data}
+                          key={chart.id}
+                        />
+                      </Col>
+                    );
+                  })}
+              </Row>
+              <Button as={Link} to={`/charts/${name}`} variant="primary">
+                View All
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
     </Container>
   );

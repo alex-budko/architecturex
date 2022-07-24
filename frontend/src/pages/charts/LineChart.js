@@ -26,11 +26,11 @@ import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
 
 function LineChart() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user.user)
+  const user = useSelector((state) => state.user.user);
 
-  const [authenticated, setAuthenticated] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false);
 
   const [started, setStarted] = useState(false);
   const [currentDataset, setCurrentDataset] = useState(0);
@@ -98,8 +98,10 @@ function LineChart() {
           label: datasetTitles[currentDataset],
           data: [],
           fill: false,
+          borderDash: [0, 0],
           borderColor: colors[currentDataset],
-          tension: 0.1,
+          backgroundColor: colors[currentDataset],
+          tension: 0,
         },
       ]);
 
@@ -119,19 +121,26 @@ function LineChart() {
     }
   }, [started, chartTitle, datasetTitles, currentDataset]);
 
+  //change chart title in real-time
+  useEffect(()=> {
+    if (started) {
+      setChartOptions(basicChartOptions)
+    }
+  }, [chartTitle, started])
+
   const pointForm = (
     <Popover>
       <Popover.Header as="h3">Datapoint</Popover.Header>
       <Popover.Body>
         <Form onSubmit={(e) => addPoint(e)}>
           <Form.Group className="mb-3" controlId="xValue">
-            <Form.Label>X</Form.Label>
-            <Form.Control name="x" type="number" placeholder="0" required />
+            <Form.Label style={{display: 'inline'}}>X: </Form.Label>
+            <Form.Control style={{display: 'inline', width: "10vw", marginRight: "5px"}} name="x" type="number" placeholder="0" required />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="yValue">
-            <Form.Label>Y</Form.Label>
-            <Form.Control name="y" type="number" placeholder="0" required />
+            <Form.Label style={{display: 'inline'}}>Y: </Form.Label>
+            <Form.Control style={{display: 'inline', width: "10vw", marginRight: "5px"}} name="y" type="number" placeholder="0" required />
           </Form.Group>
 
           <Button type="submit" variant="primary">
@@ -145,7 +154,7 @@ function LineChart() {
   const addPoint = (e) => {
     e.preventDefault();
 
-    let newChartData = [...chartData]
+    let newChartData = [...chartData];
 
     let xA = [];
 
@@ -157,12 +166,15 @@ function LineChart() {
       ];
     }
 
-    const pos = sortedIndex(xA, e.target[0].value, 0, xA.length);
+
+    const pos = sortedIndex(xA, e.target[0].value);
+
 
     newChartData[currentDataset]["data"].splice(pos, 0, {
       x: e.target[0].value,
       y: e.target[1].value,
-    })
+    });
+
 
     setChartData(newChartData);
   };
@@ -174,23 +186,18 @@ function LineChart() {
   };
 
   const changeTitle = (e) => {
-    let cT = null;
     if (e.target.name === "title") {
       let newTitles = [...datasetTitles];
       newTitles[currentDataset] = e.target.value;
       setDatasetTitles(newTitles);
     } else {
       if (e.target.name === "chartTitle") {
-        cT = e.target.value;
         setChartTitle(e.target.value);
       } else {
         let newAxisTitles = axisTitles;
         newAxisTitles[e.target.name] = e.target.value;
         setAxisTitles(newAxisTitles);
       }
-    }
-    if (!cT) {
-      cT = chartTitle;
     }
     setChartOptions(basicChartOptions);
   };
@@ -202,6 +209,7 @@ function LineChart() {
 
     let newChartData = [...chartData];
     newChartData[currentDataset].borderColor = colors[currentDataset];
+    newChartData[currentDataset].backgroundColor = colors[currentDataset];
     setChartData(newChartData);
   };
 
@@ -215,8 +223,10 @@ function LineChart() {
       label: "Dataset",
       data: [],
       fill: false,
+      borderDash: [0, 0],
       borderColor: "rgb(75, 192, 192)",
-      tension: 0.1,
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
     });
     setChartData(newChartData);
 
@@ -232,7 +242,7 @@ function LineChart() {
   };
 
   //L represents Linear
-  const chartType = 'L'
+  const chartType = "L";
 
   const mainTitles = [
     {
@@ -257,31 +267,38 @@ function LineChart() {
       {started && (
         <Row>
           <Col>
-            <Card
-              style={{
-                marginTop: "3vh",
-                width: "50vw",
-                height: "80vh",
-              }}
-              align="center"
-            >
-              <Card.Title>Line Chart</Card.Title>
+            <Card align="center" style={{marginTop: "30px"}}>
+              <Card.Title className="mt-5"><u>Line Chart</u></Card.Title>
               <Card.Body className="m-5">
-                <Line options={chartOptions} data={data} />
+                <Card>
+                  <Line options={chartOptions} data={data} />
+                </Card>
                 <Button
                   style={{
-                    fontSize: "1vw",
+                    fontSize: "small",
                     marginRight: "1vw",
                     marginTop: "2vh",
                   }}
-                  onClick={()=>chart_create(dispatch, chartType, chartOptions, data, user.name)}
+                  onClick={() =>
+                    chart_create(
+                      dispatch,
+                      chartType,
+                      chartOptions,
+                      data,
+                      user.name
+                    )
+                  }
                 >
                   Save
                 </Button>
                 <Button
                   onClick={() => setStarted(false)}
                   variant="secondary"
-                  style={{ fontSize: "1vw", marginTop: "2vh" }}
+                  style={{
+                    fontSize: "small",
+                    marginRight: "1vw",
+                    marginTop: "2vh",
+                  }}
                 >
                   Scrap
                 </Button>
@@ -289,15 +306,8 @@ function LineChart() {
             </Card>
           </Col>
           <Col>
-            <Card
-              style={{
-                marginTop: "3vh",
-                width: "35vw",
-                height: "80vh",
-              }}
-              align="center"
-            >
-              <Card.Title>Data Panel</Card.Title>
+            <Card align="center" style={{marginTop: "30px"}}>
+              <Card.Title className="mt-5"><u>Data Panel</u></Card.Title>
 
               <Nav variant="tabs" defaultActiveKey="0">
                 <Nav.Link onClick={() => setMain(true)} eventKey="main">
@@ -306,12 +316,13 @@ function LineChart() {
                 {datasetTitles.map((dataset, i) => {
                   return (
                     <Nav.Item
+                      align="center"
                       onClick={(e) => {
                         setMain(false);
                         changeDatasetNum(e);
                       }}
                     >
-                      <Nav.Link name={i} key={i} eventKey={i}>
+                      <Nav.Link align="center" name={i} key={i} eventKey={i}>
                         {dataset}
                       </Nav.Link>
                     </Nav.Item>
@@ -321,13 +332,13 @@ function LineChart() {
                   <Nav.Link onClick={() => addDataset()}>Add Dataset</Nav.Link>
                 </Nav.Item>
               </Nav>
-              <Card.Body className="me-5 ms-5">
+              <Card.Body align="center" className="me-5 ms-5">
                 <hr />
                 {main ? (
                   mainTitles.map((groupItem) => {
                     return (
                       <Form.Group className="mb-3">
-                        <Form.Label>{groupItem.title} Title</Form.Label>
+                        <Form.Label><u>{groupItem.title} Title</u></Form.Label>
                         <Form.Control
                           onChange={(e) => changeTitle(e)}
                           type="text"
@@ -351,7 +362,7 @@ function LineChart() {
                     <Form.Group className="mb-3">
                       <Form.Label>Line Color</Form.Label>
                       <HexColorPicker
-                        style={{ width: "8vw", height: "8vw" }}
+                        style={{ width: "16vw", height: "12vh" }}
                         color={colors[currentDataset]}
                         onChange={(e) => changeColor(e)}
                       />
@@ -370,7 +381,8 @@ function LineChart() {
                         id="dropdown-split-basic"
                       />
                       <Dropdown.Menu>
-                        {chartData[currentDataset].data.map((dataPoint, i) => {
+                        {chartData[currentDataset].data === [] ?
+                        (chartData[currentDataset].data.map((dataPoint, i) => {
                           return (
                             <Dropdown.Item key={i}>
                               Point: ({dataPoint.x}, {dataPoint.y})
@@ -380,7 +392,7 @@ function LineChart() {
                               />
                             </Dropdown.Item>
                           );
-                        })}
+                        })) : (<Card.Text align="center">No Data</Card.Text>)}
                       </Dropdown.Menu>
                     </Dropdown>
                   </>

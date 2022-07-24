@@ -24,13 +24,13 @@ function Charts() {
     <Card
       style={{
         marginTop: "10px",
-        width: "90vw",
+        width: "100vw",
         height: "90vh",
-        overflow: "scroll",
+        overflowY: "scroll",
       }}
     >
       <Card.Body align="center">
-        <Card.Title>Charts</Card.Title>
+        <Card.Title><u>{name}'s Charts</u></Card.Title>
         <Row>
           {charts &&
             charts.map((chart) => {
