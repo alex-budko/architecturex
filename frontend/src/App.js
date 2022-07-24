@@ -21,10 +21,15 @@ import LineChart from "./pages/charts/LineChart";
 
 
 import {check_auth} from './auth-reducers/AuthReducers'
-
+import Charts from "./pages/charts/Charts";
 
 function App() {
+
   const dispatch = useDispatch();
+
+  useEffect(()=> {
+    check_auth(dispatch)
+  })
 
   return (
     <BrowserRouter>
@@ -44,6 +49,7 @@ function App() {
           <Route path='bar' element={<BarChart />}/>
         </Route>
         <Route path="profile/:name" element={<Profile />} />
+        <Route path="charts/:name" element={<Charts />} />
       </Routes>
     </BrowserRouter>
   );

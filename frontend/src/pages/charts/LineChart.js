@@ -2,9 +2,8 @@
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
-
 //bootstrap imports
 import {
   ButtonGroup,
@@ -22,14 +21,19 @@ import {
 
 import { ImCross } from "react-icons/im";
 import { sortedIndex } from "../../utils/sortedIndex";
-import { current } from "@reduxjs/toolkit";
+import AuthenticatedStatus from "../../auth-components/AuthenticatedStatus";
+import { chart_create } from "../../auth-reducers/AuthReducers";
+import { useDispatch, useSelector } from "react-redux";
 
 function LineChart() {
+  const dispatch = useDispatch()
+
+  const user = useSelector(state => state.user.user)
+
+  const [authenticated, setAuthenticated] = useState(false)
+
   const [started, setStarted] = useState(false);
-  const [menuTabs, setMenuTabs] = useState([]);
-
   const [currentDataset, setCurrentDataset] = useState(0);
-
   const [main, setMain] = useState(false);
 
   //dataset data
@@ -48,7 +52,7 @@ function LineChart() {
   const basicAxisTitles = {
     x: "X-Axis",
     y: "Y-Axis",
-  }
+  };
 
   const [axisTitles, setAxisTitles] = useState(basicAxisTitles);
 
@@ -77,7 +81,7 @@ function LineChart() {
         text: chartTitle,
       },
     },
-  }
+  };
 
   useEffect(() => {
     if (!started) {
@@ -121,12 +125,12 @@ function LineChart() {
       <Popover.Body>
         <Form onSubmit={(e) => addPoint(e)}>
           <Form.Group className="mb-3" controlId="xValue">
-            <Form.Label>X-Value</Form.Label>
+            <Form.Label>X</Form.Label>
             <Form.Control name="x" type="number" placeholder="0" required />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="yValue">
-            <Form.Label>Y-Value</Form.Label>
+            <Form.Label>Y</Form.Label>
             <Form.Control name="y" type="number" placeholder="0" required />
           </Form.Group>
 
@@ -141,9 +145,9 @@ function LineChart() {
   const addPoint = (e) => {
     e.preventDefault();
 
-    let newChartData = [...chartData];
+    let newChartData = [...chartData]
 
-    let xA = []
+    let xA = [];
 
     if (newChartData[currentDataset]["data"][0]) {
       xA = [
@@ -158,7 +162,8 @@ function LineChart() {
     newChartData[currentDataset]["data"].splice(pos, 0, {
       x: e.target[0].value,
       y: e.target[1].value,
-    });
+    })
+
     setChartData(newChartData);
   };
 
@@ -226,20 +231,26 @@ function LineChart() {
     datasets: chartData,
   };
 
-  const mainTitles = 
-    [{
+  //L represents Linear
+  const chartType = 'L'
+
+  const mainTitles = [
+    {
       title: "Chart",
-      name: "chartTitle", 
-      value: chartTitle
-    },{
+      name: "chartTitle",
+      value: chartTitle,
+    },
+    {
       title: "X-Axis",
-      name: "x", 
-      value: axisTitles.x
-    },{
+      name: "x",
+      value: axisTitles.x,
+    },
+    {
       title: "Y-Axis",
-      name: "y", 
-      value: axisTitles.y
-    }]
+      name: "y",
+      value: axisTitles.y,
+    },
+  ];
 
   return (
     <Container align="center">
@@ -263,6 +274,7 @@ function LineChart() {
                     marginRight: "1vw",
                     marginTop: "2vh",
                   }}
+                  onClick={()=>chart_create(dispatch, chartType, chartOptions, data, user.name)}
                 >
                   Save
                 </Button>
@@ -313,15 +325,17 @@ function LineChart() {
                 <hr />
                 {main ? (
                   mainTitles.map((groupItem) => {
-                    return (<Form.Group className="mb-3">
-                    <Form.Label>{groupItem.title} Title</Form.Label>
-                    <Form.Control
-                      onChange={(e) => changeTitle(e)}
-                      type="text"
-                      name={groupItem.name}
-                      value={groupItem.value}
-                    />
-                  </Form.Group>)
+                    return (
+                      <Form.Group className="mb-3">
+                        <Form.Label>{groupItem.title} Title</Form.Label>
+                        <Form.Control
+                          onChange={(e) => changeTitle(e)}
+                          type="text"
+                          name={groupItem.name}
+                          value={groupItem.value}
+                        />
+                      </Form.Group>
+                    );
                   })
                 ) : (
                   <>

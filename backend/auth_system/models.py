@@ -1,6 +1,4 @@
-from ctypes.wintypes import CHAR
-from email.policy import default
-from secrets import choice
+
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -99,7 +97,7 @@ class Chart(models.Model):
     BAR = 'B'
     CHART_TYPES = [
         (LINE, 'Line'),
-        (BAR, 'B'),
+        (BAR, 'Bar'),
     ]
 
     def default_options():

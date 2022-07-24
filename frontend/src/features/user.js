@@ -64,6 +64,8 @@ export const userSlice = createSlice({
     password_reset_confirm_fail: (state, action) => {},
     profilecreate: (state, action) => {},
     profilecreate_fail: (state, action) => {},
+    chartcreate: (state, action) => {},
+    chartcreate_fail: (state, action) => {},
   },
 });
 
@@ -85,6 +87,8 @@ export const {
   signup_fail,
   activation_success,
   activation_fail,
+  chartcreate,
+  chartcreate_fail,
 } = userSlice.actions;
 
 export default userSlice.reducer;

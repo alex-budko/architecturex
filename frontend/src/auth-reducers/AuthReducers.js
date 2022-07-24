@@ -15,6 +15,8 @@ import {
   password_reset_confirm_fail,
   activation_fail,
   activation_success,
+  chartcreate_fail,
+  chartcreate,
 } from "../features/user";
 
 import axios from "axios";
@@ -269,5 +271,46 @@ export async function profile_update(name, email, description) {
     )
     return res
   } catch (err) {
+  }
+}
+
+export async function chart_create(dispatch, chartType, options, data, user) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const body = JSON.stringify({
+    chartType,
+    options,
+    data,
+    user,
+  });
+  try {
+    await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/create/chart/`,
+      body,
+      config
+    )
+    dispatch(chartcreate());
+  } catch (err) {
+    dispatch(chartcreate_fail());
+  }
+}
+
+export async function charts_view(name) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const data = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/charts/${name}/`,
+      config
+    )
+    return data
+  } catch (err) {
+    console.log(err)
   }
 }

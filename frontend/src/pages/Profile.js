@@ -9,13 +9,18 @@ import Row from "react-bootstrap/Row";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 
-import { profile_update, profile_view } from "../auth-reducers/AuthReducers";
+import {
+  charts_view,
+  profile_update,
+  profile_view,
+} from "../auth-reducers/AuthReducers";
 import { useParams } from "react-router-dom";
 
 import { BiUpload } from "react-icons/bi";
 
 import Uploady from "@rpldy/uploady";
 import UploadButton from "@rpldy/upload-button";
+import { Line } from "react-chartjs-2";
 
 function Profile() {
   const [data, setData] = useState({
@@ -24,6 +29,8 @@ function Profile() {
     email: "",
     avatar: null,
   });
+
+  const [charts, setCharts] = useState(null);
 
   const [description, setDescription] = useState({
     description: "",
@@ -35,11 +42,14 @@ function Profile() {
 
   useEffect(() => {
     profile_view(name).then((res) => setData(res.data));
+    charts_view(name).then((res) => setCharts(res.data));
   }, [updating, name]);
 
   useEffect(() => {
     setDescription(data.description);
   }, [data]);
+
+  console.log(charts);
 
   const CARD_WIDTH = "30vw";
   const CARD_HEIGHT = "80vh";
@@ -57,10 +67,11 @@ function Profile() {
             }}
           >
             <Card>
-              <Uploady style={{ cursor: "pointer", width: "30px" }} destination={{ url: "/C:/build/static/media/avatars/",  }}>
-                <UploadButton
-                  onClick={(e) => console.log(e)}
-                >
+              <Uploady
+                style={{ cursor: "pointer", width: "30px" }}
+                destination={{ url: "/C:/build/static/media/avatars/" }}
+              >
+                <UploadButton onClick={(e) => console.log(e)}>
                   <BiUpload />
                 </UploadButton>
               </Uploady>
@@ -89,19 +100,27 @@ function Profile() {
               marginTop: CARD_MARGIN,
               width: "40vw",
               height: "40vh",
+              overflow: "scroll"
             }}
           >
-            <Card.Body align="center">
+            <Card.Body  align="center">
               <Card.Title>Charts</Card.Title>
               <Row>
-                <Col>
-                  <Card.Img src={require("../images/g.png")} />
-                </Col>
-                <Col>
-                  <Card.Img src={require("../images/g.png")} />
-                </Col>
+                {charts &&
+                  charts.map((chart) => {
+                    return (
+                      <Col>
+                        <Line
+                          style={{width: "250px", height: "100px"}}
+                          options={chart.options}
+                          data={chart.data}
+                          key={chart.id}
+                        />
+                      </Col>
+                    );
+                  })}
               </Row>
-              <Button as={Link} to="charts" variant="primary">
+              <Button as={Link} to={`/charts/${name}`} variant="primary">
                 View All
               </Button>
             </Card.Body>
