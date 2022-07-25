@@ -1,5 +1,5 @@
 //chart.js imports
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import "chart.js/auto";
 
 import { useEffect, useState } from "react";
@@ -24,9 +24,12 @@ import { sortedIndex } from "../../utils/sortedIndex";
 import AuthenticatedStatus from "../../auth-components/AuthenticatedStatus";
 import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
 
-function LineChart() {
+function Chart() {
   const dispatch = useDispatch();
+
+  const { chart_type } = useParams();
 
   const user = useSelector((state) => state.user.user);
 
@@ -56,32 +59,61 @@ function LineChart() {
 
   const [axisTitles, setAxisTitles] = useState(basicAxisTitles);
 
-  const basicChartOptions = {
-    scales: {
-      x: {
-        title: {
-          display: "true",
-          text: axisTitles.x,
-        },
-        type: "linear",
-        display: true,
-        beginAtZero: true,
-      },
-      y: {
-        display: true,
-        title: {
-          display: true,
-          text: axisTitles.y,
-        },
-      },
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: chartTitle,
-      },
-    },
+  const linear = () => {
+    return chart_type === "line";
   };
+
+  const basicChartOptions = linear()
+    ? {
+        scales: {
+          x: {
+            title: {
+              display: "true",
+              text: axisTitles.x,
+            },
+            type: "linear",
+            display: true,
+            beginAtZero: true,
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: axisTitles.y,
+            },
+          },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: chartTitle,
+          },
+        },
+      }
+    : {
+        scales: {
+          x: {
+            title: {
+              display: "true",
+              text: axisTitles.x,
+            },
+            display: true,
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: axisTitles.y,
+            },
+          },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: chartTitle,
+          },
+        },
+      };
 
   useEffect(() => {
     if (!started) {
@@ -122,11 +154,11 @@ function LineChart() {
   }, [started, chartTitle, datasetTitles, currentDataset]);
 
   //change chart title in real-time
-  useEffect(()=> {
+  useEffect(() => {
     if (started) {
       setChartOptions(basicChartOptions)
     }
-  }, [chartTitle, started])
+  }, [chartTitle, axisTitles, started]);
 
   const pointForm = (
     <Popover>
@@ -134,13 +166,37 @@ function LineChart() {
       <Popover.Body>
         <Form onSubmit={(e) => addPoint(e)}>
           <Form.Group className="mb-3" controlId="xValue">
-            <Form.Label style={{display: 'inline'}}>X: </Form.Label>
-            <Form.Control style={{display: 'inline', width: "10vw", marginRight: "5px"}} name="x" type="number" placeholder="0" required />
+            <Form.Label style={{ display: "inline" }}>
+              {linear() ? "X:" : "Name:"}
+            </Form.Label>
+            {linear() ? (
+              <Form.Control
+                style={{ display: "inline", width: "10vw", marginRight: "5px" }}
+                name="x"
+                type="number"
+                placeholder="0"
+                required
+              />
+            ) : (
+              <Form.Control
+                style={{ display: "inline", width: "10vw", marginRight: "5px" }}
+                name="x"
+                type="text"
+                placeholder="September"
+                required
+              />
+            )}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="yValue">
-            <Form.Label style={{display: 'inline'}}>Y: </Form.Label>
-            <Form.Control style={{display: 'inline', width: "10vw", marginRight: "5px"}} name="y" type="number" placeholder="0" required />
+            <Form.Label style={{ display: "inline" }}>Y: </Form.Label>
+            <Form.Control
+              style={{ display: "inline", width: "10vw", marginRight: "5px" }}
+              name="y"
+              type="number"
+              placeholder="0"
+              required
+            />
           </Form.Group>
 
           <Button type="submit" variant="primary">
@@ -153,28 +209,26 @@ function LineChart() {
 
   const addPoint = (e) => {
     e.preventDefault();
+    let pos = 0;
+    if (linear()) {
+      let xA = [];
 
-    let newChartData = [...chartData];
+      if (newChartData[currentDataset]["data"][0]) {
+        xA = [
+          newChartData[currentDataset]["data"].map((dataPoint) => {
+            return dataPoint.x;
+          }),
+        ];
+      }
 
-    let xA = [];
-
-    if (newChartData[currentDataset]["data"][0]) {
-      xA = [
-        newChartData[currentDataset]["data"].map((dataPoint) => {
-          return dataPoint.x;
-        }),
-      ];
+      pos = sortedIndex(xA, e.target[0].value);
     }
-
-
-    const pos = sortedIndex(xA, e.target[0].value);
-
+    let newChartData = [...chartData];
 
     newChartData[currentDataset]["data"].splice(pos, 0, {
       x: e.target[0].value,
       y: e.target[1].value,
     });
-
 
     setChartData(newChartData);
   };
@@ -242,7 +296,7 @@ function LineChart() {
   };
 
   //L represents Linear
-  const chartType = "L";
+  const chartType = linear() ? "L" : "B";
 
   const mainTitles = [
     {
@@ -267,11 +321,17 @@ function LineChart() {
       {started && (
         <Row>
           <Col>
-            <Card align="center" style={{marginTop: "30px"}}>
-              <Card.Title className="mt-5"><u>Line Chart</u></Card.Title>
+            <Card align="center" style={{ marginTop: "30px" }}>
+              <Card.Title className="mt-5">
+                <u>{linear() ? "Line" : "Bar"} Chart</u>
+              </Card.Title>
               <Card.Body className="m-5">
                 <Card>
-                  <Line options={chartOptions} data={data} />
+                  {linear() ? (
+                    <Line options={chartOptions} data={data} />
+                  ) : (
+                    <Bar options={chartOptions} data={data} />
+                  )}
                 </Card>
                 <Button
                   style={{
@@ -306,8 +366,10 @@ function LineChart() {
             </Card>
           </Col>
           <Col>
-            <Card align="center" style={{marginTop: "30px"}}>
-              <Card.Title className="mt-5"><u>Data Panel</u></Card.Title>
+            <Card align="center" style={{ marginTop: "30px" }}>
+              <Card.Title className="mt-5">
+                <u>Data Panel</u>
+              </Card.Title>
 
               <Nav variant="tabs" defaultActiveKey="0">
                 <Nav.Link onClick={() => setMain(true)} eventKey="main">
@@ -338,7 +400,9 @@ function LineChart() {
                   mainTitles.map((groupItem) => {
                     return (
                       <Form.Group className="mb-3">
-                        <Form.Label><u>{groupItem.title} Title</u></Form.Label>
+                        <Form.Label>
+                          <u>{groupItem.title} Title</u>
+                        </Form.Label>
                         <Form.Control
                           onChange={(e) => changeTitle(e)}
                           type="text"
@@ -381,18 +445,21 @@ function LineChart() {
                         id="dropdown-split-basic"
                       />
                       <Dropdown.Menu>
-                        {chartData[currentDataset].data === [] ?
-                        (chartData[currentDataset].data.map((dataPoint, i) => {
-                          return (
-                            <Dropdown.Item key={i}>
-                              Point: ({dataPoint.x}, {dataPoint.y})
-                              <ImCross
-                                onClick={() => deleteDataPoint(i)}
-                                style={{ color: "red", margin: "0 0 0 15" }}
-                              />
-                            </Dropdown.Item>
-                          );
-                        })) : (<Card.Text align="center">No Data</Card.Text>)}
+                        {chartData[currentDataset].data === [] ? (
+                          chartData[currentDataset].data.map((dataPoint, i) => {
+                            return (
+                              <Dropdown.Item key={i}>
+                                Point: ({dataPoint.x}, {dataPoint.y})
+                                <ImCross
+                                  onClick={() => deleteDataPoint(i)}
+                                  style={{ color: "red", margin: "0 0 0 15" }}
+                                />
+                              </Dropdown.Item>
+                            );
+                          })
+                        ) : (
+                          <Card.Text align="center">No Data</Card.Text>
+                        )}
                       </Dropdown.Menu>
                     </Dropdown>
                   </>
@@ -406,4 +473,4 @@ function LineChart() {
   );
 }
 
-export default LineChart;
+export default Chart;

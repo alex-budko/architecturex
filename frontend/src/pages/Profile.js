@@ -22,7 +22,7 @@ import { BiUpload } from "react-icons/bi";
 
 import Uploady from "@rpldy/uploady";
 import UploadButton from "@rpldy/upload-button";
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 
 function Profile() {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1824px)" });
@@ -156,12 +156,21 @@ function Profile() {
                   charts.map((chart) => {
                     return (
                       <Col>
-                        <Line
-                          style={{ width: "250px", height: "100px" }}
-                          options={chart.options}
-                          data={chart.data}
-                          key={chart.id}
-                        />
+                        {chart.chartType === "L" ? (
+                          <Line
+                            style={{ width: "250px", height: "100px" }}
+                            options={chart.options}
+                            data={chart.data}
+                            key={chart.id}
+                          />
+                        ) : (
+                          <Bar
+                            style={{ width: "250px", height: "100px" }}
+                            options={chart.options}
+                            data={chart.data}
+                            key={chart.id}
+                          />
+                        )}
                       </Col>
                     );
                   })}

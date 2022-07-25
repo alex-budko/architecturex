@@ -16,9 +16,7 @@ import Signup from "./auth-components/Signup";
 import Profile from "./pages/Profile";
 
 
-import BarChart from "./pages/charts/BarChart";
-import LineChart from "./pages/charts/LineChart";
-
+import Chart from "./pages/charts/Chart.js";
 
 import {check_auth} from './auth-reducers/AuthReducers'
 import Charts from "./pages/charts/Charts";
@@ -44,10 +42,7 @@ function App() {
           path="password/reset/confirm/:uid/:token"
           element={<PasswordResetConfirm />}
         />
-        <Route path='chart'>
-          <Route path='line' element={<LineChart />} />
-          <Route path='bar' element={<BarChart />}/>
-        </Route>
+        <Route path='chart/:chart_type' element={<Chart />}  />
         <Route path="profile/:name" element={<Profile />} />
         <Route path="charts/:name" element={<Charts />} />
       </Routes>
