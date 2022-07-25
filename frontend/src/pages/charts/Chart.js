@@ -210,6 +210,9 @@ function Chart() {
   const addPoint = (e) => {
     e.preventDefault();
     let pos = 0;
+    
+    let newChartData = [...chartData];
+
     if (linear()) {
       let xA = [];
 
@@ -223,7 +226,6 @@ function Chart() {
 
       pos = sortedIndex(xA, e.target[0].value);
     }
-    let newChartData = [...chartData];
 
     newChartData[currentDataset]["data"].splice(pos, 0, {
       x: e.target[0].value,

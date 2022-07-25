@@ -21,7 +21,13 @@ import {
 
 import axios from "axios";
 
-export async function sign_up(dispatch, name, email, password, re_password) {
+export async function sign_up(
+  dispatch,
+  name,
+  email,
+  password,
+  re_password,
+) {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -41,7 +47,6 @@ export async function sign_up(dispatch, name, email, password, re_password) {
     );
     localStorage.setItem("name", name);
     localStorage.setItem("email", email);
-
     dispatch(signup(res.data));
   } catch (err) {
     dispatch(signup_fail());
@@ -71,7 +76,6 @@ export async function verify(dispatch, uid, token) {
     }
 
     dispatch(activation_success());
-
   } catch (err) {
     dispatch(activation_fail());
   }
@@ -216,16 +220,16 @@ async function profile_create(dispatch) {
   };
   const body = JSON.stringify({
     user: localStorage.getItem("name"),
-    email: localStorage.getItem('email'),
+    email: localStorage.getItem("email"),
   });
-  localStorage.removeItem('name')
-  localStorage.removeItem('email')
+  localStorage.removeItem("name");
+  localStorage.removeItem("email");
   try {
     await axios.post(
       `${process.env.REACT_APP_API_URL}/api/create/profile/`,
       body,
       config
-    )
+    );
     dispatch(profilecreate());
   } catch (err) {
     dispatch(profilecreate_fail());
@@ -246,10 +250,9 @@ export async function profile_view(name) {
       `${process.env.REACT_APP_API_URL}/api/profile/${name}/`,
       body,
       config
-    )
-    return res
-  } catch (err) {
-  }
+    );
+    return res;
+  } catch (err) {}
 }
 
 export async function profile_update(name, email, description) {
@@ -260,18 +263,17 @@ export async function profile_update(name, email, description) {
   };
   const body = JSON.stringify({
     user: name,
-    email: email, 
-    description: description
+    email: email,
+    description: description,
   });
   try {
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/api/profile/${name}/`,
       body,
       config
-    )
-    return res
-  } catch (err) {
-  }
+    );
+    return res;
+  } catch (err) {}
 }
 
 export async function chart_create(dispatch, chartType, options, data, user) {
@@ -291,7 +293,7 @@ export async function chart_create(dispatch, chartType, options, data, user) {
       `${process.env.REACT_APP_API_URL}/api/create/chart/`,
       body,
       config
-    )
+    );
     dispatch(chartcreate());
   } catch (err) {
     dispatch(chartcreate_fail());
@@ -308,9 +310,9 @@ export async function charts_view(name) {
     const data = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/charts/${name}/`,
       config
-    )
-    return data
+    );
+    return data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }

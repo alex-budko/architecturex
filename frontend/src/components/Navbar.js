@@ -24,10 +24,10 @@ function CustomNavbar() {
               <Nav.Link as={Link} to="/">
                 About
               </Nav.Link>
-              <Nav.Link as={Link} to="/">
-                Pricing
+              <Nav.Link as={Link} to="/support">
+                Support
               </Nav.Link>
-              <Nav.Link as={Link} to="/">
+              <Nav.Link as={Link} to="/contact">
                 Contact
               </Nav.Link>
               <NavDropdown title="Create" id="collasible-nav-dropdown">

@@ -20,6 +20,8 @@ import Chart from "./pages/charts/Chart.js";
 
 import {check_auth} from './auth-reducers/AuthReducers'
 import Charts from "./pages/charts/Charts";
+import Support from "./pages/Support";
+import Contact from "./pages/Contact";
 
 function App() {
 
@@ -34,6 +36,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="support" element={<Support />} />
+        <Route path="contact" element={<Contact />} />
         <Route path="activate/:uid/:token" element={<Activate />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />

@@ -1,6 +1,4 @@
 import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,6 +7,7 @@ import { useParams } from "react-router";
 import { charts_view } from "../../auth-reducers/AuthReducers";
 
 import { Line, Bar } from "react-chartjs-2";
+import Container from "react-bootstrap/Container";
 
 
 function Charts() {
@@ -31,30 +30,26 @@ function Charts() {
     >
       <Card.Body align="center">
         <Card.Title><u>{name}'s Charts</u></Card.Title>
-        <Row>
           {charts &&
             charts.map((chart) => {
               return (
-                <Col>
+                <Container style={{ width: "600px" }}>
                   {chart.chartType === "L" ? (
                     <Line
-                      style={{ width: "250px", height: "100px" }}
                       options={chart.options}
                       data={chart.data}
                       key={chart.id}
                     />
                   ) : (
                     <Bar
-                      style={{ width: "250px", height: "100px" }}
                       options={chart.options}
                       data={chart.data}
                       key={chart.id}
                     />
                   )}
-                </Col>
+                </Container>
               );
             })}
-        </Row>
         <Button as={Link} to={`/profile/${name}`} variant="primary">
           Go To Profile
         </Button>

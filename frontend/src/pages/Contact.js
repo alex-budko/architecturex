@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import { useSelector } from "react-redux";
 import { Card, Container } from 'react-bootstrap';
 
-function Home() {
+function Contact() {
   
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
@@ -11,7 +11,7 @@ function Home() {
     <>
       <Container style={{width: '750px'}}>
         <div className="jumbotron mt-5">
-            <h1 className="display-3">Welcome To Architecturex!</h1>
+            <h1 className="display-3">Contact</h1>
             <p className="lead">This open-source editing website was developed by Alexander Budko. In here, you can. Click the button below to begin!</p>
             <hr className="my-4"/>
             <Card align="center">
@@ -28,4 +28,4 @@ function Home() {
   )
 }
 
-export default Home;
+export default Contact;

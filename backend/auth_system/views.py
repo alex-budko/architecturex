@@ -22,6 +22,9 @@ class ChartRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Chart.objects.all()
 
 class ChartListView(generics.ListAPIView):
-    lookup_field = 'user'
     serializer_class = ChartSerializer
-    queryset = Chart.objects.all()
+    model=Chart
+    def get_queryset(self):
+        user = self.kwargs['user']
+        queryset = self.model.objects.filter(user=user)
+        return queryset
