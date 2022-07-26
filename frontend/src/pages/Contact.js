@@ -11,7 +11,7 @@ function Contact() {
     <>
       <Container style={{width: '750px'}}>
         <div className="jumbotron mt-5">
-            <h1 className="display-3">Contact</h1>
+            <h1 className="display-3">Architecturex</h1>
             <p className="lead">This open-source editing website was developed by Alexander Budko. In here, you can. Click the button below to begin!</p>
             <hr className="my-4"/>
             <Card align="center">
