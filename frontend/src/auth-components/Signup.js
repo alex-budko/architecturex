@@ -83,7 +83,7 @@ function Signup() {
       value: password,
       muted: true,
       mutedText:
-        "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.",
+        "Your password must be 8-20 chars. long, contain letters and numbers, but can't contain spaces or other characters.",
     },
     re_password: {
       name: "re_password",

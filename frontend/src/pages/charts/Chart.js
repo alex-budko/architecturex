@@ -7,11 +7,7 @@ import { HexColorPicker } from "react-colorful";
 //bootstrap imports
 import {
   ButtonGroup,
-  Button,
   Card,
-  Row,
-  Container,
-  Col,
   Dropdown,
   OverlayTrigger,
   Form,
@@ -25,6 +21,20 @@ import AuthenticatedStatus from "../../auth-components/AuthenticatedStatus";
 import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import {
+  Center,
+  Container,
+  Heading,
+  HStack,
+  Button,
+  Box,
+  Flex,
+  Stack,
+  Wrap,
+  FormLabel,
+  WrapItem,
+  Divider,
+} from "@chakra-ui/react";
 
 function Chart() {
   const dispatch = useDispatch();
@@ -156,7 +166,7 @@ function Chart() {
   //change chart title in real-time
   useEffect(() => {
     if (started) {
-      setChartOptions(basicChartOptions)
+      setChartOptions(basicChartOptions);
     }
   }, [chartTitle, axisTitles, started]);
 
@@ -210,7 +220,7 @@ function Chart() {
   const addPoint = (e) => {
     e.preventDefault();
     let pos = 0;
-    
+
     let newChartData = [...chartData];
 
     if (linear()) {
@@ -319,159 +329,251 @@ function Chart() {
   ];
 
   return (
-    <Container align="center">
-      {started && (
-        <Row>
-          <Col>
-            <Card align="center" style={{ marginTop: "30px" }}>
-              <Card.Title className="mt-5">
-                <u>{linear() ? "Line" : "Bar"} Chart</u>
-              </Card.Title>
-              <Card.Body className="m-5">
-                <Card>
-                  {linear() ? (
-                    <Line options={chartOptions} data={data} />
-                  ) : (
-                    <Bar options={chartOptions} data={data} />
-                  )}
-                </Card>
-                <Button
-                  style={{
-                    fontSize: "small",
-                    marginRight: "1vw",
-                    marginTop: "2vh",
-                  }}
-                  onClick={() =>
-                    chart_create(
-                      dispatch,
-                      chartType,
-                      chartOptions,
-                      data,
-                      user.name
-                    )
-                  }
+    <Center>
+      <Flex>
+        {started && (
+          <Wrap spacing={6} justify="center">
+            <WrapItem>
+              <Center>
+                <Box
+                  p="15"
+                  height={[
+                    "300px", // 48em-62em
+                    "450px", // 62em+
+                    "500px", // 48em-62em
+                    "500px", // 62em+
+                  ]}
+                  bg="teal.400"
+                  width={[
+                    "500px", // 48em-62em
+                    "560px", // 62em+
+                    "660px", // 48em-62em
+                    "600px", // 62em+
+                  ]}
+                  bgColor={"gray.300"}
+                  rounded={"md"}
                 >
-                  Save
-                </Button>
-                <Button
-                  onClick={() => setStarted(false)}
-                  variant="secondary"
-                  style={{
-                    fontSize: "small",
-                    marginRight: "1vw",
-                    marginTop: "2vh",
-                  }}
-                >
-                  Scrap
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card align="center" style={{ marginTop: "30px" }}>
-              <Card.Title className="mt-5">
-                <u>Data Panel</u>
-              </Card.Title>
+                  <Center>
+                    <Heading mb={3} color={"orange.400"}>
+                      {linear() ? "Line" : "Bar"} Chart
+                    </Heading>
+                  </Center>
+                  <Divider color="orange.300" orientation="horizontal" />
 
-              <Nav variant="tabs" defaultActiveKey="0">
-                <Nav.Link onClick={() => setMain(true)} eventKey="main">
-                  Main
-                </Nav.Link>
-                {datasetTitles.map((dataset, i) => {
-                  return (
-                    <Nav.Item
-                      align="center"
-                      onClick={(e) => {
-                        setMain(false);
-                        changeDatasetNum(e);
+                  <Container>
+                    <Center>
+                      <Box
+                        rounded={"md"}
+                        w={[
+                          "450px", // 0-30em
+                          "500px", // 30em-48em
+                          "600px", // 48em-62em
+                          "560px", // 62em+
+                        ]}
+                        bgColor="gray.100"
+                        mt={2}
+                        mb={2}
+                        p={2}
+                      >
+                        {linear() ? (
+                          <Line options={chartOptions} data={data} />
+                        ) : (
+                          <Bar options={chartOptions} data={data} />
+                        )}
+                      </Box>
+                    </Center>
+
+                    <Center>
+                      <HStack spacing={3}>
+                        <Button
+                          colorScheme={"green"}
+                          variant="solid"
+                          onClick={() =>
+                            chart_create(
+                              dispatch,
+                              chartType,
+                              chartOptions,
+                              data,
+                              user.name
+                            )
+                          }
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          colorScheme={"red"}
+                          onClick={() => setStarted(false)}
+                        >
+                          Scrap
+                        </Button>
+                      </HStack>
+                    </Center>
+                  </Container>
+                </Box>
+              </Center>
+            </WrapItem>
+            <WrapItem>
+              <Center>
+                <Box
+                  p="15"
+                  height={[
+                    "300px", // 48em-62em
+                    "450px", // 62em+
+                    "500px", // 48em-62em
+                    "500px", // 62em+
+                  ]}
+                  bg="teal.400"
+                  width={[
+                    "500px", // 48em-62em
+                    "560px", // 62em+
+                    "660px", // 48em-62em
+                    "600px", // 62em+
+                  ]}
+                  bgColor={"gray.300"}
+                  rounded={"md"}
+                >
+                  <Center>
+                    <Heading mb={3} color={"orange.400"}>
+                      Data Panel
+                    </Heading>
+                  </Center>
+
+                  <Nav variant="tabs" defaultActiveKey="0">
+                    <Nav.Link
+                      className="me-1"
+                      style={{
+                        color: "#2D3748",
+                        backgroundColor: "#FBD38D",
+                        fontWeight: "bold",
                       }}
+                      onClick={() => setMain(true)}
+                      eventKey="main"
                     >
-                      <Nav.Link align="center" name={i} key={i} eventKey={i}>
-                        {dataset}
+                      Main
+                    </Nav.Link>
+                    {datasetTitles.map((dataset, i) => {
+                      return (
+                        <Nav.Item
+                          align="center"
+                          onClick={(e) => {
+                            setMain(false);
+                            changeDatasetNum(e);
+                          }}
+                        >
+                          <Nav.Link
+                            className="me-1"
+                            style={{
+                              color: "#171923",
+                              backgroundColor: "#FBD38D",
+                              fontWeight: "bold",
+                            }}
+                            align="center"
+                            name={i}
+                            key={i}
+                            eventKey={i}
+                          >
+                            {dataset}
+                          </Nav.Link>
+                        </Nav.Item>
+                      );
+                    })}
+                    <Nav.Item>
+                      <Nav.Link
+                        style={{
+                          backgroundColor: "#2B6CB0",
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
+                        onClick={() => addDataset()}
+                      >
+                        Add Dataset
                       </Nav.Link>
                     </Nav.Item>
-                  );
-                })}
-                <Nav.Item>
-                  <Nav.Link onClick={() => addDataset()}>Add Dataset</Nav.Link>
-                </Nav.Item>
-              </Nav>
-              <Card.Body align="center" className="me-5 ms-5">
-                <hr />
-                {main ? (
-                  mainTitles.map((groupItem) => {
-                    return (
-                      <Form.Group className="mb-3">
-                        <Form.Label>
-                          <u>{groupItem.title} Title</u>
-                        </Form.Label>
-                        <Form.Control
-                          onChange={(e) => changeTitle(e)}
-                          type="text"
-                          name={groupItem.name}
-                          value={groupItem.value}
-                        />
-                      </Form.Group>
-                    );
-                  })
-                ) : (
-                  <>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Dataset Title</Form.Label>
-                      <Form.Control
-                        onChange={(e) => changeTitle(e)}
-                        type="text"
-                        name="title"
-                        value={datasetTitles[currentDataset]}
-                      />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Line Color</Form.Label>
-                      <HexColorPicker
-                        style={{ width: "16vw", height: "12vh" }}
-                        color={colors[currentDataset]}
-                        onChange={(e) => changeColor(e)}
-                      />
-                    </Form.Group>
-                    <Dropdown as={ButtonGroup}>
-                      <OverlayTrigger
-                        trigger="click"
-                        placement="left"
-                        overlay={pointForm}
-                      >
-                        <Button variant="info">Add Datapoint</Button>
-                      </OverlayTrigger>
-                      <Dropdown.Toggle
-                        split
-                        variant="primary"
-                        id="dropdown-split-basic"
-                      />
-                      <Dropdown.Menu>
-                        {chartData[currentDataset].data === [] ? (
-                          chartData[currentDataset].data.map((dataPoint, i) => {
-                            return (
-                              <Dropdown.Item key={i}>
-                                Point: ({dataPoint.x}, {dataPoint.y})
-                                <ImCross
-                                  onClick={() => deleteDataPoint(i)}
-                                  style={{ color: "red", margin: "0 0 0 15" }}
-                                />
-                              </Dropdown.Item>
-                            );
-                          })
-                        ) : (
-                          <Card.Text align="center">No Data</Card.Text>
-                        )}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      )}
-    </Container>
+                  </Nav>
+                  <Container ml={0}>
+                    {main ? (
+                      mainTitles.map((groupItem) => {
+                        return (
+                          <Form.Group className="mb-3">
+                            <FormLabel color={"orange.500"}>
+                              {groupItem.title} Title
+                            </FormLabel>
+                            <Form.Control
+                              onChange={(e) => changeTitle(e)}
+                              type="text"
+                              name={groupItem.name}
+                              value={groupItem.value}
+                            />
+                          </Form.Group>
+                        );
+                      })
+                    ) : (
+                      <Container>
+                        <Form.Group className="mb-3">
+                          <FormLabel color={"orange.500"}>
+                            Dataset Title
+                          </FormLabel>
+                          <Form.Control
+                            onChange={(e) => changeTitle(e)}
+                            type="text"
+                            name="title"
+                            value={datasetTitles[currentDataset]}
+                          />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                          <FormLabel color={"orange.500"}>Line Color</FormLabel>
+                          <HexColorPicker
+                            style={{ width: "16vw", height: "12vh" }}
+                            color={colors[currentDataset]}
+                            onChange={(e) => changeColor(e)}
+                          />
+                        </Form.Group>
+                        <Dropdown as={ButtonGroup}>
+                          <OverlayTrigger
+                            trigger="click"
+                            placement="left"
+                            overlay={pointForm}
+                          >
+                            <Button variant="info">Add Datapoint</Button>
+                          </OverlayTrigger>
+                          <Dropdown.Toggle
+                            split
+                            variant="primary"
+                            id="dropdown-split-basic"
+                          />
+                          <Dropdown.Menu>
+                            {chartData[currentDataset].data === [] ? (
+                              chartData[currentDataset].data.map(
+                                (dataPoint, i) => {
+                                  return (
+                                    <Dropdown.Item key={i}>
+                                      Point: ({dataPoint.x}, {dataPoint.y})
+                                      <ImCross
+                                        onClick={() => deleteDataPoint(i)}
+                                        style={{
+                                          color: "red",
+                                          margin: "0 0 0 15",
+                                        }}
+                                      />
+                                    </Dropdown.Item>
+                                  );
+                                }
+                              )
+                            ) : (
+                              <Card.Text align="center">No Data</Card.Text>
+                            )}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Container>
+                    )}
+                  </Container>
+                </Box>
+              </Center>
+            </WrapItem>
+          </Wrap>
+        )}
+      </Flex>
+    </Center>
   );
 }
 
