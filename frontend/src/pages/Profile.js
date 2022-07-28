@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { useMediaQuery } from "react-responsive";
-
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import InputGroup from "react-bootstrap/InputGroup";
-import Form from "react-bootstrap/Form";
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Image,
+  Center,
+  Flex,
+  Wrap,
+  FormControl,
+  WrapItem,
+  Avatar,
+  HStack,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
 
 import {
   charts_view,
@@ -25,11 +32,6 @@ import UploadButton from "@rpldy/upload-button";
 import { Line, Bar } from "react-chartjs-2";
 
 function Profile() {
-  const isBigScreen = useMediaQuery({ query: "(min-width: 1824px)" });
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
-  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
-  const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
-
   const [data, setData] = useState({
     user: "UNDEFINED",
     description: "",
@@ -58,55 +60,60 @@ function Profile() {
 
   console.log(charts);
   return (
-    <Container>
-      <Row>
-        <Col fluid="sm">
-          <Card
-            style={{
-              marginTop: "30px",
-              width: !isTabletOrMobile ? `500px` : `250px`,
-              height: !isTabletOrMobile ? `80vh` : `350px`,
-            }}
-          >
-            {/* profile picture */}
-            <Row>
-              <Col></Col>
-              <Col>
-                <Container
+    <Center>
+      <Flex>
+        <Wrap spacing={6} justify="center">
+          <WrapItem>
+            <Box
+              p="15"
+              height={[
+                "300px", // 48em-62em
+                "450px", // 62em+
+                "500px", // 48em-62em
+                "580px", // 62em+
+              ]}
+              bg="teal.400"
+              width={[
+                "500px", // 48em-62em
+                "560px", // 62em+
+                "660px", // 48em-62em
+                "600px", // 62em+
+              ]}
+              bgColor={"blue.800"}
+              rounded={"md"}
+            >
+              <Center>
+                <Avatar
+                  size="2xl"
                   align="center"
-                  style={{
-                    width: !isTabletOrMobile ? `250px` : `150px`,
-                    height: !isTabletOrMobile ? `250px` : `150px`,
-                  }}
+                  src={require("../images/pfp.png")}
+                />
+                <Uploady
+                  style={{ cursor: "pointer", width: "30px" }}
+                  destination={{ url: "/C:/build/static/media/avatars/" }}
                 >
-                  <Uploady
-                    style={{ cursor: "pointer", width: "30px" }}
-                    destination={{ url: "/C:/build/static/media/avatars/" }}
-                  >
-                    <UploadButton onClick={(e) => console.log(e)}>
-                      <BiUpload />
-                    </UploadButton>
-                  </Uploady>
+                  <UploadButton onClick={(e) => console.log(e)}>
+                    <BiUpload />
+                  </UploadButton>
+                </Uploady>
+              </Center>
 
-                  <Card.Img align="center" src={require("../images/pfp.png")} />
-                </Container>
-              </Col>
-              <Col></Col>
-            </Row>
+              <Box align="center">
+                <VStack>
+                  <Heading color="orange.400" size="lg" mb={3}>
+                    {data.user}
+                  </Heading>
+                </VStack>
 
-            <Card.Body align="center">
-              <Card.Title xs={6}>Username: {data.user}</Card.Title>
-              <Card.Title xs={6}> Email: {data.email}</Card.Title>
-              <InputGroup
-                style={{
-                  marginTop: "10px",
-                  padding: "1px",
-                  marginBottom: "10px",
-                  height: "20vh",
-                }}
-              >
-                <Form.Control
-                  className="text-dark bg-light"
+                <FormControl
+                  bg={"orange.200"}
+                  style={{
+                    color: "#1A365D",
+                  }}
+                  p="2"
+                  resize={"none"}
+                  minH={"200px"}
+                  rounded={"md"}
                   value={description}
                   size="sm"
                   aria-label="Description"
@@ -115,74 +122,110 @@ function Profile() {
                     setDescription(e.target.value);
                   }}
                   disabled={!updating}
+                  mb={3}
                 />
-              </InputGroup>
-              {!updating ? (
-                <Button
-                  onClick={() => setUpdating(!updating)}
-                  variant="primary"
-                >
-                  Update
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => {
-                    setUpdating(!updating);
-                    profile_update(data.user, data.email, description);
-                  }}
-                  variant="primary"
-                >
-                  Confirm
-                </Button>
-              )}
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col fluid="sm">
-          <Card
-            style={{
-              marginTop: "30px",
-              width: !isTabletOrMobile ? `500px` : `250px`,
-              height: !isTabletOrMobile ? `80vh` : `100px`,
-              overflowX: "hidden",
-              overflowY: "scroll",
-            }}
-          >
-            <Card.Body align="center">
-              <Card.Title>Charts</Card.Title>
-              <Row>
+                {!updating ? (
+                  <Button
+                    onClick={() => setUpdating(!updating)}
+                    colorScheme={"orange"}
+                    color="blue.800"
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      setUpdating(!updating);
+                      profile_update(data.user, data.email, description);
+                    }}
+                    colorScheme={"orange"}
+                    color="blue.800"
+                  >
+                    Confirm
+                  </Button>
+                )}
+              </Box>
+            </Box>
+          </WrapItem>
+          <WrapItem>
+            <Box
+              p="15"
+              height={[
+                "300px", // 48em-62em
+                "450px", // 62em+
+                "500px", // 48em-62em
+                "580px", // 62em+
+              ]}
+              bg="teal.400"
+              width={[
+                "500px", // 48em-62em
+                "560px", // 62em+
+                "660px", // 48em-62em
+                "600px", // 62em+
+              ]}
+              bgColor={"blue.800"}
+              rounded={"md"}
+              overflowY="scroll"
+            >
+              <Center>
+                <Heading color={"orange.400"} mb="2">
+                  Charts
+                </Heading>
+              </Center>
+              <Box p="2" rounded={"md"} bgColor={"orange.200"}>
                 {charts &&
-                  !isTabletOrMobile &&
-                  charts.map((chart) => {
+                  charts.map((chart, i) => {
                     return (
-                      <Col>
-                        {chart.chartType === "L" ? (
-                          <Line
-                            style={{ width: "250px", height: "100px" }}
-                            options={chart.options}
-                            data={chart.data}
-                            key={chart.id}
-                          />
-                        ) : (
-                          <Bar
-                            style={{ width: "250px", height: "100px" }}
-                            options={chart.options}
-                            data={chart.data}
-                            key={chart.id}
-                          />
-                        )}
-                      </Col>
+                      i < 2 && (
+                        <Center>
+                          <Box
+                            p="1"
+                            rounded={"md"}
+                            width={[
+                              "330px", // 48em-62em
+                              "360px", // 62em+
+                              "400px", // 48em-62em
+                              "480px", // 62em+
+                            ]}
+                            bgColor={"gray.50"}
+                            mb="1"
+                          >
+                            {chart.chartType === "L" ? (
+                              <Line
+                                options={chart.options}
+                                data={chart.data}
+                                key={chart.id}
+                              />
+                            ) : (
+                              <Bar
+                                options={chart.options}
+                                data={chart.data}
+                                key={chart.id}
+                              />
+                            )}
+                          </Box>
+                        </Center>
+                      )
                     );
                   })}
-              </Row>
-              <Button as={Link} to={`/charts/${name}`} variant="primary">
-                View All
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+
+                <Center>
+                  <Button
+                    mt="3"
+                    as={Link}
+                    to={`/charts/${name}`}
+                    bgColor={"blue.800"}
+                    _hover={{ bgColor: "blue.500", color: "orange.50" }}
+                  >
+                    View All
+                  </Button>
+                </Center>
+              </Box>
+            </Box>
+          </WrapItem>
+        </Wrap>
+      </Flex>
+    </Center>
   );
 }
 

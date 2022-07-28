@@ -350,7 +350,7 @@ function Chart() {
                     "660px", // 48em-62em
                     "600px", // 62em+
                   ]}
-                  bgColor={"gray.300"}
+                  bgColor={"blue.800"}
                   rounded={"md"}
                 >
                   <Center>
@@ -429,7 +429,7 @@ function Chart() {
                     "660px", // 48em-62em
                     "600px", // 62em+
                   ]}
-                  bgColor={"gray.300"}
+                  bgColor={"blue.800"}
                   rounded={"md"}
                 >
                   <Center>
@@ -437,6 +437,8 @@ function Chart() {
                       Data Panel
                     </Heading>
                   </Center>
+                  <Divider color="orange.300" orientation="horizontal" mb={2} />
+
 
                   <Nav variant="tabs" defaultActiveKey="0">
                     <Nav.Link
@@ -495,7 +497,7 @@ function Chart() {
                       mainTitles.map((groupItem) => {
                         return (
                           <Form.Group className="mb-3">
-                            <FormLabel color={"orange.500"}>
+                            <FormLabel color={"orange.300"}>
                               {groupItem.title} Title
                             </FormLabel>
                             <Form.Control
@@ -510,7 +512,7 @@ function Chart() {
                     ) : (
                       <Container>
                         <Form.Group className="mb-3">
-                          <FormLabel color={"orange.500"}>
+                          <FormLabel color={"orange.300"}>
                             Dataset Title
                           </FormLabel>
                           <Form.Control
@@ -521,7 +523,7 @@ function Chart() {
                           />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                          <FormLabel color={"orange.500"}>Line Color</FormLabel>
+                          <FormLabel color={"orange.300"}>Line Color</FormLabel>
                           <HexColorPicker
                             style={{ width: "16vw", height: "12vh" }}
                             color={colors[currentDataset]}
