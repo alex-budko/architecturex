@@ -58,27 +58,20 @@ function Profile() {
     setDescription(data.description);
   }, [data]);
 
-  console.log(charts);
+  const RESPONSIVE_H = ["450px", "500px", "580px"];
+
+  const RESPONSIVE_W = ["300px", "450px", "580px", "660px", "600px"];
+
   return (
     <Center>
       <Flex>
-        <Wrap spacing={6} justify="center">
+        <Wrap spacing={6} spacingY={20} justify="center">
           <WrapItem>
             <Box
               p="15"
-              height={[
-                "300px", // 48em-62em
-                "450px", // 62em+
-                "500px", // 48em-62em
-                "580px", // 62em+
-              ]}
+              height={RESPONSIVE_H}
               bg="teal.400"
-              width={[
-                "500px", // 48em-62em
-                "560px", // 62em+
-                "660px", // 48em-62em
-                "600px", // 62em+
-              ]}
+              width={RESPONSIVE_W}
               bgColor={"blue.800"}
               rounded={"md"}
             >
@@ -148,31 +141,29 @@ function Profile() {
             </Box>
           </WrapItem>
           <WrapItem>
+            
             <Box
               p="15"
-              height={[
-                "300px", // 48em-62em
-                "450px", // 62em+
-                "500px", // 48em-62em
-                "580px", // 62em+
-              ]}
+              height={RESPONSIVE_H}
               bg="teal.400"
-              width={[
-                "500px", // 48em-62em
-                "560px", // 62em+
-                "660px", // 48em-62em
-                "600px", // 62em+
-              ]}
+              width={RESPONSIVE_W}
               bgColor={"blue.800"}
               rounded={"md"}
               overflowY="scroll"
             >
               <Center>
+                <Avatar
+                  size="2xl"
+                  align="center"
+                  src={require("../images/charts.png")}
+                />
+              </Center>
+              <Center>
                 <Heading color={"orange.400"} mb="2">
                   Charts
                 </Heading>
               </Center>
-              <Box p="2" rounded={"md"} bgColor={"orange.200"}>
+              <Box p="2" minH={'200px'} rounded={"md"} bgColor={"orange.200"}>
                 {charts &&
                   charts.map((chart, i) => {
                     return (
@@ -182,10 +173,10 @@ function Profile() {
                             p="1"
                             rounded={"md"}
                             width={[
-                              "330px", // 48em-62em
-                              "360px", // 62em+
-                              "400px", // 48em-62em
-                              "480px", // 62em+
+                              "330px", 
+                              "360px", 
+                              "400px", 
+                              "480px",
                             ]}
                             bgColor={"gray.50"}
                             mb="1"

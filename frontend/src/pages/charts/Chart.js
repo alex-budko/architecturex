@@ -34,6 +34,12 @@ import {
   FormLabel,
   WrapItem,
   Divider,
+  NumberInput,
+  NumberInputField,
+  Input,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 
 function Chart() {
@@ -168,50 +174,84 @@ function Chart() {
     if (started) {
       setChartOptions(basicChartOptions);
     }
-  }, [chartTitle, axisTitles, started]);
+  }, [chartTitle, axisTitles.x, axisTitles.y, started]);
 
   const pointForm = (
-    <Popover>
-      <Popover.Header as="h3">Datapoint</Popover.Header>
+    <Popover style={{ backgroundColor: "#F6AD55" }}>
+      <Center>
+        <Heading color="orange.700" size="md">
+          Datapoint
+        </Heading>
+      </Center>
       <Popover.Body>
         <Form onSubmit={(e) => addPoint(e)}>
-          <Form.Group className="mb-3" controlId="xValue">
-            <Form.Label style={{ display: "inline" }}>
-              {linear() ? "X:" : "Name:"}
-            </Form.Label>
-            {linear() ? (
-              <Form.Control
-                style={{ display: "inline", width: "10vw", marginRight: "5px" }}
-                name="x"
-                type="number"
-                placeholder="0"
-                required
-              />
-            ) : (
-              <Form.Control
-                style={{ display: "inline", width: "10vw", marginRight: "5px" }}
-                name="x"
-                type="text"
-                placeholder="September"
-                required
-              />
-            )}
-          </Form.Group>
+          <Wrap spacingY={"3"}>
+            <HStack>
+              <FormLabel
+                color="orange.900"
+                className="me-2"
+                style={{ display: "inline" }}
+              >
+                {linear() ? "X:" : "Name:"}
+              </FormLabel>
+              {linear() ? (
+                <NumberInput bgColor="gray.50">
+                  <NumberInputField
+                    name="x"
+                    type="number"
+                    placeholder="0"
+                    required
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              ) : (
+                <Input
+                  bgColor="gray.50"
+                  name="x"
+                  type="text"
+                  placeholder="Name"
+                  required
+                />
+              )}
+            </HStack>
 
-          <Form.Group className="mb-3" controlId="yValue">
-            <Form.Label style={{ display: "inline" }}>Y: </Form.Label>
-            <Form.Control
-              style={{ display: "inline", width: "10vw", marginRight: "5px" }}
-              name="y"
-              type="number"
-              placeholder="0"
-              required
-            />
-          </Form.Group>
+            <HStack>
+              <FormLabel
+                color="orange.900"
+                className={linear() ? `me-2` : `me-10`}
+                style={{ display: "inline" }}
+              >
+                Y:
+              </FormLabel>
+              <NumberInput>
+                <NumberInputField
+                  bgColor="gray.50"
+                  name="y"
+                  type="number"
+                  placeholder="0"
+                  required
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </HStack>
+          </Wrap>
 
-          <Button type="submit" variant="primary">
-            Submit
-          </Button>
+          <Center>
+            <Button
+              type="submit"
+              _hover={{ bgColor: "orange.200" }}
+              bgColor={"orange.400"}
+              mt="3"
+            >
+              Submit
+            </Button>
+          </Center>
         </Form>
       </Popover.Body>
     </Popover>
@@ -328,6 +368,9 @@ function Chart() {
     },
   ];
 
+  const RESPONSIVE_W = ["260px", "350px", "450px", "660px", "600px"];
+  const RESPONSIVE_H = ["400px", "480px", "550px", "580px", "560px"];
+
   return (
     <Center>
       <Flex>
@@ -336,20 +379,11 @@ function Chart() {
             <WrapItem>
               <Center>
                 <Box
+                  mt={"5"}
                   p="15"
-                  height={[
-                    "300px", // 48em-62em
-                    "450px", // 62em+
-                    "500px", // 48em-62em
-                    "500px", // 62em+
-                  ]}
+                  height={RESPONSIVE_H}
                   bg="teal.400"
-                  width={[
-                    "500px", // 48em-62em
-                    "560px", // 62em+
-                    "660px", // 48em-62em
-                    "600px", // 62em+
-                  ]}
+                  width={RESPONSIVE_W}
                   bgColor={"blue.800"}
                   rounded={"md"}
                 >
@@ -364,12 +398,8 @@ function Chart() {
                     <Center>
                       <Box
                         rounded={"md"}
-                        w={[
-                          "450px", // 0-30em
-                          "500px", // 30em-48em
-                          "600px", // 48em-62em
-                          "560px", // 62em+
-                        ]}
+                        width={["260px", "320px", "450px", "660px", "600px"]}
+                        
                         bgColor="gray.100"
                         mt={2}
                         mb={2}
@@ -415,20 +445,12 @@ function Chart() {
             <WrapItem>
               <Center>
                 <Box
+                  mt={"5"}
+                  mb={"5"}
                   p="15"
-                  height={[
-                    "300px", // 48em-62em
-                    "450px", // 62em+
-                    "500px", // 48em-62em
-                    "500px", // 62em+
-                  ]}
+                  height={RESPONSIVE_H}
                   bg="teal.400"
-                  width={[
-                    "500px", // 48em-62em
-                    "560px", // 62em+
-                    "660px", // 48em-62em
-                    "600px", // 62em+
-                  ]}
+                  width={RESPONSIVE_W}
                   bgColor={"blue.800"}
                   rounded={"md"}
                 >
@@ -439,8 +461,7 @@ function Chart() {
                   </Center>
                   <Divider color="orange.300" orientation="horizontal" mb={2} />
 
-
-                  <Nav variant="tabs" defaultActiveKey="0">
+                  <Nav variant="tabs" defaultActiveKey="0" className="mb-2">
                     <Nav.Link
                       className="me-1"
                       style={{
@@ -492,7 +513,7 @@ function Chart() {
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
-                  <Container ml={0}>
+                  <Wrap justify={"center"}>
                     {main ? (
                       mainTitles.map((groupItem) => {
                         return (
@@ -523,52 +544,75 @@ function Chart() {
                           />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                          <FormLabel color={"orange.300"}>Line Color</FormLabel>
-                          <HexColorPicker
-                            style={{ width: "16vw", height: "12vh" }}
-                            color={colors[currentDataset]}
-                            onChange={(e) => changeColor(e)}
-                          />
+                          <Center>
+                            <FormLabel color={"orange.300"}>
+                              {linear() ? "Line" : "Bar"} Color
+                            </FormLabel>
+                          </Center>
+                          <Center>
+                            <HexColorPicker
+                              style={{ width: "250px", height: "100px" }}
+                              color={colors[currentDataset]}
+                              onChange={(e) => changeColor(e)}
+                            />
+                          </Center>
                         </Form.Group>
-                        <Dropdown as={ButtonGroup}>
-                          <OverlayTrigger
-                            trigger="click"
-                            placement="left"
-                            overlay={pointForm}
-                          >
-                            <Button variant="info">Add Datapoint</Button>
-                          </OverlayTrigger>
-                          <Dropdown.Toggle
-                            split
-                            variant="primary"
-                            id="dropdown-split-basic"
-                          />
-                          <Dropdown.Menu>
-                            {chartData[currentDataset].data === [] ? (
-                              chartData[currentDataset].data.map(
-                                (dataPoint, i) => {
-                                  return (
-                                    <Dropdown.Item key={i}>
-                                      Point: ({dataPoint.x}, {dataPoint.y})
-                                      <ImCross
-                                        onClick={() => deleteDataPoint(i)}
-                                        style={{
-                                          color: "red",
-                                          margin: "0 0 0 15",
-                                        }}
-                                      />
-                                    </Dropdown.Item>
-                                  );
-                                }
-                              )
-                            ) : (
-                              <Card.Text align="center">No Data</Card.Text>
-                            )}
-                          </Dropdown.Menu>
-                        </Dropdown>
+
+                        <Center>
+                          <Dropdown as={ButtonGroup}>
+                            <OverlayTrigger
+                              trigger="click"
+                              placement="top"
+                              overlay={pointForm}
+                            >
+                              <Button bgColor={"blue.600"}>
+                                Add Datapoint
+                              </Button>
+                            </OverlayTrigger>
+                            <Dropdown.Toggle
+                              split
+                              variant="primary"
+                              id="dropdown-split-basic"
+                            />
+                            <Dropdown.Menu
+                              style={{
+                                backgroundColor: "#F6AD55",
+                                padding: "3px",
+                              }}
+                            >
+                              {chartData[currentDataset].data.length !== 0 ? (
+                                chartData[currentDataset].data.map(
+                                  (dataPoint, i) => {
+                                    return (
+                                      <Box
+                                        key={i}
+                                        rounded="md"
+                                        bgColor="orange.100"
+                                        mb="1"
+                                        boxShadow="md"
+                                      >
+                                        P: ({dataPoint.x}, {dataPoint.y})
+                                        <ImCross
+                                          onClick={() => deleteDataPoint(i)}
+                                          style={{
+                                            color: "red",
+                                            margin: "0 0 0 5",
+                                            cursor: "",
+                                          }}
+                                        />
+                                      </Box>
+                                    );
+                                  }
+                                )
+                              ) : (
+                                <Card.Text align="center">No Data</Card.Text>
+                              )}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Center>
                       </Container>
                     )}
-                  </Container>
+                  </Wrap>
                 </Box>
               </Center>
             </WrapItem>

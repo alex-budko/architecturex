@@ -1,11 +1,10 @@
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import FloatingLabel from "react-bootstrap/esm/FloatingLabel";
 import { Link as ReactLink} from "react-router-dom";
-import { Center, Heading, Link } from "@chakra-ui/react";
+import { Center, Button, Heading, Link } from "@chakra-ui/react";
 
 function FormCreator(props) {
   const groups = props.groups;
@@ -66,7 +65,7 @@ function FormCreator(props) {
               </Row>
             )}
             <div className="d-grid gap-2">
-              <Button variant="primary" size="md" type="submit">
+              <Button backgroundColor={'blue.600'} size="md" type="submit">
                 {`${props.submit}`}
               </Button>
             </div>
