@@ -16,26 +16,28 @@ import {
   InputGroup,
   InputLeftElement,
   Textarea,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 import {
   MdPhone,
   MdEmail,
   MdLocationOn,
   MdFacebook,
   MdOutlineEmail,
-} from 'react-icons/md';
-import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs';
+} from "react-icons/md";
+import { BsGithub, BsDiscord, BsPerson } from "react-icons/bs";
 
 export default function Contact() {
   return (
     <Container maxW="full" mt={0} centerContent overflow="hidden">
       <Flex>
         <Box
+          rounded={"lg"}
+          shadow="dark-lg"
           bg="gray.900"
           color="white"
-          borderRadius="lg"
           m={{ sm: 4, md: 16, lg: 10 }}
-          p={{ sm: 5, md: 5, lg: 16 }}>
+          p={{ sm: 5, md: 5, lg: 16 }}
+        >
           <Box p={4}>
             <Wrap spacing={{ base: 20, sm: 3, md: 5, lg: 20 }}>
               <WrapItem>
@@ -52,8 +54,9 @@ export default function Contact() {
                         width="200px"
                         variant="ghost"
                         color="#DCE2FF"
-                        _hover={{ border: '2px solid #1C6FEB' }}
-                        leftIcon={<MdPhone color="#1970F1" size="20px" />}>
+                        _hover={{ border: "2px solid #1C6FEB" }}
+                        leftIcon={<MdPhone color="#1970F1" size="20px" />}
+                      >
                         +(321) 317-5721
                       </Button>
                       <Button
@@ -62,8 +65,9 @@ export default function Contact() {
                         width="200px"
                         variant="ghost"
                         color="#DCE2FF"
-                        _hover={{ border: '2px solid #1C6FEB' }}
-                        leftIcon={<MdEmail color="#1970F1" size="20px" />}>
+                        _hover={{ border: "2px solid #1C6FEB" }}
+                        leftIcon={<MdEmail color="#1970F1" size="20px" />}
+                      >
                         alex.budko@gmail.com
                       </Button>
                       <Button
@@ -72,8 +76,9 @@ export default function Contact() {
                         width="200px"
                         variant="ghost"
                         color="#DCE2FF"
-                        _hover={{ border: '2px solid #1C6FEB' }}
-                        leftIcon={<MdLocationOn color="#1970F1" size="20px" />}>
+                        _hover={{ border: "2px solid #1C6FEB" }}
+                        leftIcon={<MdLocationOn color="#1970F1" size="20px" />}
+                      >
                         Melbourne, FL
                       </Button>
                     </VStack>
@@ -82,13 +87,14 @@ export default function Contact() {
                     mt={{ lg: 10, md: 10 }}
                     spacing={5}
                     px={5}
-                    alignItems="flex-start">
+                    alignItems="flex-start"
+                  >
                     <IconButton
                       aria-label="gmail"
                       variant="ghost"
                       size="lg"
                       isRound={true}
-                      _hover={{ bg: '#0D74FF' }}
+                      _hover={{ bg: "#0D74FF" }}
                       icon={<MdFacebook size="28px" />}
                     />
                     <IconButton
@@ -96,7 +102,7 @@ export default function Contact() {
                       variant="ghost"
                       size="lg"
                       isRound={true}
-                      _hover={{ bg: '#0D74FF' }}
+                      _hover={{ bg: "#0D74FF" }}
                       icon={<BsGithub size="28px" />}
                     />
                     <IconButton
@@ -104,7 +110,7 @@ export default function Contact() {
                       variant="ghost"
                       size="lg"
                       isRound={true}
-                      _hover={{ bg: '#0D74FF' }}
+                      _hover={{ bg: "#0D74FF" }}
                       icon={<BsDiscord size="28px" />}
                     />
                   </HStack>
@@ -139,7 +145,7 @@ export default function Contact() {
                         <Textarea
                           borderColor="gray.300"
                           _hover={{
-                            borderRadius: 'gray.300',
+                            borderRadius: "gray.300",
                           }}
                           placeholder="message"
                         />
@@ -149,7 +155,8 @@ export default function Contact() {
                           variant="solid"
                           bg="#0D74FF"
                           color="white"
-                          _hover={{}}>
+                          _hover={{}}
+                        >
                           Send Message
                         </Button>
                       </FormControl>

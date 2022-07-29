@@ -30,6 +30,7 @@ import { BiUpload } from "react-icons/bi";
 import Uploady from "@rpldy/uploady";
 import UploadButton from "@rpldy/upload-button";
 import { Line, Bar } from "react-chartjs-2";
+import { useSelector } from "react-redux";
 
 function Profile() {
   const [data, setData] = useState({
@@ -44,6 +45,8 @@ function Profile() {
   const [description, setDescription] = useState({
     description: "",
   });
+
+  const user = useSelector((state) => state.user.user);
 
   const [updating, setUpdating] = useState(false);
 
@@ -117,7 +120,7 @@ function Profile() {
                   disabled={!updating}
                   mb={3}
                 />
-                {!updating ? (
+                {(user && name === user.name) && (!updating ? (
                   <Button
                     onClick={() => setUpdating(!updating)}
                     colorScheme={"orange"}
@@ -136,7 +139,7 @@ function Profile() {
                   >
                     Confirm
                   </Button>
-                )}
+                ))}
               </Box>
             </Box>
           </WrapItem>
@@ -173,13 +176,13 @@ function Profile() {
                             p="1"
                             rounded={"md"}
                             width={[
-                              "330px", 
-                              "360px", 
-                              "400px", 
+                              "100%", 
+                              "100%", 
+                              "90%", 
                               "480px",
                             ]}
                             bgColor={"gray.50"}
-                            mb="1"
+                            mt='3'
                           >
                             {chart.chartType === "L" ? (
                               <Line

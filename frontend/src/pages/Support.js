@@ -16,11 +16,11 @@ export default function Support() {
       align={"center"}
       justify={"center"}
       py={12}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      rounded={'lg'} shadow='dark-lg'
     >
       <Stack
         boxShadow={"2xl"}
-        bg={useColorModeValue("white", "gray.700")}
+        bg="gray.900"
         rounded={"xl"}
         p={10}
         spacing={8}

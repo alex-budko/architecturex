@@ -1,5 +1,3 @@
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -8,7 +6,7 @@ import { charts_view } from "../../auth-reducers/AuthReducers";
 
 import { Line, Bar } from "react-chartjs-2";
 import Container from "react-bootstrap/Container";
-
+import { Box, Button, Heading } from "@chakra-ui/react";
 
 function Charts() {
   const [charts, setCharts] = useState(null);
@@ -20,41 +18,36 @@ function Charts() {
   }, [name]);
 
   return (
-    <Card
-      style={{
-        marginTop: "10px",
-        width: "100vw",
-        height: "90vh",
-        overflowY: "scroll",
-      }}
-    >
-      <Card.Body align="center">
-        <Card.Title><u>{name}'s Charts</u></Card.Title>
-          {charts &&
-            charts.map((chart) => {
-              return (
-                <Container style={{ width: "600px" }}>
-                  {chart.chartType === "L" ? (
-                    <Line
-                      options={chart.options}
-                      data={chart.data}
-                      key={chart.id}
-                    />
-                  ) : (
-                    <Bar
-                      options={chart.options}
-                      data={chart.data}
-                      key={chart.id}
-                    />
-                  )}
-                </Container>
-              );
-            })}
-        <Button as={Link} to={`/profile/${name}`} variant="primary">
+    <Box bgColor="gray.900" m="20" shadow={"dark-lg"} rounded='lg'>
+      <Box align="center">
+        <Heading>
+          <u>{name}'s Charts</u>
+        </Heading>
+        {charts &&
+          charts.map((chart) => {
+            return (
+              <Box mt='4' style={{ width: "600px" }} bgColor="gray.50" shadow={"dark-lg"} rounded='lg'>
+                {chart.chartType === "L" ? (
+                  <Line
+                    options={chart.options}
+                    data={chart.data}
+                    key={chart.id}
+                  />
+                ) : (
+                  <Bar
+                    options={chart.options}
+                    data={chart.data}
+                    key={chart.id}
+                  />
+                )}
+              </Box>
+            );
+          })}
+        <Button as={Link} to={`/profile/${name}`} variant="primary" _hover={{color: 'gray.300'}}>
           Go To Profile
         </Button>
-      </Card.Body>
-    </Card>
+      </Box>
+    </Box>
   );
 }
 

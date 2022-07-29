@@ -4,6 +4,7 @@ import "chart.js/auto";
 
 import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
+
 //bootstrap imports
 import {
   ButtonGroup,
@@ -17,7 +18,6 @@ import {
 
 import { ImCross } from "react-icons/im";
 import { sortedIndex } from "../../utils/sortedIndex";
-import AuthenticatedStatus from "../../auth-components/AuthenticatedStatus";
 import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
@@ -47,9 +47,11 @@ function Chart() {
 
   const { chart_type } = useParams();
 
-  const user = useSelector((state) => state.user.user);
+  const linear = () => {
+    return chart_type === "line";
+  };
 
-  const [authenticated, setAuthenticated] = useState(false);
+  const user = useSelector((state) => state.user.user);
 
   const [started, setStarted] = useState(false);
   const [currentDataset, setCurrentDataset] = useState(0);
@@ -66,7 +68,9 @@ function Chart() {
   //chart titles
   const [datasetTitles, setDatasetTitles] = useState(["Dataset"]);
 
-  const [chartTitle, setChartTitle] = useState("My Line Chart");
+  const [chartTitle, setChartTitle] = useState(
+    `My ${linear() ? "Line" : "Bar"} Chart`
+  );
 
   const basicAxisTitles = {
     x: "X-Axis",
@@ -74,10 +78,6 @@ function Chart() {
   };
 
   const [axisTitles, setAxisTitles] = useState(basicAxisTitles);
-
-  const linear = () => {
-    return chart_type === "line";
-  };
 
   const basicChartOptions = linear()
     ? {
@@ -368,24 +368,26 @@ function Chart() {
     },
   ];
 
-  const RESPONSIVE_W = ["260px", "350px", "450px", "660px", "600px"];
+  const RESPONSIVE_W = ["90vw", "80vw", "70vw", "660px", "600px"];
   const RESPONSIVE_H = ["400px", "480px", "550px", "580px", "560px"];
 
-  return (
+  return user === null ? (
+    <h1>Not Authenticated</h1>
+  ) : (
     <Center>
       <Flex>
         {started && (
-          <Wrap spacing={6} justify="center">
+          <Wrap spacing={3} justify="center">
             <WrapItem>
               <Center>
                 <Box
-                  mt={"5"}
-                  p="15"
+                  boxShadow={"2xl"}
+                  shadow="dark-lg"
+                  bg="gray.900"
+                  rounded={"xl"}
+                  mt="5"
                   height={RESPONSIVE_H}
-                  bg="teal.400"
                   width={RESPONSIVE_W}
-                  bgColor={"blue.800"}
-                  rounded={"md"}
                 >
                   <Center>
                     <Heading mb={3} color={"orange.400"}>
@@ -398,8 +400,7 @@ function Chart() {
                     <Center>
                       <Box
                         rounded={"md"}
-                        width={["260px", "320px", "450px", "660px", "600px"]}
-                        
+                        width={["100%", "100%", "90%", "660px", "600px"]}
                         bgColor="gray.100"
                         mt={2}
                         mb={2}
@@ -416,7 +417,7 @@ function Chart() {
                     <Center>
                       <HStack spacing={3}>
                         <Button
-                          colorScheme={"green"}
+                          bgColor={"green.700"}
                           variant="solid"
                           onClick={() =>
                             chart_create(
@@ -431,7 +432,7 @@ function Chart() {
                           Save
                         </Button>
                         <Button
-                          colorScheme={"red"}
+                          bgColor={"red.700"}
                           onClick={() => setStarted(false)}
                         >
                           Scrap
@@ -445,14 +446,13 @@ function Chart() {
             <WrapItem>
               <Center>
                 <Box
-                  mt={"5"}
-                  mb={"5"}
-                  p="15"
+                  boxShadow={"2xl"}
+                  shadow="dark-lg"
+                  bg="gray.900"
+                  rounded={"xl"}
+                  mt="5"
                   height={RESPONSIVE_H}
-                  bg="teal.400"
                   width={RESPONSIVE_W}
-                  bgColor={"blue.800"}
-                  rounded={"md"}
                 >
                   <Center>
                     <Heading mb={3} color={"orange.400"}>
@@ -500,18 +500,20 @@ function Chart() {
                         </Nav.Item>
                       );
                     })}
-                    <Nav.Item>
-                      <Nav.Link
-                        style={{
-                          backgroundColor: "#2B6CB0",
-                          color: "white",
-                          fontWeight: "bold",
-                        }}
-                        onClick={() => addDataset()}
-                      >
-                        Add Dataset
-                      </Nav.Link>
-                    </Nav.Item>
+                    {datasetTitles.length < 5 && (
+                      <Nav.Item>
+                        <Nav.Link
+                          style={{
+                            backgroundColor: "#2B6CB0",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
+                          onClick={() => addDataset()}
+                        >
+                          Add Dataset
+                        </Nav.Link>
+                      </Nav.Item>
+                    )}
                   </Nav>
                   <Wrap justify={"center"}>
                     {main ? (
@@ -543,6 +545,7 @@ function Chart() {
                             value={datasetTitles[currentDataset]}
                           />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                           <Center>
                             <FormLabel color={"orange.300"}>
