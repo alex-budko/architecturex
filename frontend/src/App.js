@@ -22,14 +22,22 @@ import Support from "./pages/Support";
 import Contact from "./pages/Contact";
 import Navbar from "./layout/Navbar";
 import About from "./pages/About";
+import { useColorMode } from "@chakra-ui/react";
 
 function App() {
-
+  
+  const { colorMode, toggleColorMode } = useColorMode()
   const dispatch = useDispatch();
 
   useEffect(()=> {
     check_auth(dispatch)
+
+    if (colorMode === 'light') {
+      toggleColorMode()
+    }
   })
+
+
 
   return (
     <BrowserRouter>

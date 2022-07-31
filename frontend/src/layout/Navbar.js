@@ -72,7 +72,7 @@ export default function Navbar() {
       _hover={{
         textDecoration: "none",
         color: "white",
-        bg: useColorModeValue("gray.200", "gray.700"),
+        bg: useColorModeValue("gray.600", "gray.700"),
       }}
       to={href}
       onClick={(e) => {
@@ -124,7 +124,7 @@ export default function Navbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg={useColorModeValue("gray.500", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -161,13 +161,12 @@ export default function Navbar() {
           {user ? (
             <Flex alignItems={"center"}>
               <Avatar
-                size={"sm"}
+                size={"md"}
+                _hover={{color: 'white'}}
                 cursor="pointer"
+                name={user.name}
                 as={ReactLink}
                 to={`/profile/${user.name}`}
-                src={
-                  "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                }
               />
             </Flex>
           ) : (

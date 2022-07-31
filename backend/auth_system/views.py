@@ -28,3 +28,4 @@ class ChartListView(generics.ListAPIView):
         user = self.kwargs['user']
         queryset = self.model.objects.filter(user=user)
         return queryset
+

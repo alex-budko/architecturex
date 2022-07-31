@@ -1,3 +1,4 @@
+from .email_views import contact_message
 from .views import ChartListView, ProfileCreateView, ChartCreateView, ProfileRetrieveUpdateDestroyView, ChartRetrieveUpdateDestroyView
 
 from django.urls import path
@@ -8,5 +9,6 @@ urlpatterns = [
     path('charts/<slug:user>/', ChartListView.as_view(), name='chart-list'),
     path('create/profile/', ProfileCreateView.as_view(), name='profile-create'),
     path('create/chart/', ChartCreateView.as_view(), name='chart-create'),
+    path('message/', contact_message, name='contact-message'),
 ]
 

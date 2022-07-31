@@ -7,9 +7,13 @@ import {
   Button,
   Icon,
 } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Home() {
+
+  const user = useSelector((state) => state.user.user);
+
   return (
     <Container maxW={"5xl"} bg='gray.900' mt={'5'} minH='500px' rounded={'lg'} shadow='dark-lg'>
       <Stack
@@ -39,7 +43,7 @@ export default function Home() {
             rounded={"full"}
             px={6}
             as={Link}
-            to="/login"
+            to={`${!user ? '/login' : '/chart/line'}`}
             colorScheme={"orange"}
             bg={"orange.400"}
             _hover={{ bg: "orange.500", color: 'white'}}

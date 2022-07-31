@@ -26,7 +26,7 @@ function Charts() {
         {charts &&
           charts.map((chart) => {
             return (
-              <Box mt='4' style={{ width: "600px" }} bgColor="gray.50" shadow={"dark-lg"} rounded='lg'>
+              <Box mt='4' width={["300px", "450px", "500px", "580px"]} bgColor="gray.50" shadow={"dark-lg"} rounded='lg'>
                 {chart.chartType === "L" ? (
                   <Line
                     options={chart.options}

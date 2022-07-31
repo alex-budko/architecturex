@@ -16,6 +16,7 @@ import {
   InputGroup,
   InputLeftElement,
   Textarea,
+  Center,
 } from "@chakra-ui/react";
 import {
   MdPhone,
@@ -25,8 +26,29 @@ import {
   MdOutlineEmail,
 } from "react-icons/md";
 import { BsGithub, BsDiscord, BsPerson } from "react-icons/bs";
+import { contact_email } from "../reducers/Reducers";
+import { CheckIcon } from "@chakra-ui/icons";
+
+import { useState } from "react";
 
 export default function Contact() {
+  const [state, setState] = useState(["initial" | "submitting" | "success"]);
+
+  const handle_message = (e) => {
+    e.preventDefault();
+    const name = e.target[0].value;
+    const email = e.target[1].value;
+    const message = e.target[2].value;
+
+    setState("submitting");
+
+    setTimeout(() => {
+      setState("success");
+    }, 1000);
+
+    contact_email(name, email, message);
+  };
+
   return (
     <Container maxW="full" mt={0} centerContent overflow="hidden">
       <Flex>
@@ -101,6 +123,8 @@ export default function Contact() {
                       aria-label="github"
                       variant="ghost"
                       size="lg"
+                      as='a'
+                      href='https://github.com/alex-budko'
                       isRound={true}
                       _hover={{ bg: "#0D74FF" }}
                       icon={<BsGithub size="28px" />}
@@ -120,46 +144,53 @@ export default function Contact() {
                 <Box bg="white" borderRadius="lg">
                   <Box m={8} color="#0B0E3F">
                     <VStack spacing={5}>
-                      <FormControl id="name">
-                        <FormLabel>Your Name</FormLabel>
-                        <InputGroup borderColor="#E0E1E7">
-                          <InputLeftElement
-                            pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                      <form onSubmit={(e) => handle_message(e)}>
+                        <FormControl id="name" isRequired>
+                          <FormLabel>Your Name</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement
+                              pointerEvents="none"
+                              children={<BsPerson color="gray.800" />}
+                            />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id="mail" isRequired>
+                          <FormLabel>Mail</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement
+                              pointerEvents="none"
+                              children={<MdOutlineEmail color="gray.800" />}
+                            />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id="message" isRequired>
+                          <FormLabel>Message</FormLabel>
+                          <Textarea
+                            borderColor="gray.300"
+                            _hover={{
+                              borderRadius: "gray.300",
+                            }}
+                            placeholder="message"
                           />
-                          <Input type="text" size="md" />
-                        </InputGroup>
-                      </FormControl>
-                      <FormControl id="name">
-                        <FormLabel>Mail</FormLabel>
-                        <InputGroup borderColor="#E0E1E7">
-                          <InputLeftElement
-                            pointerEvents="none"
-                            children={<MdOutlineEmail color="gray.800" />}
-                          />
-                          <Input type="text" size="md" />
-                        </InputGroup>
-                      </FormControl>
-                      <FormControl id="name">
-                        <FormLabel>Message</FormLabel>
-                        <Textarea
-                          borderColor="gray.300"
-                          _hover={{
-                            borderRadius: "gray.300",
-                          }}
-                          placeholder="message"
-                        />
-                      </FormControl>
-                      <FormControl id="name" float="right">
-                        <Button
-                          variant="solid"
-                          bg="#0D74FF"
-                          color="white"
-                          _hover={{}}
-                        >
-                          Send Message
-                        </Button>
-                      </FormControl>
+                        </FormControl>
+                        <FormControl float="right">
+                          <Center>
+                            <Button
+                            mt='3'
+                              colorScheme={
+                                state === "success" ? "green" : "blue"
+                              }
+                              isLoading={state === "submitting"}
+                              w="100%"
+                              type={state === "success" ? "button" : "submit"}
+                            >
+                              {state === "success" ? <CheckIcon /> : "Send Message"}
+                            </Button>
+                          </Center>
+                        </FormControl>
+                      </form>
                     </VStack>
                   </Box>
                 </Box>

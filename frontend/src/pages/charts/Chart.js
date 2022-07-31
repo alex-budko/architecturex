@@ -41,6 +41,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from "@chakra-ui/react";
+import NotAuthenticated from "../NotAuthenticated";
 
 function Chart() {
   const dispatch = useDispatch();
@@ -372,7 +373,7 @@ function Chart() {
   const RESPONSIVE_H = ["400px", "480px", "550px", "580px", "560px"];
 
   return user === null ? (
-    <h1>Not Authenticated</h1>
+    <NotAuthenticated />
   ) : (
     <Center>
       <Flex>

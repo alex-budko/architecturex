@@ -8,6 +8,23 @@ class UserAccountManager(BaseUserManager):
     """
         Creates and saves a user with the given email, name, and password.
     """
+    def create(self, name, email, password=None):
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            name=name,
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    """
+        Creates and saves a user with the given email, name, and password.
+    """
     def create_user(self, email, name, password=None):
         if not email:
             raise ValueError('Users must have an email address')
@@ -18,7 +35,7 @@ class UserAccountManager(BaseUserManager):
         )
 
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
 
         return user
 
@@ -87,7 +104,6 @@ class Profile(models.Model):
     )
     description = models.CharField(blank=True, default='Description', max_length=300)
     avatar = models.ImageField(blank=True, upload_to='avatars')
-    
 
     def __str__(self):
         return self.user.email
