@@ -20,7 +20,7 @@ import { ImCross } from "react-icons/im";
 import { sortedIndex } from "../../utils/sortedIndex";
 import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   Center,
   Container,
@@ -40,6 +40,7 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Text,
 } from "@chakra-ui/react";
 import NotAuthenticated from "../NotAuthenticated";
 
@@ -51,6 +52,8 @@ function Chart() {
   const linear = () => {
     return chart_type === "line";
   };
+
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.user.user);
 
@@ -420,15 +423,16 @@ function Chart() {
                         <Button
                           bgColor={"green.700"}
                           variant="solid"
-                          onClick={() =>
+                          onClick={() => {
                             chart_create(
                               dispatch,
                               chartType,
                               chartOptions,
                               data,
                               user.name
-                            )
-                          }
+                            );
+                            navigate(`/charts/${user.name}`);
+                          }}
                         >
                           Save
                         </Button>
@@ -588,14 +592,17 @@ function Chart() {
                                 chartData[currentDataset].data.map(
                                   (dataPoint, i) => {
                                     return (
-                                      <Box
+                                      <HStack
                                         key={i}
                                         rounded="md"
                                         bgColor="orange.100"
                                         mb="1"
                                         boxShadow="md"
+                                        justify={"center"}
                                       >
-                                        P: ({dataPoint.x}, {dataPoint.y})
+                                        <Text>
+                                          ({dataPoint.x}, {dataPoint.y})
+                                        </Text>
                                         <ImCross
                                           onClick={() => deleteDataPoint(i)}
                                           style={{
@@ -604,7 +611,7 @@ function Chart() {
                                             cursor: "",
                                           }}
                                         />
-                                      </Box>
+                                      </HStack>
                                     );
                                   }
                                 )

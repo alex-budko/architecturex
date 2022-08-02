@@ -3,6 +3,10 @@ from rest_framework import generics
 from .serializers import ProfileSerializer, ChartSerializer
 from .models import Profile, Chart
 
+class ProfileList(generics.ListAPIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+
 class ProfileCreateView(generics.CreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()

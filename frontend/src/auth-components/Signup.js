@@ -34,18 +34,17 @@ function Signup() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      re_password: "",
+    });
     if (password !== re_password) {
       setValidPassword(true);
-      setShow(true)
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        re_password: "",
-      })
     } else {
       setValidPassword(false);
+      setShow(true);
       sign_up(dispatch, name, email, password, re_password);
     }
   };
@@ -105,7 +104,9 @@ function Signup() {
         submit={"Sign Up"}
         changeInfo={changeInfo}
       />
-      {show && <EmailSent setShow={setShow} message={"Sign Up"} confirmEmail={true} />}
+      {show && (
+        <EmailSent setShow={setShow} message={"Sign Up"} confirmEmail={true} />
+      )}
     </>
   );
 }
