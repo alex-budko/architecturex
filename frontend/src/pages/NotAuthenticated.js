@@ -30,7 +30,7 @@ export default function NotAuthenticated() {
         spacing={8}
         align={"center"}
       >
-        <Icon color="yellow.300" as={BiSad} w={24} h={24} />
+        <Icon as={BiSad} w={24} h={24} />
         <Stack align={"center"} spacing={2}>
           <Heading
             textTransform={"uppercase"}

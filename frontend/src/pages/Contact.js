@@ -90,7 +90,7 @@ export default function Contact() {
                         _hover={{ border: "2px solid #1C6FEB" }}
                         leftIcon={<MdEmail color="#1970F1" size="20px" />}
                       >
-                        alex.budko@gmail.com
+                        xalex.budko@gmail.com
                       </Button>
                       <Button
                         size="md"

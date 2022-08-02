@@ -39,9 +39,6 @@ export default function Support() {
             <Text fontSize={"lg"} color={"gray.500"}>
               By cliking on the PayPal icon, you can support this website!{" "}
             </Text>
-            <Text fontSize={"lg"} color={"gray.500"}>
-              It would mean the WORLD to me!
-            </Text>
           </VStack>
         </Stack>
       </Stack>
