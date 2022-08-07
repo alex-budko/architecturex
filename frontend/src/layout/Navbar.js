@@ -4,7 +4,6 @@ import {
   Avatar,
   HStack,
   IconButton,
-  Button,
   Menu,
   MenuButton,
   MenuList,
@@ -103,6 +102,14 @@ export default function Navbar() {
               >
                 Bar Chart
               </MenuItem>
+              <MenuItem
+                _hover={{ color: "white" }}
+                as={ReactLink}
+                to="/chart/bubble"
+              >
+                Bubble Chart
+              </MenuItem>
+              
               {user && (
                 <>
                   <MenuDivider />

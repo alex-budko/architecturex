@@ -4,18 +4,14 @@ import { Link } from "react-router-dom";
 import {
   Box,
   Button,
-  Container,
   Heading,
-  Image,
   Center,
   Flex,
   Wrap,
   FormControl,
   WrapItem,
   Avatar,
-  HStack,
   VStack,
-  Text,
 } from "@chakra-ui/react";
 
 import {
@@ -24,11 +20,6 @@ import {
   profile_view,
 } from "../auth-reducers/AuthReducers";
 import { useParams } from "react-router-dom";
-
-import { BiUpload } from "react-icons/bi";
-
-import Uploady from "@rpldy/uploady";
-import UploadButton from "@rpldy/upload-button";
 import { Line, Bar } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 
@@ -82,16 +73,16 @@ function Profile() {
                 <Avatar
                   size="2xl"
                   align="center"
-                  src={require("../images/pfp.png")}
+                  name={name}
                 />
-                <Uploady
+                {/* <Uploady
                   style={{ cursor: "pointer", width: "30px" }}
                   destination={{ url: "/C:/build/static/media/avatars/" }}
                 >
                   <UploadButton onClick={(e) => console.log(e)}>
                     <BiUpload />
                   </UploadButton>
-                </Uploady>
+                </Uploady> */}
               </Center>
 
               <Box align="center">

@@ -5,6 +5,8 @@ import "chart.js/auto";
 import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 
+import NotAuthenticated from "../NotAuthenticated";
+
 //bootstrap imports
 import {
   ButtonGroup,
@@ -29,20 +31,17 @@ import {
   Button,
   Box,
   Flex,
-  Stack,
   Wrap,
   FormLabel,
   WrapItem,
   Divider,
-  NumberInput,
-  NumberInputField,
-  Input,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Text,
 } from "@chakra-ui/react";
-import NotAuthenticated from "../NotAuthenticated";
+import { capitalize } from "../../utils/capitalize";
+import { LinearX } from "./components/LinearX";
+import { LinearY } from "./components/LinearY";
+import { BarX } from "./components/BarX";
+import { BubbleR } from "./components/BubbleR";
 
 function Chart() {
   const dispatch = useDispatch();
@@ -72,8 +71,13 @@ function Chart() {
   //chart titles
   const [datasetTitles, setDatasetTitles] = useState(["Dataset"]);
 
+  const CHART_TITLES = {
+    bar: "Bar",
+    line: "Line",
+  };
+
   const [chartTitle, setChartTitle] = useState(
-    `My ${linear() ? "Line" : "Bar"} Chart`
+    `My ${CHART_TITLES[chart_type]} Chart`
   );
 
   const basicAxisTitles = {
@@ -83,79 +87,130 @@ function Chart() {
 
   const [axisTitles, setAxisTitles] = useState(basicAxisTitles);
 
-  const basicChartOptions = linear()
-    ? {
-        scales: {
-          x: {
-            title: {
-              display: "true",
-              text: axisTitles.x,
-            },
-            type: "linear",
-            display: true,
-            beginAtZero: true,
+  //basic chart options
+  const BCO = {
+    line: {
+      scales: {
+        x: {
+          title: {
+            display: "true",
+            text: axisTitles.x,
           },
-          y: {
-            display: true,
-            title: {
-              display: true,
-              text: axisTitles.y,
-            },
-          },
+          type: "linear",
+          display: true,
+          beginAtZero: true,
         },
-        plugins: {
+        y: {
+          display: true,
           title: {
             display: true,
-            text: chartTitle,
+            text: axisTitles.y,
           },
         },
-      }
-    : {
-        scales: {
-          x: {
-            title: {
-              display: "true",
-              text: axisTitles.x,
-            },
-            display: true,
-          },
-          y: {
-            display: true,
-            title: {
-              display: true,
-              text: axisTitles.y,
-            },
-          },
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: chartTitle,
         },
-        plugins: {
+      },
+    },
+    bar: {
+      scales: {
+        x: {
+          title: {
+            display: "true",
+            text: axisTitles.x,
+          },
+          display: true,
+        },
+        y: {
+          display: true,
           title: {
             display: true,
-            text: chartTitle,
+            text: axisTitles.y,
           },
         },
-      };
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: chartTitle,
+        },
+      },
+    },
+    bubble: {
+      scales: {
+        x: {
+          title: {
+            display: "true",
+            text: axisTitles.x,
+          },
+          type: "linear",
+          display: true,
+          beginAtZero: true,
+        },
+        y: {
+          display: true,
+          title: {
+            display: true,
+            text: axisTitles.y,
+          },
+        },
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: chartTitle,
+        },
+      },
+    },
+  };
+
+  //basic chart data
+  const BCD = {
+    line: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    bar: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    bubble: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+  };
 
   useEffect(() => {
     if (!started) {
       setCurrentDataset(0);
 
+      setChartTitle(`My ${CHART_TITLES[chart_type]} Chart`);
+
       setAxisTitles(basicAxisTitles);
 
       setDatasetTitles(["Dataset"]);
 
-      setChartOptions(basicChartOptions);
+      setChartOptions(BCO[chart_type]);
 
-      setChartData([
-        {
-          label: datasetTitles[currentDataset],
-          data: [],
-          fill: false,
-          borderDash: [0, 0],
-          borderColor: colors[currentDataset],
-          backgroundColor: colors[currentDataset],
-          tension: 0,
-        },
-      ]);
+      setChartData([BCD[chart_type]]);
 
       setStarted(true);
     }
@@ -163,20 +218,17 @@ function Chart() {
 
   //update data in the chart in-real-time
   useEffect(() => {
-    const upd = () => {
+    if (started) {
       let newChartData = [...chartData];
       newChartData[currentDataset].label = datasetTitles[currentDataset];
       setChartData(newChartData);
-    };
-    if (started) {
-      upd();
     }
   }, [started, chartTitle, datasetTitles, currentDataset]);
 
   //change chart title in real-time
   useEffect(() => {
     if (started) {
-      setChartOptions(basicChartOptions);
+      setChartOptions(BCO[chart_type]);
     }
   }, [chartTitle, axisTitles.x, axisTitles.y, started]);
 
@@ -190,60 +242,23 @@ function Chart() {
       <Popover.Body>
         <Form onSubmit={(e) => addPoint(e)}>
           <Wrap spacingY={"3"}>
-            <HStack>
-              <FormLabel
-                color="orange.900"
-                className="me-2"
-                style={{ display: "inline" }}
-              >
-                {linear() ? "X:" : "Name:"}
-              </FormLabel>
-              {linear() ? (
-                <NumberInput bgColor="gray.50">
-                  <NumberInputField
-                    name="x"
-                    type="number"
-                    placeholder="0"
-                    required
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              ) : (
-                <Input
-                  bgColor="gray.50"
-                  name="x"
-                  type="text"
-                  placeholder="Name"
-                  required
-                />
-              )}
-            </HStack>
-
-            <HStack>
-              <FormLabel
-                color="orange.900"
-                className={linear() ? `me-2` : `me-10`}
-                style={{ display: "inline" }}
-              >
-                Y:
-              </FormLabel>
-              <NumberInput>
-                <NumberInputField
-                  bgColor="gray.50"
-                  name="y"
-                  type="number"
-                  placeholder="0"
-                  required
-                />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </HStack>
+            {chart_type === "line" ? (
+              <>
+                <LinearX />
+                <LinearY />
+              </>
+            ) : chart_type === "bar" ? (
+              <>
+                <BarX />
+                <LinearY />
+              </>
+            ) : (
+              <>
+                <LinearX />
+                <LinearY />
+                <BubbleR />
+              </>
+            )}
           </Wrap>
 
           <Center>
@@ -289,6 +304,23 @@ function Chart() {
     setChartData(newChartData);
   };
 
+  const ADD_FUNCTIONS = {
+    
+  }
+
+  const addBubblePoint = (e) => {
+    e.preventDefault();
+    let newChartData = [...chartData];
+
+    newChartData[currentDataset]["data"].splice(0, 0, {
+      x: e.target[0].value,
+      y: e.target[1].value,
+      r: e.target[2].value,
+    });
+
+    setChartData(newChartData);
+  };
+
   const deleteDataPoint = (i) => {
     let newChartData = [...chartData];
     newChartData[currentDataset]["data"].splice(i, 1);
@@ -309,7 +341,7 @@ function Chart() {
         setAxisTitles(newAxisTitles);
       }
     }
-    setChartOptions(basicChartOptions);
+    setChartOptions(BCO[chart_type]);
   };
 
   const changeColor = (e) => {
@@ -329,15 +361,7 @@ function Chart() {
     setDatasetTitles(newDatasetTitles);
 
     let newChartData = [...chartData];
-    newChartData.push({
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    });
+    newChartData.push(BCD[chart_type]);
     setChartData(newChartData);
 
     setColors([...colors, "rgb(75, 192, 192)"]);
@@ -395,7 +419,7 @@ function Chart() {
                 >
                   <Center>
                     <Heading mb={3} color={"orange.400"}>
-                      {linear() ? "Line" : "Bar"} Chart
+                      {capitalize(chart_type)} Chart
                     </Heading>
                   </Center>
                   <Divider color="orange.300" orientation="horizontal" />
