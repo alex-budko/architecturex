@@ -109,6 +109,13 @@ export default function Navbar() {
               >
                 Bubble Chart
               </MenuItem>
+              <MenuItem
+                _hover={{ color: "white" }}
+                as={ReactLink}
+                to="/chart/pie"
+              >
+                Pie Chart
+              </MenuItem>
               
               {user && (
                 <>

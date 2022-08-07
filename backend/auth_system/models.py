@@ -109,11 +109,16 @@ class Profile(models.Model):
         return self.user.email
 
 class Chart(models.Model):
-    LINE = 'L'
-    BAR = 'B'
+    LINE = 'line'
+    BAR = 'bar'
+    BUBBLE = 'bubble'
+    PIE = 'pie'
     CHART_TYPES = [
         (LINE, 'Line'),
         (BAR, 'Bar'),
+        (BUBBLE, 'Bubble'),
+        (PIE, 'Pie'),
+
     ]
 
     def default_options():
@@ -123,7 +128,7 @@ class Chart(models.Model):
         return {"data": "none"}
 
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    chartType = models.CharField(max_length=1, choices=CHART_TYPES, default=LINE)
+    chartType = models.CharField(max_length=60, choices=CHART_TYPES, default=LINE)
     options = models.JSONField(default=default_options)
     data = models.JSONField(default=default_data)
 

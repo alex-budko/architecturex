@@ -20,7 +20,7 @@ import {
   profile_view,
 } from "../auth-reducers/AuthReducers";
 import { useParams } from "react-router-dom";
-import { Line, Bar } from "react-chartjs-2";
+import { Line, Bar, Bubble, Pie } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 
 function Profile() {
@@ -70,11 +70,7 @@ function Profile() {
               rounded={"md"}
             >
               <Center>
-                <Avatar
-                  size="2xl"
-                  align="center"
-                  name={name}
-                />
+                <Avatar size="2xl" align="center" name={name} />
                 {/* <Uploady
                   style={{ cursor: "pointer", width: "30px" }}
                   destination={{ url: "/C:/build/static/media/avatars/" }}
@@ -111,31 +107,32 @@ function Profile() {
                   disabled={!updating}
                   mb={3}
                 />
-                {(user && name === user.name) && (!updating ? (
-                  <Button
-                    onClick={() => setUpdating(!updating)}
-                    colorScheme={"orange"}
-                    color="blue.800"
-                  >
-                    Update
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => {
-                      setUpdating(!updating);
-                      profile_update(data.user, data.email, description);
-                    }}
-                    colorScheme={"orange"}
-                    color="blue.800"
-                  >
-                    Confirm
-                  </Button>
-                ))}
+                {user &&
+                  name === user.name &&
+                  (!updating ? (
+                    <Button
+                      onClick={() => setUpdating(!updating)}
+                      colorScheme={"orange"}
+                      color="blue.800"
+                    >
+                      Update
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => {
+                        setUpdating(!updating);
+                        profile_update(data.user, data.email, description);
+                      }}
+                      colorScheme={"orange"}
+                      color="blue.800"
+                    >
+                      Confirm
+                    </Button>
+                  ))}
               </Box>
             </Box>
           </WrapItem>
           <WrapItem>
-            
             <Box
               p="15"
               height={RESPONSIVE_H}
@@ -157,7 +154,7 @@ function Profile() {
                   Charts
                 </Heading>
               </Center>
-              <Box p="2" minH={'200px'} rounded={"md"} bgColor={"orange.200"}>
+              <Box p="2" minH={"200px"} rounded={"md"} bgColor={"orange.200"}>
                 {charts &&
                   charts.map((chart, i) => {
                     return (
@@ -166,23 +163,30 @@ function Profile() {
                           <Box
                             p="1"
                             rounded={"md"}
-                            width={[
-                              "100%", 
-                              "100%", 
-                              "90%", 
-                              "480px",
-                            ]}
+                            width={["100%", "100%", "90%", "480px"]}
                             bgColor={"gray.50"}
-                            mt='3'
+                            mt="3"
                           >
-                            {chart.chartType === "L" ? (
+                            {chart.chartType === "line" ? (
                               <Line
                                 options={chart.options}
                                 data={chart.data}
                                 key={chart.id}
                               />
-                            ) : (
+                            ) : chart.chartType === "bar" ? (
                               <Bar
+                                options={chart.options}
+                                data={chart.data}
+                                key={chart.id}
+                              />
+                            ) : chart.chartType === "bubble" ? (
+                              <Bubble
+                                options={chart.options}
+                                data={chart.data}
+                                key={chart.id}
+                              />
+                            ) : (
+                              <Pie
                                 options={chart.options}
                                 data={chart.data}
                                 key={chart.id}

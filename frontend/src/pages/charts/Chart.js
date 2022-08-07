@@ -1,5 +1,5 @@
 //chart.js imports
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Bubble, Line, Pie } from "react-chartjs-2";
 import "chart.js/auto";
 
 import { useEffect, useState } from "react";
@@ -74,6 +74,8 @@ function Chart() {
   const CHART_TITLES = {
     bar: "Bar",
     line: "Line",
+    bubble: "Bubble",
+    pie: "Pie",
   };
 
   const [chartTitle, setChartTitle] = useState(
@@ -165,6 +167,14 @@ function Chart() {
         },
       },
     },
+    pie: {
+      plugins: {
+        title: {
+          display: true,
+          text: chartTitle,
+        },
+      },
+    },
   };
 
   //basic chart data
@@ -196,7 +206,22 @@ function Chart() {
       backgroundColor: "rgb(75, 192, 192)",
       tension: 0,
     },
+    pie: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
   };
+
+  useEffect(()=> {
+    if (started) {
+      setStarted(false)
+    }
+  }, [chart_type])
 
   useEffect(() => {
     if (!started) {
@@ -240,7 +265,7 @@ function Chart() {
         </Heading>
       </Center>
       <Popover.Body>
-        <Form onSubmit={(e) => addPoint(e)}>
+        <Form onSubmit={(e) => ADD_FUNCTIONS[chart_type](e)}>
           <Wrap spacingY={"3"}>
             {chart_type === "line" ? (
               <>
@@ -252,11 +277,15 @@ function Chart() {
                 <BarX />
                 <LinearY />
               </>
-            ) : (
+            ) : chart_type === "bubble" ? (
               <>
                 <LinearX />
                 <LinearY />
                 <BubbleR />
+              </>
+            ) : (
+              <>
+                <LinearX />
               </>
             )}
           </Wrap>
@@ -304,12 +333,9 @@ function Chart() {
     setChartData(newChartData);
   };
 
-  const ADD_FUNCTIONS = {
-    
-  }
-
   const addBubblePoint = (e) => {
     e.preventDefault();
+
     let newChartData = [...chartData];
 
     newChartData[currentDataset]["data"].splice(0, 0, {
@@ -319,6 +345,25 @@ function Chart() {
     });
 
     setChartData(newChartData);
+  };
+
+  const addPiePoint = (e) => {
+    e.preventDefault();
+
+    let newChartData = [...chartData];
+
+    newChartData[currentDataset]["data"].splice(0, 0,
+      e.target[0].value
+    );
+
+    setChartData(newChartData);
+  };
+
+  const ADD_FUNCTIONS = {
+    bar: addPoint,
+    line: addPoint,
+    bubble: addBubblePoint,
+    pie: addPiePoint,
   };
 
   const deleteDataPoint = (i) => {
@@ -374,9 +419,6 @@ function Chart() {
   const data = {
     datasets: chartData,
   };
-
-  //L represents Linear
-  const chartType = linear() ? "L" : "B";
 
   const mainTitles = [
     {
@@ -434,10 +476,14 @@ function Chart() {
                         mb={2}
                         p={2}
                       >
-                        {linear() ? (
+                        {chart_type === "line" ? (
                           <Line options={chartOptions} data={data} />
-                        ) : (
+                        ) : chart_type === "bar" ? (
                           <Bar options={chartOptions} data={data} />
+                        ) : chart_type === "bubble" ?(
+                          <Bubble options={chartOptions} data={data} />
+                        ) : (
+                          <Pie options={chartOptions} data={data} />
                         )}
                       </Box>
                     </Center>
@@ -450,7 +496,7 @@ function Chart() {
                           onClick={() => {
                             chart_create(
                               dispatch,
-                              chartType,
+                              chart_type,
                               chartOptions,
                               data,
                               user.name
@@ -578,7 +624,7 @@ function Chart() {
                         <Form.Group className="mb-3">
                           <Center>
                             <FormLabel color={"orange.300"}>
-                              {linear() ? "Line" : "Bar"} Color
+                              {capitalize(chart_type)} Color
                             </FormLabel>
                           </Center>
                           <Center>
