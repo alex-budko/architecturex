@@ -36,7 +36,6 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
     },
     logout: (state, action) => {
-      console.log("Logout");
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
       state.access = null;

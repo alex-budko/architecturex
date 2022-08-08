@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -16,14 +16,17 @@ import {
 
 import {
   charts_view,
+  log_out,
   profile_update,
   profile_view,
 } from "../auth-reducers/AuthReducers";
 import { useParams } from "react-router-dom";
 import { Line, Bar, Bubble, Pie } from "react-chartjs-2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function Profile() {
+  const dispatch = useDispatch()
+
   const [data, setData] = useState({
     user: "UNDEFINED",
     description: "",
@@ -32,6 +35,8 @@ function Profile() {
   });
 
   const [charts, setCharts] = useState(null);
+
+  const navigate = useNavigate()
 
   const [description, setDescription] = useState({
     description: "",
@@ -130,6 +135,10 @@ function Profile() {
                     </Button>
                   ))}
               </Box>
+              <Center mt={'3'}>{user && name === user.name && <Button bgColor='red.600' onClick={()=>{
+                log_out(dispatch)
+                navigate('/')
+                }}>Log Out</Button>}</Center>
             </Box>
           </WrapItem>
           <WrapItem>

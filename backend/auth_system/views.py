@@ -33,3 +33,6 @@ class ChartListView(generics.ListAPIView):
         queryset = self.model.objects.filter(user=user)
         return queryset
 
+class AllChartListView(generics.ListAPIView):
+    serializer_class = ChartSerializer
+    queryset = Chart.objects.all()

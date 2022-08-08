@@ -217,11 +217,11 @@ function Chart() {
     },
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     if (started) {
-      setStarted(false)
+      setStarted(false);
     }
-  }, [chart_type])
+  }, [chart_type]);
 
   useEffect(() => {
     if (!started) {
@@ -307,25 +307,9 @@ function Chart() {
 
   const addPoint = (e) => {
     e.preventDefault();
-    let pos = 0;
-
     let newChartData = [...chartData];
 
-    if (linear()) {
-      let xA = [];
-
-      if (newChartData[currentDataset]["data"][0]) {
-        xA = [
-          newChartData[currentDataset]["data"].map((dataPoint) => {
-            return dataPoint.x;
-          }),
-        ];
-      }
-
-      pos = sortedIndex(xA, e.target[0].value);
-    }
-
-    newChartData[currentDataset]["data"].splice(pos, 0, {
+    newChartData[currentDataset]["data"].push({
       x: e.target[0].value,
       y: e.target[1].value,
     });
@@ -352,9 +336,7 @@ function Chart() {
 
     let newChartData = [...chartData];
 
-    newChartData[currentDataset]["data"].splice(0, 0,
-      e.target[0].value
-    );
+    newChartData[currentDataset]["data"].splice(0, 0, e.target[0].value);
 
     setChartData(newChartData);
   };
@@ -417,6 +399,7 @@ function Chart() {
   };
 
   const data = {
+    labels: [],
     datasets: chartData,
   };
 
@@ -480,10 +463,13 @@ function Chart() {
                           <Line options={chartOptions} data={data} />
                         ) : chart_type === "bar" ? (
                           <Bar options={chartOptions} data={data} />
-                        ) : chart_type === "bubble" ?(
+                        ) : chart_type === "bubble" ? (
                           <Bubble options={chartOptions} data={data} />
                         ) : (
-                          <Pie options={chartOptions} data={data} />
+                          <Pie
+                            options={chartOptions}
+                            data={data}
+                          />
                         )}
                       </Box>
                     </Center>

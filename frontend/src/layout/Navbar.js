@@ -82,8 +82,8 @@ export default function Navbar() {
     >
       {!kidsExist && name}
       {kidsExist && (
-        <Flex alignItems={"center"}>
-          <Menu>
+        <Flex zIndex={10} alignItems={"center"}>
+          <Menu >
             <MenuButton rounded={"full"} cursor={"pointer"} minW={0}>
               {name}
             </MenuButton>

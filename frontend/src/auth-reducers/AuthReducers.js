@@ -17,6 +17,7 @@ import {
   activation_success,
   chartcreate_fail,
   chartcreate,
+  logout,
 } from "../features/user";
 
 import axios from "axios";
@@ -108,6 +109,10 @@ export async function log_user(dispatch, email, password) {
   } catch (err) {
     dispatch(login_fail());
   }
+}
+
+export async function log_out(dispatch) {
+  dispatch(logout());
 }
 
 export async function load_user(dispatch) {

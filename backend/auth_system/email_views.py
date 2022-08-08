@@ -6,7 +6,7 @@ from rest_framework.response import Response
 def contact_message(req):
     data = req.data
     send_mail(
-        'Architecturex Message from %s' % data['name'],
+        'Architecturex Message from %s (%s)' % (data['name'], data['email']),
         data['message'],
         data['email'],
         ['alex.budko2017@gmail.com'],

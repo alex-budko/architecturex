@@ -26,9 +26,9 @@ function FormCreator(props) {
                   className="mb-4"
                   controlId={`formBasic${group.controlId}`}
                 >
-                  <FloatingLabel style={{color: "#1A365D"}} label={`${group.label}`}>
+                  <FloatingLabel style={{color: "#1A365D !important"}} label={`${group.label}`}>
                     <Form.Control
-                      style={{color: "#1A202C", backgroundColor: "#EDF2F7"}}
+                      style={{color: "white", backgroundColor: "#1A202C"}}
                       isInvalid={group.isInvalid}
                       required
                       value={group.value}
