@@ -35,4 +35,4 @@ class ChartListView(generics.ListAPIView):
 
 class AllChartListView(generics.ListAPIView):
     serializer_class = ChartSerializer
-    queryset = Chart.objects.all()
+    queryset = Chart.objects.all().order_by('-id')

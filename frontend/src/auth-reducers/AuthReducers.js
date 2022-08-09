@@ -321,3 +321,20 @@ export async function charts_view(name) {
     console.log(err);
   }
 }
+
+export async function all_charts_view() {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const data = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/charts/`,
+      config
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
