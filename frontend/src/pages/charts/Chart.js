@@ -19,7 +19,6 @@ import {
 } from "react-bootstrap";
 
 import { ImCross } from "react-icons/im";
-import { sortedIndex } from "../../utils/sortedIndex";
 import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
@@ -37,11 +36,12 @@ import {
   Divider,
   Text,
 } from "@chakra-ui/react";
+
+//components
 import { capitalize } from "../../utils/capitalize";
-import { LinearX } from "./components/LinearX";
-import { LinearY } from "./components/LinearY";
-import { BarX } from "./components/BarX";
-import { BubbleR } from "./components/BubbleR";
+import { basicChartData as BCD } from "./components/basicChartData";
+import { NumberInputArch } from "./components/NumberInputArch";
+import { StringInputArch } from "./components/StringInputArch";
 
 function Chart() {
   const dispatch = useDispatch();
@@ -59,11 +59,14 @@ function Chart() {
   const [started, setStarted] = useState(false);
   const [currentDataset, setCurrentDataset] = useState(0);
   const [main, setMain] = useState(false);
+  const [chartLabels, setChartLabels] = useState([]);
 
   //dataset data
   const [chartData, setChartData] = useState([]);
 
   const [colors, setColors] = useState(["#aabbcc"]);
+
+  const [pointColor, changePointColor] = useState("#aabbcc");
 
   //chart options
   const [chartOptions, setChartOptions] = useState([]);
@@ -71,15 +74,8 @@ function Chart() {
   //chart titles
   const [datasetTitles, setDatasetTitles] = useState(["Dataset"]);
 
-  const CHART_TITLES = {
-    bar: "Bar",
-    line: "Line",
-    bubble: "Bubble",
-    pie: "Pie",
-  };
-
   const [chartTitle, setChartTitle] = useState(
-    `My ${CHART_TITLES[chart_type]} Chart`
+    `My ${capitalize(chart_type)} Chart`
   );
 
   const basicAxisTitles = {
@@ -177,44 +173,66 @@ function Chart() {
     },
   };
 
-  //basic chart data
-  const BCD = {
-    line: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    },
-    bar: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    },
-    bubble: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    },
-    pie: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    },
+  //chart titles
+  const mainTitles = {
+    line: [
+      {
+        title: "Chart",
+        name: "chartTitle",
+        value: chartTitle,
+      },
+      {
+        title: "X-Axis",
+        name: "x",
+        value: axisTitles.x,
+      },
+      {
+        title: "Y-Axis",
+        name: "y",
+        value: axisTitles.y,
+      },
+    ],
+    bar: [
+      {
+        title: "Chart",
+        name: "chartTitle",
+        value: chartTitle,
+      },
+      {
+        title: "X-Axis",
+        name: "x",
+        value: axisTitles.x,
+      },
+      {
+        title: "Y-Axis",
+        name: "y",
+        value: axisTitles.y,
+      },
+    ],
+    bubble: [
+      {
+        title: "Chart",
+        name: "chartTitle",
+        value: chartTitle,
+      },
+      {
+        title: "X-Axis",
+        name: "x",
+        value: axisTitles.x,
+      },
+      {
+        title: "Y-Axis",
+        name: "y",
+        value: axisTitles.y,
+      },
+    ],
+    pie: [
+      {
+        title: "Chart",
+        name: "chartTitle",
+        value: chartTitle,
+      },
+    ],
   };
 
   useEffect(() => {
@@ -227,7 +245,7 @@ function Chart() {
     if (!started) {
       setCurrentDataset(0);
 
-      setChartTitle(`My ${CHART_TITLES[chart_type]} Chart`);
+      setChartTitle(`My ${capitalize(chart_type)} Chart`);
 
       setAxisTitles(basicAxisTitles);
 
@@ -269,23 +287,29 @@ function Chart() {
           <Wrap spacingY={"3"}>
             {chart_type === "line" ? (
               <>
-                <LinearX />
-                <LinearY />
+                <NumberInputArch name={"x"} />
+                <NumberInputArch name={"y"} />
               </>
             ) : chart_type === "bar" ? (
               <>
-                <BarX />
-                <LinearY />
+                <StringInputArch name={"name"} />
+                <NumberInputArch name={"y"} />
               </>
             ) : chart_type === "bubble" ? (
               <>
-                <LinearX />
-                <LinearY />
-                <BubbleR />
+                <NumberInputArch name={"x"} />
+                <NumberInputArch name={"y"} />
+                <NumberInputArch name={"r"} />
               </>
             ) : (
               <>
-                <LinearX />
+                <StringInputArch name={"name"} />
+                <NumberInputArch name={"count"} />
+                <HexColorPicker
+                  color={pointColor}
+                  onChange={(e) => changePointColor(e)}
+                  style={{ width: "250px", height: "100px" }}
+                />
               </>
             )}
           </Wrap>
@@ -304,6 +328,11 @@ function Chart() {
       </Popover.Body>
     </Popover>
   );
+
+  const data = {
+    labels: chartLabels,
+    datasets: chartData,
+  };
 
   const addPoint = (e) => {
     e.preventDefault();
@@ -336,8 +365,13 @@ function Chart() {
 
     let newChartData = [...chartData];
 
-    newChartData[currentDataset]["data"].splice(0, 0, e.target[0].value);
+    const name = e.target[0].value;
+    const count = e.target[1].value;
 
+    newChartData[currentDataset]["data"].push(count);
+    newChartData[0]["backgroundColor"].push(pointColor);
+
+    setChartLabels([...chartLabels, name]);
     setChartData(newChartData);
   };
 
@@ -398,29 +432,6 @@ function Chart() {
     setCurrentDataset(e.target.name);
   };
 
-  const data = {
-    labels: [],
-    datasets: chartData,
-  };
-
-  const mainTitles = [
-    {
-      title: "Chart",
-      name: "chartTitle",
-      value: chartTitle,
-    },
-    {
-      title: "X-Axis",
-      name: "x",
-      value: axisTitles.x,
-    },
-    {
-      title: "Y-Axis",
-      name: "y",
-      value: axisTitles.y,
-    },
-  ];
-
   const RESPONSIVE_W = ["90vw", "80vw", "70vw", "660px", "600px"];
   const RESPONSIVE_H = ["400px", "480px", "550px", "580px", "560px"];
 
@@ -453,7 +464,11 @@ function Chart() {
                     <Center>
                       <Box
                         rounded={"md"}
-                        width={["100%", "100%", "90%", "660px", "600px"]}
+                        width={
+                          chart_type !== "pie"
+                            ? ["100%", "100%", "90%", "660px", "600px"]
+                            : ["90%", "95%", "90%", "350px", "400px"]
+                        }
                         bgColor="gray.100"
                         mt={2}
                         mb={2}
@@ -466,10 +481,7 @@ function Chart() {
                         ) : chart_type === "bubble" ? (
                           <Bubble options={chartOptions} data={data} />
                         ) : (
-                          <Pie
-                            options={chartOptions}
-                            data={data}
-                          />
+                          <Pie options={chartOptions} data={data} />
                         )}
                       </Box>
                     </Center>
@@ -578,7 +590,7 @@ function Chart() {
                   </Nav>
                   <Wrap justify={"center"}>
                     {main ? (
-                      mainTitles.map((groupItem) => {
+                      mainTitles[chart_type].map((groupItem) => {
                         return (
                           <Form.Group className="mb-3">
                             <FormLabel color={"orange.300"}>

@@ -8,8 +8,9 @@ import {
   NumberInputField,
   HStack,
 } from "@chakra-ui/react";
+import { capitalize } from "../../../utils/capitalize";
 
-export const LinearX = () => {
+export const NumberInputArch = ({name}) => {
   return (
     <HStack>
       <FormLabel
@@ -17,10 +18,10 @@ export const LinearX = () => {
         className="me-2"
         style={{ display: "inline" }}
       >
-        X:
+        {capitalize(name)}:
       </FormLabel>
       <NumberInput bgColor="gray.50">
-        <NumberInputField name="x" type="number" placeholder="0" required />
+        <NumberInputField name={name} type="number" placeholder="0" required />
         <NumberInputStepper>
           <NumberIncrementStepper />
           <NumberDecrementStepper />

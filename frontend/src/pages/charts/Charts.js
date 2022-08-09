@@ -37,7 +37,7 @@ function Charts() {
                 <Center>
                   <Box
                     mt="4"
-                    width={["300px", "450px", "500px", "580px"]}
+                    width={chart.chartType !== 'pie' ? ["300px", "450px", "500px", "580px"] : ["50%", "60%", "70%", "400px", "500px"]}
                     bgColor="gray.50"
                     shadow={"dark-lg"}
                     rounded="lg"

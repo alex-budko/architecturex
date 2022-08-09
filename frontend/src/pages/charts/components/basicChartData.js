@@ -1,0 +1,38 @@
+export const basicChartData = {
+    line: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    bar: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    bubble: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    pie: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "black",
+      backgroundColor: [],
+      tension: 0,
+    },
+  };

@@ -33,8 +33,8 @@ const Links = [
     kidsExist: false,
   },
   {
-    name: "Support",
-    href: "support",
+    name: "Trending",
+    href: "trending",
     kidsExist: false,
   },
   {

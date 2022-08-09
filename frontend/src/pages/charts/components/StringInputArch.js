@@ -1,8 +1,9 @@
 import { FormLabel } from "react-bootstrap";
 
 import { HStack, Input } from "@chakra-ui/react";
+import { capitalize } from "../../../utils/capitalize";
 
-export const BarX = () => {
+export const StringInputArch = ({name}) => {
   return (
     <HStack>
       <FormLabel
@@ -10,13 +11,13 @@ export const BarX = () => {
         className="me-2"
         style={{ display: "inline" }}
       >
-        Name:
+        {capitalize(name)}:
       </FormLabel>
       <Input
         bgColor="gray.50"
-        name="x"
+        name={name}
         type="text"
-        placeholder="Name"
+        placeholder={capitalize(name)}
         required
       />
     </HStack>

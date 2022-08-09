@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import FormCreator from "../utils/FormCreator";
 import { log_user } from "../auth-reducers/AuthReducers";
-import { Center, Heading, Stack } from "@chakra-ui/react";
 
 function Login() {
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ function Login() {
       setTimeout(() => {
         setFormData({ email: "", password: "" });
         setInvalid(true);
-      }, 500);
+      }, 1250);
     }
   };
 
