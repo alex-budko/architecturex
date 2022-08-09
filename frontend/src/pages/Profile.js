@@ -12,6 +12,7 @@ import {
   WrapItem,
   Avatar,
   VStack,
+  HStack,
 } from "@chakra-ui/react";
 
 import {
@@ -25,7 +26,7 @@ import { Line, Bar, Bubble, Pie } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
 
 function Profile() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [data, setData] = useState({
     user: "UNDEFINED",
@@ -36,7 +37,7 @@ function Profile() {
 
   const [charts, setCharts] = useState(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [description, setDescription] = useState({
     description: "",
@@ -112,33 +113,45 @@ function Profile() {
                   disabled={!updating}
                   mb={3}
                 />
-                {user &&
-                  name === user.name &&
-                  (!updating ? (
-                    <Button
-                      onClick={() => setUpdating(!updating)}
-                      colorScheme={"orange"}
-                      color="blue.800"
-                    >
-                      Update
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        setUpdating(!updating);
-                        profile_update(data.user, data.email, description);
-                      }}
-                      colorScheme={"orange"}
-                      color="blue.800"
-                    >
-                      Confirm
-                    </Button>
-                  ))}
+                <HStack justify='center'>
+                  {user &&
+                    name === user.name &&
+                    (!updating ? (
+                      <Button
+                        onClick={() => setUpdating(!updating)}
+                        colorScheme={"orange"}
+                        color="blue.800"
+                      >
+                        Update
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          setUpdating(!updating);
+                          profile_update(data.user, data.email, description);
+                        }}
+                        colorScheme={"orange"}
+                        color="blue.800"
+                      >
+                        Confirm
+                      </Button>
+                    ))}
+                  <Center mt={"3"}>
+                    {user && name === user.name && (
+                      <Button
+                        bgColor="red.600"
+                        _hover={{bgColor: 'red.800'}}
+                        onClick={() => {
+                          log_out(dispatch);
+                          navigate("/");
+                        }}
+                      >
+                        Log Out
+                      </Button>
+                    )}
+                  </Center>
+                </HStack>
               </Box>
-              <Center mt={'3'}>{user && name === user.name && <Button bgColor='red.600' onClick={()=>{
-                log_out(dispatch)
-                navigate('/')
-                }}>Log Out</Button>}</Center>
             </Box>
           </WrapItem>
           <WrapItem>

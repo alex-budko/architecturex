@@ -3,6 +3,7 @@ import {
   Center,
   Divider,
   Heading,
+  Text,
   VStack,
   Wrap,
   WrapItem,
@@ -29,46 +30,54 @@ function Trending() {
         <Wrap justify="center" p="30">
           {charts &&
             charts.map((chart, i) => {
-              if (i > 5) return;
+              if (i > 10) return;
               return (
                 <Center>
                   <WrapItem
                     mt="4"
                     p="5"
-                    width={
-                      chart.chartType !== "pie"
-                        ? ["300px", "450px", "500px", "580px"]
-                        : ["50%", "60%", "70%", "400px", "500px"]
-                    }
-                    bgColor="gray.50"
+                    bgColor={"gray.800"}
                     shadow={"dark-lg"}
                     rounded="3xl"
                   >
-                    {chart.chartType === "line" ? (
-                      <Line
-                        options={chart.options}
-                        data={chart.data}
-                        key={chart.id}
-                      />
-                    ) : chart.chartType === "bar" ? (
-                      <Bar
-                        options={chart.options}
-                        data={chart.data}
-                        key={chart.id}
-                      />
-                    ) : chart.chartType === "bubble" ? (
-                      <Bubble
-                        options={chart.options}
-                        data={chart.data}
-                        key={chart.id}
-                      />
-                    ) : (
-                      <Pie
-                        options={chart.options}
-                        data={chart.data}
-                        key={chart.id}
-                      />
-                    )}
+                    <VStack>
+                      <Text fontSize={'lg'} fontFamily='bold'>Made By {chart.user} </Text>
+                      <Box
+                        rounded="3xl"
+                        width={
+                          chart.chartType !== "pie"
+                            ? ["300px", "450px", "500px", "580px"]
+                            : ["50%", "60%", "70%", "400px", "500px"]
+                        }
+                        bgColor="gray.50"
+                      >
+                        {chart.chartType === "line" ? (
+                          <Line
+                            options={chart.options}
+                            data={chart.data}
+                            key={chart.id}
+                          />
+                        ) : chart.chartType === "bar" ? (
+                          <Bar
+                            options={chart.options}
+                            data={chart.data}
+                            key={chart.id}
+                          />
+                        ) : chart.chartType === "bubble" ? (
+                          <Bubble
+                            options={chart.options}
+                            data={chart.data}
+                            key={chart.id}
+                          />
+                        ) : (
+                          <Pie
+                            options={chart.options}
+                            data={chart.data}
+                            key={chart.id}
+                          />
+                        )}
+                      </Box>
+                    </VStack>
                   </WrapItem>
                 </Center>
               );

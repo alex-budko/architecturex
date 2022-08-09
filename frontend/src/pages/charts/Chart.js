@@ -39,7 +39,6 @@ import {
 
 //components
 import { capitalize } from "../../utils/capitalize";
-import { basicChartData as BCD } from "./components/basicChartData";
 import { NumberInputArch } from "./components/NumberInputArch";
 import { StringInputArch } from "./components/StringInputArch";
 
@@ -86,7 +85,7 @@ function Chart() {
   const [axisTitles, setAxisTitles] = useState(basicAxisTitles);
 
   //basic chart options
-  const BCO = {
+  let BCO = {
     line: {
       scales: {
         x: {
@@ -173,6 +172,51 @@ function Chart() {
     },
   };
 
+  //basic chart data
+  let BCD = {
+    line: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    bar: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    bubble: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "rgb(75, 192, 192)",
+      backgroundColor: "rgb(75, 192, 192)",
+      tension: 0,
+    },
+    pie: {
+      label: "Dataset",
+      data: [],
+      fill: false,
+      borderDash: [0, 0],
+      borderColor: "black",
+      backgroundColor: [],
+      tension: 0,
+    },
+  };
+
+  const BCD_copy = {...BCD}
+
+  const BCO_copy = {...BCO}
+
+
   //chart titles
   const mainTitles = {
     line: [
@@ -250,6 +294,11 @@ function Chart() {
       setAxisTitles(basicAxisTitles);
 
       setDatasetTitles(["Dataset"]);
+
+      BCD = {...BCD_copy}
+      BCO = {...BCO_copy}
+
+      setChartLabels([])
 
       setChartOptions(BCO[chart_type]);
 
@@ -369,7 +418,7 @@ function Chart() {
     const count = e.target[1].value;
 
     newChartData[currentDataset]["data"].push(count);
-    newChartData[0]["backgroundColor"].push(pointColor);
+    newChartData[currentDataset]["backgroundColor"].push(pointColor)
 
     setChartLabels([...chartLabels, name]);
     setChartData(newChartData);
@@ -381,6 +430,7 @@ function Chart() {
     bubble: addBubblePoint,
     pie: addPiePoint,
   };
+
 
   const deleteDataPoint = (i) => {
     let newChartData = [...chartData];
@@ -626,11 +676,11 @@ function Chart() {
                             </FormLabel>
                           </Center>
                           <Center>
-                            <HexColorPicker
+                            {chart_type !== 'pie' && <HexColorPicker
                               style={{ width: "250px", height: "100px" }}
                               color={colors[currentDataset]}
                               onChange={(e) => changeColor(e)}
-                            />
+                            />}
                           </Center>
                         </Form.Group>
 
