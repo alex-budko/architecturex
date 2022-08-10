@@ -24,9 +24,9 @@ function Signup() {
   });
   const { name, email, password, re_password } = formData;
 
-  if (isAuthenticated) {
-    return <Navigate to="/" />;
-  }
+  // if (isAuthenticated) {
+  //   return <Navigate to="/" />;
+  // }
 
   const changeInfo = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -76,15 +76,12 @@ function Profile() {
               rounded={"md"}
             >
               <Center>
-                <Avatar size="2xl" align="center" name={name} />
-                {/* <Uploady
-                  style={{ cursor: "pointer", width: "30px" }}
-                  destination={{ url: "/C:/build/static/media/avatars/" }}
-                >
-                  <UploadButton onClick={(e) => console.log(e)}>
-                    <BiUpload />
-                  </UploadButton>
-                </Uploady> */}
+                <Avatar
+                  bgColor={"blue.600"}
+                  size="2xl"
+                  align="center"
+                  name={name}
+                />
               </Center>
 
               <Box align="center">
@@ -93,9 +90,9 @@ function Profile() {
                     {data.user}
                   </Heading>
                 </VStack>
-
                 <FormControl
-                  bg={"orange.200"}
+                  textAlign={"center"}
+                  bg={"gray.300"}
                   style={{
                     color: "#1A365D",
                   }}
@@ -113,7 +110,7 @@ function Profile() {
                   disabled={!updating}
                   mb={3}
                 />
-                <HStack justify='center'>
+                <HStack justify="center">
                   {user &&
                     name === user.name &&
                     (!updating ? (
@@ -140,7 +137,7 @@ function Profile() {
                     {user && name === user.name && (
                       <Button
                         bgColor="red.600"
-                        _hover={{bgColor: 'red.800'}}
+                        _hover={{ bgColor: "red.800" }}
                         onClick={() => {
                           log_out(dispatch);
                           navigate("/");
@@ -166,6 +163,7 @@ function Profile() {
             >
               <Center>
                 <Avatar
+                  bgColor={"blue.600"}
                   size="2xl"
                   align="center"
                   src={require("../images/charts.png")}
@@ -176,7 +174,7 @@ function Profile() {
                   Charts
                 </Heading>
               </Center>
-              <Box p="2" minH={"200px"} rounded={"md"} bgColor={"orange.200"}>
+              <Box p="2" minH={"200px"} rounded={"md"} bgColor={"gray.300"}>
                 {charts &&
                   charts.map((chart, i) => {
                     return (
@@ -184,8 +182,8 @@ function Profile() {
                         <Center>
                           <Box
                             p="1"
-                            rounded={"md"}
-                            width={["100%", "100%", "90%", "480px"]}
+                            rounded={"2xl"}
+                            width={chart.chartType !== 'pie' ? ["100%", "100%", "90%", "480px"] : ["50%", "60%", "70%", "350px"]}
                             bgColor={"gray.50"}
                             mt="3"
                           >

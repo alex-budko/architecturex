@@ -4,9 +4,12 @@ import {
   Center,
   Divider,
   Heading,
+  HStack,
   Text,
   VStack,
 } from "@chakra-ui/react";
+
+import { FiThumbsUp } from "react-icons/fi";
 
 function EmailSent({ setShow, message, confirmEmail }) {
   const handleClose = () => setShow(false);
@@ -14,18 +17,20 @@ function EmailSent({ setShow, message, confirmEmail }) {
   return (
     <Center>
       <VStack
-        bgColor={"green.800"}
+        bgColor={"blue.800"}
         minH="250px"
         minW={"300px"}
         zIndex={5}
-        rounded='3xl'
-        shadow={'dark-lg'}
-
-        p='10'
+        rounded="3xl"
+        shadow={"dark-lg"}
+        p="10"
         position="absolute"
         top={"50%"}
       >
-        <Heading>{message} Successful!</Heading>
+        <HStack>
+          <Heading>{message} Successful! </Heading>
+          <FiThumbsUp style={{width: 50, height: 50}} />
+        </HStack>
         {confirmEmail && (
           <>
             <Divider />
@@ -40,7 +45,7 @@ function EmailSent({ setShow, message, confirmEmail }) {
           position={"absolute"}
           bottom="10"
           size="lg"
-          bgColor="green.900"
+          bgColor="blue.900"
           onClick={() => handleClose()}
         >
           Close

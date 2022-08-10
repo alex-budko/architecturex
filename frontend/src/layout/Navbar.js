@@ -83,7 +83,7 @@ export default function Navbar() {
       {!kidsExist && name}
       {kidsExist && (
         <Flex zIndex={10} alignItems={"center"}>
-          <Menu >
+          <Menu>
             <MenuButton rounded={"full"} cursor={"pointer"} minW={0}>
               {name}
             </MenuButton>
@@ -116,7 +116,7 @@ export default function Navbar() {
               >
                 Pie Chart
               </MenuItem>
-              
+
               {user && (
                 <>
                   <MenuDivider />
@@ -175,8 +175,9 @@ export default function Navbar() {
           {user ? (
             <Flex alignItems={"center"}>
               <Avatar
+                bgColor={"blue.600"}
                 size={"md"}
-                _hover={{color: 'white'}}
+                _hover={{ color: "white" }}
                 cursor="pointer"
                 name={user.name}
                 as={ReactLink}

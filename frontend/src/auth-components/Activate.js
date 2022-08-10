@@ -2,11 +2,17 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { verify } from "../auth-reducers/AuthReducers";
 import { Button, Center, Heading, VStack } from "@chakra-ui/react";
+import { useState } from "react";
 
 function Activate() {
   const { uid, token } = useParams();
   const dispatch = useDispatch;
   const navigate = useNavigate();
+  const [verified, setVerified] = useState(false)
+
+  if (verified) {
+    navigate('/login')
+  }
 
   return (
     <Center>
@@ -28,7 +34,7 @@ function Activate() {
           bottom='4'
           onClick={() => {
             verify(dispatch, uid, token).then(() => {
-              navigate("/login");
+              setVerified(true)
             });
           }}
           size="md"

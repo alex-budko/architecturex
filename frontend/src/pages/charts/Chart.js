@@ -212,10 +212,9 @@ function Chart() {
     },
   };
 
-  const BCD_copy = {...BCD}
+  const BCD_copy = { ...BCD };
 
-  const BCO_copy = {...BCO}
-
+  const BCO_copy = { ...BCO };
 
   //chart titles
   const mainTitles = {
@@ -295,10 +294,10 @@ function Chart() {
 
       setDatasetTitles(["Dataset"]);
 
-      BCD = {...BCD_copy}
-      BCO = {...BCO_copy}
+      BCD = { ...BCD_copy };
+      BCO = { ...BCO_copy };
 
-      setChartLabels([])
+      setChartLabels([]);
 
       setChartOptions(BCO[chart_type]);
 
@@ -418,7 +417,7 @@ function Chart() {
     const count = e.target[1].value;
 
     newChartData[currentDataset]["data"].push(count);
-    newChartData[currentDataset]["backgroundColor"].push(pointColor)
+    newChartData[currentDataset]["backgroundColor"].push(pointColor);
 
     setChartLabels([...chartLabels, name]);
     setChartData(newChartData);
@@ -430,7 +429,6 @@ function Chart() {
     bubble: addBubblePoint,
     pie: addPiePoint,
   };
-
 
   const deleteDataPoint = (i) => {
     let newChartData = [...chartData];
@@ -669,20 +667,22 @@ function Chart() {
                           />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                          <Center>
-                            <FormLabel color={"orange.300"}>
-                              {capitalize(chart_type)} Color
-                            </FormLabel>
-                          </Center>
-                          <Center>
-                            {chart_type !== 'pie' && <HexColorPicker
-                              style={{ width: "250px", height: "100px" }}
-                              color={colors[currentDataset]}
-                              onChange={(e) => changeColor(e)}
-                            />}
-                          </Center>
-                        </Form.Group>
+                        {chart_type !== "pie" && (
+                          <Form.Group className="mb-3">
+                            <Center>
+                              <FormLabel color={"orange.300"}>
+                                {capitalize(chart_type)} Color
+                              </FormLabel>
+                            </Center>
+                            <Center>
+                              <HexColorPicker
+                                style={{ width: "250px", height: "100px" }}
+                                color={colors[currentDataset]}
+                                onChange={(e) => changeColor(e)}
+                              />
+                            </Center>
+                          </Form.Group>
+                        )}
 
                         <Center>
                           <Dropdown as={ButtonGroup}>

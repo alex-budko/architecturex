@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Bar, Bubble, Line, Pie } from "react-chartjs-2";
 import { all_charts_view } from "../auth-reducers/AuthReducers";
+import { Link } from "react-router-dom";
 
 function Trending() {
   const [charts, setCharts] = useState(null);
@@ -41,7 +42,19 @@ function Trending() {
                     rounded="3xl"
                   >
                     <VStack>
-                      <Text fontSize={'lg'} fontFamily='bold'>Made By {chart.user} </Text>
+                      <Text fontSize={"lg"} fontWeight="bold">
+                        Made By{" "}
+                        <u>
+                          <Text
+                            _hover={{ color: "orange.700" }}
+                            color="orange.500"
+                            as={Link}
+                            to={`/profile/${chart.user}`}
+                          >
+                            {chart.user}
+                          </Text>
+                        </u>{" "}
+                      </Text>
                       <Box
                         rounded="3xl"
                         width={
