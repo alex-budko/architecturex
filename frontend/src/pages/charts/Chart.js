@@ -35,6 +35,7 @@ import {
   WrapItem,
   Divider,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 
 //components
@@ -189,7 +190,7 @@ function Chart() {
       fill: false,
       borderDash: [0, 0],
       borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
+      backgroundColor: [],
       tension: 0,
     },
     bubble: {
@@ -342,6 +343,11 @@ function Chart() {
               <>
                 <StringInputArch name={"name"} />
                 <NumberInputArch name={"y"} />
+                <HexColorPicker
+                  color={pointColor}
+                  onChange={(e) => changePointColor(e)}
+                  style={{ width: "250px", height: "100px" }}
+                />
               </>
             ) : chart_type === "bubble" ? (
               <>
@@ -382,7 +388,7 @@ function Chart() {
     datasets: chartData,
   };
 
-  const addPoint = (e) => {
+  const addLinePoint = (e) => {
     e.preventDefault();
     let newChartData = [...chartData];
 
@@ -391,6 +397,19 @@ function Chart() {
       y: e.target[1].value,
     });
 
+    setChartData(newChartData);
+  };
+
+  const addBarPoint = (e) => {
+    e.preventDefault();
+    let newChartData = [...chartData];
+
+    newChartData[currentDataset]["data"].push({
+      x: e.target[0].value,
+      y: e.target[1].value,
+    });
+
+    newChartData[currentDataset]["backgroundColor"].push(pointColor);
     setChartData(newChartData);
   };
 
@@ -424,8 +443,8 @@ function Chart() {
   };
 
   const ADD_FUNCTIONS = {
-    bar: addPoint,
-    line: addPoint,
+    bar: addBarPoint,
+    line: addLinePoint,
     bubble: addBubblePoint,
     pie: addPiePoint,
   };
@@ -586,6 +605,7 @@ function Chart() {
                     <Nav.Link
                       className="me-1"
                       style={{
+                        borderWidth: "3px",
                         color: "#2D3748",
                         backgroundColor: "#FBD38D",
                         fontWeight: "bold",
@@ -610,6 +630,7 @@ function Chart() {
                               color: "#171923",
                               backgroundColor: "#FBD38D",
                               fontWeight: "bold",
+                              borderWidth: "3px",
                             }}
                             align="center"
                             name={i}
@@ -640,25 +661,47 @@ function Chart() {
                     {main ? (
                       mainTitles[chart_type].map((groupItem) => {
                         return (
-                          <Form.Group className="mb-3">
-                            <FormLabel color={"orange.300"}>
-                              {groupItem.title} Title
-                            </FormLabel>
-                            <Form.Control
-                              onChange={(e) => changeTitle(e)}
-                              type="text"
-                              name={groupItem.name}
-                              value={groupItem.value}
-                            />
-                          </Form.Group>
+                          <VStack justify={"center"} spacing="3">
+                            <Form.Group className="mb-3">
+                              <Center>
+                                <FormLabel color={"orange.300"}>
+                                  {groupItem.title} Title
+                                </FormLabel>
+                              </Center>
+
+                              <Form.Control
+                                onChange={(e) => changeTitle(e)}
+                                type="text"
+                                name={groupItem.name}
+                                value={groupItem.value}
+                              />
+                            </Form.Group>
+                            <VStack
+                              bgColor={"gray.800"}
+                              style={{marginTop: '25px'}}
+                              p="3"
+                              rounded={"xl"}
+                            >
+                              <Text textShadow={"dark-lg"} fontSize={"xl"}>
+                                Main Options
+                              </Text>
+                              <Divider />
+                              {/* {mainOptions[chart_type].map((option)=> {
+
+                            })} */}
+                            </VStack>
+                          </VStack>
                         );
                       })
                     ) : (
-                      <Container>
-                        <Form.Group className="mb-3">
-                          <FormLabel color={"orange.300"}>
-                            Dataset Title
-                          </FormLabel>
+                      <VStack>
+                        <Form.Group className="mb-1">
+                          <Center>
+                            <FormLabel color={"orange.300"}>
+                              Dataset Title
+                            </FormLabel>
+                          </Center>
+
                           <Form.Control
                             onChange={(e) => changeTitle(e)}
                             type="text"
@@ -667,8 +710,8 @@ function Chart() {
                           />
                         </Form.Group>
 
-                        {chart_type !== "pie" && (
-                          <Form.Group className="mb-3">
+                        {chart_type !== "pie" && chart_type !== "bar" && (
+                          <Form.Group className="mb-1">
                             <Center>
                               <FormLabel color={"orange.300"}>
                                 {capitalize(chart_type)} Color
@@ -739,7 +782,21 @@ function Chart() {
                             </Dropdown.Menu>
                           </Dropdown>
                         </Center>
-                      </Container>
+                        <VStack
+                          bgColor={"gray.800"}
+                          style={{marginTop: '25px'}}
+                          p="3"
+                          rounded={"xl"}
+                        >
+                          <Text textShadow={"dark-lg"} fontSize={"xl"}>
+                            Dataset Options
+                          </Text>
+                          <Divider />
+                          {/* {mainOptions[chart_type].map((option)=> {
+
+                            })} */}
+                        </VStack>
+                      </VStack>
                     )}
                   </Wrap>
                 </Box>

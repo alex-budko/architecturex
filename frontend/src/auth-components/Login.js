@@ -39,7 +39,7 @@ function Login() {
       label: "Email",
       type: "email",
       pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
-      isInvalid: false,
+      isInvalid: invalid,
       value: email,
       muted: true,
       mutedText: `We'll never share your email with anyone else`,
