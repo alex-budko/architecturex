@@ -40,8 +40,11 @@ import {
 
 //components
 import { capitalize } from "../../utils/capitalize";
-import { NumberInputArch } from "./components/NumberInputArch";
-import { StringInputArch } from "./components/StringInputArch";
+
+import Li from "./datapointFunc/Li";
+import Ba from "./datapointFunc/Ba";
+import Bu from "./datapointFunc/Bu";
+import Pi from "./datapointFunc/Pi";
 
 function Chart() {
   const dispatch = useDispatch();
@@ -87,6 +90,7 @@ function Chart() {
 
   //basic chart options
   let BCO = {
+    radius: 0,
     line: {
       scales: {
         x: {
@@ -335,14 +339,10 @@ function Chart() {
         <Form onSubmit={(e) => ADD_FUNCTIONS[chart_type](e)}>
           <Wrap spacingY={"3"}>
             {chart_type === "line" ? (
-              <>
-                <NumberInputArch name={"x"} />
-                <NumberInputArch name={"y"} />
-              </>
+              <Li />
             ) : chart_type === "bar" ? (
               <>
-                <StringInputArch name={"name"} />
-                <NumberInputArch name={"y"} />
+                <Ba />
                 <HexColorPicker
                   color={pointColor}
                   onChange={(e) => changePointColor(e)}
@@ -351,14 +351,11 @@ function Chart() {
               </>
             ) : chart_type === "bubble" ? (
               <>
-                <NumberInputArch name={"x"} />
-                <NumberInputArch name={"y"} />
-                <NumberInputArch name={"r"} />
+                <Bu />
               </>
             ) : (
               <>
-                <StringInputArch name={"name"} />
-                <NumberInputArch name={"count"} />
+                <Pi />
                 <HexColorPicker
                   color={pointColor}
                   onChange={(e) => changePointColor(e)}
@@ -659,40 +656,45 @@ function Chart() {
                   </Nav>
                   <Wrap justify={"center"}>
                     {main ? (
-                      mainTitles[chart_type].map((groupItem) => {
-                        return (
-                          <VStack justify={"center"} spacing="3">
-                            <Form.Group className="mb-3">
-                              <Center>
-                                <FormLabel color={"orange.300"}>
-                                  {groupItem.title} Title
-                                </FormLabel>
-                              </Center>
+                      <Wrap justify={"center"}>
+                        {mainTitles[chart_type].map((groupItem) => {
+                          return (
+                            <Wrap justify={"center"} spacing="3">
+                              <Form.Group className="mb-3">
+                                <Center>
+                                  <FormLabel color={"orange.300"}>
+                                    {groupItem.title} Title
+                                  </FormLabel>
+                                </Center>
 
-                              <Form.Control
-                                onChange={(e) => changeTitle(e)}
-                                type="text"
-                                name={groupItem.name}
-                                value={groupItem.value}
-                              />
-                            </Form.Group>
-                            <VStack
-                              bgColor={"gray.800"}
-                              style={{marginTop: '25px'}}
-                              p="3"
-                              rounded={"xl"}
-                            >
-                              <Text textShadow={"dark-lg"} fontSize={"xl"}>
-                                Main Options
-                              </Text>
-                              <Divider />
-                              {/* {mainOptions[chart_type].map((option)=> {
-
-                            })} */}
-                            </VStack>
-                          </VStack>
-                        );
-                      })
+                                <Form.Control
+                                  onChange={(e) => changeTitle(e)}
+                                  type="text"
+                                  name={groupItem.name}
+                                  value={groupItem.value}
+                                />
+                              </Form.Group>
+                            </Wrap>
+                          );
+                        })}
+                        <VStack
+                          bgColor={"gray.800"}
+                          style={{ marginTop: "25cdpx" }}
+                          p="3"
+                          rounded={"xl"}
+                          minW="90%"
+                        >
+                          <Text textShadow={"dark-lg"} fontSize={"xl"}>
+                            Main Options
+                          </Text>
+                          <Divider />
+                          <Wrap justify="center">
+                            {/* {mainOptions[chart_type].map((option)=> {
+    
+                                })} */}
+                          </Wrap>
+                        </VStack>
+                      </Wrap>
                     ) : (
                       <VStack>
                         <Form.Group className="mb-1">
@@ -784,7 +786,7 @@ function Chart() {
                         </Center>
                         <VStack
                           bgColor={"gray.800"}
-                          style={{marginTop: '25px'}}
+                          style={{ marginTop: "25px" }}
                           p="3"
                           rounded={"xl"}
                         >
