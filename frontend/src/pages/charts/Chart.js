@@ -617,8 +617,10 @@ function Chart() {
                         <Nav.Item
                           align="center"
                           onClick={(e) => {
-                            setMain(false);
-                            changeDatasetNum(e);
+                            if (typeof e.target.name !== "undefined") {
+                              setMain(false);
+                              changeDatasetNum(e);
+                            }
                           }}
                         >
                           <Nav.Link
@@ -646,6 +648,7 @@ function Chart() {
                             backgroundColor: "#2B6CB0",
                             color: "white",
                             fontWeight: "bold",
+                            borderWidth: "3px",
                           }}
                           onClick={() => addDataset()}
                         >
@@ -736,7 +739,7 @@ function Chart() {
                               placement="top"
                               overlay={pointForm}
                             >
-                              <Button bgColor={"blue.600"}>
+                              <Button rounded="2" bgColor={"blue.600"}>
                                 Add Datapoint
                               </Button>
                             </OverlayTrigger>
@@ -784,22 +787,24 @@ function Chart() {
                             </Dropdown.Menu>
                           </Dropdown>
                         </Center>
-                        <VStack
-                          bgColor={"gray.800"}
-                          style={{ marginTop: "25px" }}
-                          p="3"
-                          rounded={"xl"}
-                        >
-                          <Text textShadow={"dark-lg"} fontSize={"xl"}>
-                            Dataset Options
-                          </Text>
-                          <Divider />
-                          {/* {mainOptions[chart_type].map((option)=> {
-
-                            })} */}
-                        </VStack>
                       </VStack>
                     )}
+                    <Wrap
+                      justify="center"
+                      bgColor={"gray.800"}
+                      style={{ marginTop: "25px" }}
+                      p="3"
+                      rounded={"xl"}
+                      minW="90%"
+                    >
+                      <Text textShadow={"dark-lg"} fontSize={"xl"}>
+                        Dataset Options
+                      </Text>
+                      <Divider />
+                      {/* {datasetOptions[chart_type].map((option)=> {
+
+                            })} */}
+                    </Wrap>
                   </Wrap>
                 </Box>
               </Center>

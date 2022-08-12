@@ -1,12 +1,13 @@
 import { NumberInputArch } from "../components/NumberInputArch";
 
-const Bu = (
+const Bu = () => {
+  return (
     <>
       <NumberInputArch name={"x"} />
-                <NumberInputArch name={"y"} />
-                <NumberInputArch name={"r"} />
+      <NumberInputArch name={"y"} />
+      <NumberInputArch name={"r"} />
     </>
   );
+};
 
-  export default Bu;
-  
+export default Bu;
