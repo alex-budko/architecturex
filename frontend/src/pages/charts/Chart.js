@@ -51,10 +51,6 @@ function Chart() {
 
   const { chart_type } = useParams();
 
-  const linear = () => {
-    return chart_type === "line";
-  };
-
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.user.user);
@@ -496,6 +492,52 @@ function Chart() {
     setCurrentDataset(e.target.name);
   };
 
+  const datasetColorChange = (e, optionName) => {
+    let newChartData = [...chartData];
+    newChartData[currentDataset][optionName] = e;
+    setChartData(newChartData);
+  };
+
+  //main options
+  const mainOptions = {
+    line: [],
+    bar: [],
+    bubble: [],
+    pie: [],
+  };
+
+  //dataset options
+  const datasetOptions = {
+    line: [
+      {
+        type: "color",
+        name: "Point Background Color",
+        optionName: "pointBackgroundColor",
+      },
+    ],
+    bar: [
+      {
+        type: "color",
+        name: "Hover Background Color",
+        optionName: "hoverBackgroundColor",
+      },
+    ],
+    bubble: [
+      {
+        type: "color",
+        name: "Hover Background Color",
+        optionName: "hoverBackgroundColor",
+      },
+    ],
+    pie: [
+      {
+        type: "color",
+        name: "Hover Background Color",
+        optionName: "hoverBackgroundColor",
+      },
+    ],
+  };
+
   const RESPONSIVE_W = ["90vw", "80vw", "70vw", "660px", "600px"];
   const RESPONSIVE_H = ["400px", "480px", "550px", "580px", "560px"];
 
@@ -509,6 +551,7 @@ function Chart() {
             <WrapItem>
               <Center>
                 <Box
+                  overflow="auto"
                   boxShadow={"2xl"}
                   shadow="dark-lg"
                   bg="gray.900"
@@ -583,6 +626,7 @@ function Chart() {
             <WrapItem>
               <Center>
                 <Box
+                  overflow="auto"
                   boxShadow={"2xl"}
                   shadow="dark-lg"
                   bg="gray.900"
@@ -692,9 +736,9 @@ function Chart() {
                           </Text>
                           <Divider />
                           <Wrap justify="center">
-                            {/* {mainOptions[chart_type].map((option)=> {
-    
-                                })} */}
+                            {/* {mainOptions[chart_type].map((option, i) => {
+                              
+                            })} */}
                           </Wrap>
                         </VStack>
                       </Wrap>
@@ -787,24 +831,39 @@ function Chart() {
                             </Dropdown.Menu>
                           </Dropdown>
                         </Center>
+                        <Wrap
+                          justify="center"
+                          bgColor={"gray.800"}
+                          style={{ marginTop: "25px" }}
+                          p="3"
+                          rounded={"xl"}
+                          minW="100%"
+                        >
+                          <Text textShadow={"dark-lg"} fontSize={"xl"}>
+                            Dataset Options
+                          </Text>
+                          <Divider />
+                          {datasetOptions[chart_type].map((option) => {
+                            if (option["type"] === "color") {
+                              return (
+                                <VStack>
+                                  <Text>{option["name"]}</Text>
+                                  <HexColorPicker
+                                    style={{ width: "250px", height: "100px" }}
+                                    onChange={(e) => {
+                                      datasetColorChange(
+                                        e,
+                                        option["optionName"]
+                                      );
+                                    }}
+                                  />
+                                </VStack>
+                              );
+                            }
+                          })}
+                        </Wrap>
                       </VStack>
                     )}
-                    <Wrap
-                      justify="center"
-                      bgColor={"gray.800"}
-                      style={{ marginTop: "25px" }}
-                      p="3"
-                      rounded={"xl"}
-                      minW="90%"
-                    >
-                      <Text textShadow={"dark-lg"} fontSize={"xl"}>
-                        Dataset Options
-                      </Text>
-                      <Divider />
-                      {/* {datasetOptions[chart_type].map((option)=> {
-
-                            })} */}
-                    </Wrap>
                   </Wrap>
                 </Box>
               </Center>

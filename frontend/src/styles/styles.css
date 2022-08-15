@@ -10,7 +10,7 @@ input[type=number] {
 }
 
 body {
-  overflow: scroll;
+  overflow: auto;
 }
 
 ::-webkit-scrollbar {
