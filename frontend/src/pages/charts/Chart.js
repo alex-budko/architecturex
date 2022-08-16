@@ -465,17 +465,6 @@ function Chart() {
     setChartOptions(BCO[chart_type]);
   };
 
-  const changeColor = (e) => {
-    let newColors = [...colors];
-    newColors[currentDataset] = e;
-    setColors(newColors);
-
-    let newChartData = [...chartData];
-    newChartData[currentDataset].borderColor = colors[currentDataset];
-    newChartData[currentDataset].backgroundColor = colors[currentDataset];
-    setChartData(newChartData);
-  };
-
   const addDataset = () => {
     let newDatasetTitles = [...datasetTitles];
     newDatasetTitles.push("Dataset");
@@ -492,10 +481,12 @@ function Chart() {
     setCurrentDataset(e.target.name);
   };
 
-  const datasetColorChange = (e, optionName) => {
+  const datasetColorChange = (e, optionNames) => {
     let newChartData = [...chartData];
-    newChartData[currentDataset][optionName] = e;
-    setChartData(newChartData);
+    for (let optionName of optionNames) {
+      newChartData[currentDataset][optionName] = e;
+      setChartData(newChartData);
+    }
   };
 
   //main options
@@ -512,21 +503,31 @@ function Chart() {
       {
         type: "color",
         name: "Point Background Color",
-        optionName: "pointBackgroundColor",
+        optionName: ["pointBackgroundColor"],
+      },
+      {
+        type: "color",
+        name: "Line Color",
+        optionName: ["borderColor", "backgroundColor"],
       },
     ],
     bar: [
       {
         type: "color",
         name: "Hover Background Color",
-        optionName: "hoverBackgroundColor",
+        optionName: ["hoverBackgroundColor"],
+      },
+      {
+        type: "color",
+        name: "Background Color",
+        optionName: ["borderColor", "backgroundColor"],
       },
     ],
     bubble: [
       {
         type: "color",
         name: "Hover Background Color",
-        optionName: "hoverBackgroundColor",
+        optionName: ["hoverBackgroundColor"],
       },
     ],
     pie: [
@@ -744,93 +745,78 @@ function Chart() {
                       </Wrap>
                     ) : (
                       <VStack>
-                        <Form.Group className="mb-1">
-                          <Center>
-                            <FormLabel color={"orange.300"}>
-                              Dataset Title
-                            </FormLabel>
-                          </Center>
-
-                          <Form.Control
-                            onChange={(e) => changeTitle(e)}
-                            type="text"
-                            name="title"
-                            value={datasetTitles[currentDataset]}
-                          />
-                        </Form.Group>
-
-                        {chart_type !== "pie" && chart_type !== "bar" && (
+                        <HStack>
                           <Form.Group className="mb-1">
                             <Center>
                               <FormLabel color={"orange.300"}>
-                                {capitalize(chart_type)} Color
+                                Dataset Title
                               </FormLabel>
                             </Center>
-                            <Center>
-                              <HexColorPicker
-                                style={{ width: "250px", height: "100px" }}
-                                color={colors[currentDataset]}
-                                onChange={(e) => changeColor(e)}
-                              />
-                            </Center>
-                          </Form.Group>
-                        )}
 
-                        <Center>
-                          <Dropdown as={ButtonGroup}>
-                            <OverlayTrigger
-                              trigger="click"
-                              placement="top"
-                              overlay={pointForm}
-                            >
-                              <Button rounded="2" bgColor={"blue.600"}>
-                                Add Datapoint
-                              </Button>
-                            </OverlayTrigger>
-                            <Dropdown.Toggle
-                              split
-                              variant="primary"
-                              id="dropdown-split-basic"
+                            <Form.Control
+                              onChange={(e) => changeTitle(e)}
+                              type="text"
+                              name="title"
+                              value={datasetTitles[currentDataset]}
                             />
-                            <Dropdown.Menu
-                              style={{
-                                backgroundColor: "#F6AD55",
-                                padding: "3px",
-                              }}
-                            >
-                              {chartData[currentDataset].data.length !== 0 ? (
-                                chartData[currentDataset].data.map(
-                                  (dataPoint, i) => {
-                                    return (
-                                      <HStack
-                                        key={i}
-                                        rounded="md"
-                                        bgColor="orange.100"
-                                        mb="1"
-                                        boxShadow="md"
-                                        justify={"center"}
-                                      >
-                                        <Text>
-                                          ({dataPoint.x}, {dataPoint.y})
-                                        </Text>
-                                        <ImCross
-                                          onClick={() => deleteDataPoint(i)}
-                                          style={{
-                                            color: "red",
-                                            margin: "0 0 0 5",
-                                            cursor: "",
-                                          }}
-                                        />
-                                      </HStack>
-                                    );
-                                  }
-                                )
-                              ) : (
-                                <Card.Text align="center">No Data</Card.Text>
-                              )}
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </Center>
+                          </Form.Group>
+                          <Center>
+                            <Dropdown as={ButtonGroup} style={{marginTop: '30px'}}>
+                              <OverlayTrigger
+                                trigger="click"
+                                placement="top"
+                                overlay={pointForm}
+                              >
+                                <Button rounded="2" bgColor={"blue.600"}>
+                                  Add Datapoint
+                                </Button>
+                              </OverlayTrigger>
+                              <Dropdown.Toggle
+                                split
+                                variant="primary"
+                                id="dropdown-split-basic"
+                              />
+                              <Dropdown.Menu
+                                style={{
+                                  backgroundColor: "#F6AD55",
+                                  padding: "3px",
+                                }}
+                              >
+                                {chartData[currentDataset].data.length !== 0 ? (
+                                  chartData[currentDataset].data.map(
+                                    (dataPoint, i) => {
+                                      return (
+                                        <HStack
+                                          key={i}
+                                          rounded="md"
+                                          bgColor="orange.100"
+                                          mb="1"
+                                          boxShadow="md"
+                                          justify={"center"}
+                                        >
+                                          <Text>
+                                            ({dataPoint.x}, {dataPoint.y})
+                                          </Text>
+                                          <ImCross
+                                            onClick={() => deleteDataPoint(i)}
+                                            style={{
+                                              color: "red",
+                                              margin: "0 0 0 5",
+                                              cursor: "",
+                                            }}
+                                          />
+                                        </HStack>
+                                      );
+                                    }
+                                  )
+                                ) : (
+                                  <Card.Text align="center">No Data</Card.Text>
+                                )}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </Center>
+                        </HStack>
+
                         <Wrap
                           justify="center"
                           bgColor={"gray.800"}
