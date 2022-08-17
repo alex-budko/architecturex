@@ -18,6 +18,7 @@ import {
   Nav,
 } from "react-bootstrap";
 
+
 import { ImCross } from "react-icons/im";
 import { chart_create } from "../../auth-reducers/AuthReducers";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +46,11 @@ import Li from "./datapointFunc/Li";
 import Ba from "./datapointFunc/Ba";
 import Bu from "./datapointFunc/Bu";
 import Pi from "./datapointFunc/Pi";
+import { NumberInputArch } from "./components/NumberInputArch";
+
+// options
+import { datasetOptions } from "./options/datasetOptions";
+import { mainOptions } from "./options/datasetOptions";
 
 function Chart() {
   const dispatch = useDispatch();
@@ -62,8 +68,6 @@ function Chart() {
 
   //dataset data
   const [chartData, setChartData] = useState([]);
-
-  const [colors, setColors] = useState(["#aabbcc"]);
 
   const [pointColor, changePointColor] = useState("#aabbcc");
 
@@ -175,47 +179,17 @@ function Chart() {
 
   //basic chart data
   let BCD = {
-    line: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    },
-    bar: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: [],
-      tension: 0,
-    },
-    bubble: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgb(75, 192, 192)",
-      tension: 0,
-    },
-    pie: {
-      label: "Dataset",
-      data: [],
-      fill: false,
-      borderDash: [0, 0],
-      borderColor: "black",
-      backgroundColor: [],
-      tension: 0,
-    },
+    label: "Dataset",
+    data: [],
+    fill: false,
+    borderDash: [0, 0],
+    borderColor: [],
+    backgroundColor: [],
+    tension: 0,
   };
 
-  const BCD_copy = { ...BCD };
-
-  const BCO_copy = { ...BCO };
+  const BCD_ = { ...BCD };
+  const BCO_ = { ...BCO };
 
   //chart titles
   const mainTitles = {
@@ -295,14 +269,14 @@ function Chart() {
 
       setDatasetTitles(["Dataset"]);
 
-      BCD = { ...BCD_copy };
-      BCO = { ...BCO_copy };
+      BCD = { ...BCD_ };
+      BCO = { ...BCO_ };
 
       setChartLabels([]);
 
       setChartOptions(BCO[chart_type]);
 
-      setChartData([BCD[chart_type]]);
+      setChartData([BCD]);
 
       setStarted(true);
     }
@@ -317,7 +291,7 @@ function Chart() {
     }
   }, [started, chartTitle, datasetTitles, currentDataset]);
 
-  //change chart title in real-time
+  //change chart titles in real-time
   useEffect(() => {
     if (started) {
       setChartOptions(BCO[chart_type]);
@@ -471,72 +445,20 @@ function Chart() {
     setDatasetTitles(newDatasetTitles);
 
     let newChartData = [...chartData];
-    newChartData.push(BCD[chart_type]);
+    newChartData.push(BCD);
     setChartData(newChartData);
-
-    setColors([...colors, "rgb(75, 192, 192)"]);
   };
 
   const changeDatasetNum = (e) => {
     setCurrentDataset(e.target.name);
   };
 
-  const datasetColorChange = (e, optionNames) => {
+  const datasetChange = (e, optionNames) => {
     let newChartData = [...chartData];
     for (let optionName of optionNames) {
       newChartData[currentDataset][optionName] = e;
-      setChartData(newChartData);
     }
-  };
-
-  //main options
-  const mainOptions = {
-    line: [],
-    bar: [],
-    bubble: [],
-    pie: [],
-  };
-
-  //dataset options
-  const datasetOptions = {
-    line: [
-      {
-        type: "color",
-        name: "Point Background Color",
-        optionName: ["pointBackgroundColor"],
-      },
-      {
-        type: "color",
-        name: "Line Color",
-        optionName: ["borderColor", "backgroundColor"],
-      },
-    ],
-    bar: [
-      {
-        type: "color",
-        name: "Hover Background Color",
-        optionName: ["hoverBackgroundColor"],
-      },
-      {
-        type: "color",
-        name: "Background Color",
-        optionName: ["borderColor", "backgroundColor"],
-      },
-    ],
-    bubble: [
-      {
-        type: "color",
-        name: "Hover Background Color",
-        optionName: ["hoverBackgroundColor"],
-      },
-    ],
-    pie: [
-      {
-        type: "color",
-        name: "Hover Background Color",
-        optionName: "hoverBackgroundColor",
-      },
-    ],
+    setChartData(newChartData);
   };
 
   const RESPONSIVE_W = ["90vw", "80vw", "70vw", "660px", "600px"];
@@ -573,6 +495,7 @@ function Chart() {
                       <Box
                         rounded={"md"}
                         width={
+                          //pie chart is square, whereas other charts are rectangles
                           chart_type !== "pie"
                             ? ["100%", "100%", "90%", "660px", "600px"]
                             : ["90%", "95%", "90%", "350px", "400px"]
@@ -761,10 +684,13 @@ function Chart() {
                             />
                           </Form.Group>
                           <Center>
-                            <Dropdown as={ButtonGroup} style={{marginTop: '30px'}}>
+                            <Dropdown
+                              as={ButtonGroup}
+                              style={{ marginTop: "30px" }}
+                            >
                               <OverlayTrigger
                                 trigger="click"
-                                placement="top"
+                                placement="bottom"
                                 overlay={pointForm}
                               >
                                 <Button rounded="2" bgColor={"blue.600"}>
@@ -829,23 +755,29 @@ function Chart() {
                             Dataset Options
                           </Text>
                           <Divider />
-                          {datasetOptions[chart_type].map((option) => {
-                            if (option["type"] === "color") {
-                              return (
-                                <VStack>
-                                  <Text>{option["name"]}</Text>
+                          {datasetOptions[chart_type].map((option, k) => {
+                            return (
+                              <VStack key={k * 99 + 99}>
+                                <Text>{option["name"]}</Text>
+                                {option["type"] === "color" ? (
                                   <HexColorPicker
                                     style={{ width: "250px", height: "100px" }}
                                     onChange={(e) => {
-                                      datasetColorChange(
-                                        e,
-                                        option["optionName"]
-                                      );
+                                      datasetChange(e, option["optionName"]);
                                     }}
                                   />
-                                </VStack>
-                              );
-                            }
+                                ) : option["type"] === "number" ? (
+                                  <NumberInputArch
+                                    optionName={option["optionName"]}
+                                    onChange={
+                                      datasetChange
+                                    }
+                                  />
+                                ) : (
+                                  <Text>Invalid Type</Text>
+                                )}
+                              </VStack>
+                            );
                           })}
                         </Wrap>
                       </VStack>

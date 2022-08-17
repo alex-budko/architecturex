@@ -14,6 +14,7 @@ export const StringInputArch = ({name}) => {
         {capitalize(name)}:
       </FormLabel>
       <Input
+        _placeholder={{color:'blackAlpha.600'}}
         bgColor="gray.50"
         name={name}
         type="text"

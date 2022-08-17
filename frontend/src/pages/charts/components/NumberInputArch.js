@@ -10,19 +10,37 @@ import {
 } from "@chakra-ui/react";
 import { capitalize } from "../../../utils/capitalize";
 
-export const NumberInputArch = ({name}) => {
+export const NumberInputArch = ({
+  name = null,
+  onChange = null,
+  optionName = null,
+}) => {
   return (
     <HStack>
-      <FormLabel
-        color="orange.900"
-        className="me-2"
-        style={{ display: "inline" }}
+      {name && (
+        <FormLabel
+          color="orange.900"
+          className="me-2"
+          style={{ display: "inline" }}
+        >
+          {capitalize(name)}:
+        </FormLabel>
+      )}
+      <NumberInput
+        bgColor="gray.50"
+        rounded={"3xl"}
+        onChange={onChange ? (e) => onChange(+e, optionName) : null}
       >
-        {capitalize(name)}:
-      </FormLabel>
-      <NumberInput bgColor="gray.50">
-        <NumberInputField name={name} type="number" placeholder="0" required />
-        <NumberInputStepper>
+        <NumberInputField
+          name={name}
+          _placeholder={{color:'blackAlpha.600'}}
+          placeholder='1'
+          type="number"
+          color="black"
+          defaultValue={1}
+          required
+        />
+        <NumberInputStepper bgColor="blue.600" rounded="3xl">
           <NumberIncrementStepper />
           <NumberDecrementStepper />
         </NumberInputStepper>
