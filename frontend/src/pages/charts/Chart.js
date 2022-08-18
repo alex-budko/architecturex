@@ -61,7 +61,7 @@ function Chart() {
 
   const [started, setStarted] = useState(false);
   const [currentDataset, setCurrentDataset] = useState(0);
-  const [main, setMain] = useState(false);
+  const [main, setMain] = useState(true);
   const [chartLabels, setChartLabels] = useState([]);
 
   //dataset data
@@ -276,6 +276,8 @@ function Chart() {
       setChartLabels([]);
 
       setChartStyle({})
+      
+      setMain(true)
 
       setChartOptions(BCO[chartType]);
 
@@ -574,7 +576,7 @@ function Chart() {
                   </Center>
                   <Divider color="orange.300" orientation="horizontal" mb={2} />
 
-                  <Nav variant="tabs" defaultActiveKey="main" className="mb-2">
+                  <Nav variant="tabs" defaultActiveKey={99} className="mb-2">
                     <Nav.Link
                       className="me-1"
                       style={{
@@ -584,7 +586,7 @@ function Chart() {
                         fontWeight: "bold",
                       }}
                       onClick={() => setMain(true)}
-                      eventKey="main"
+                      eventKey={99}
                     >
                       Main
                     </Nav.Link>

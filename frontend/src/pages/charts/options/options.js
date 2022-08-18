@@ -58,7 +58,7 @@ export const datasetOptions = {
     },
     {
       type: "color",
-      name: " Color",
+      name: "Border Color",
       optionName: ["borderColor"],
     },
     {
