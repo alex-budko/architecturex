@@ -281,7 +281,7 @@ export async function profile_update(name, email, description) {
   } catch (err) {}
 }
 
-export async function chart_create(dispatch, chartType, options, data, user) {
+export async function chart_create(dispatch, chartType, options, style, data, user) {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -290,6 +290,7 @@ export async function chart_create(dispatch, chartType, options, data, user) {
   const body = JSON.stringify({
     chartType,
     options,
+    style,
     data,
     user,
   });

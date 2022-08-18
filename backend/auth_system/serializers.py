@@ -32,4 +32,4 @@ class ChartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chart
-        fields = ('id', 'user', 'chartType', 'options', 'data')
+        fields = ('id', 'user', 'chartType', 'style', 'options', 'data')

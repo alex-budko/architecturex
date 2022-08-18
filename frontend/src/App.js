@@ -55,7 +55,7 @@ function App() {
           path="password/reset/confirm/:uid/:token"
           element={<PasswordResetConfirm />}
         />
-        <Route path='chart/:chart_type' element={<Chart />}  />
+        <Route path='chart/:chartType' element={<Chart />}  />
         <Route path="profile/:name" element={<Profile />} />
         <Route path="charts/:name" element={<Charts />} />
       </Routes>

@@ -127,10 +127,14 @@ class Chart(models.Model):
     def default_data():
         return {"data": "none"}
 
+    def default_style():
+        return {}
+
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     chartType = models.CharField(max_length=60, choices=CHART_TYPES, default=LINE)
     options = models.JSONField(default=default_options)
     data = models.JSONField(default=default_data)
+    style = models.JSONField(default=default_style)
 
     def __str__(self):
         return self.user.email

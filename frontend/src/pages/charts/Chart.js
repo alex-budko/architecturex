@@ -1,5 +1,5 @@
 //chart.js imports
-import { Bar, Bubble, Line, Pie } from "react-chartjs-2";
+import { Chart as ChartJS } from "react-chartjs-2";
 import "chart.js/auto";
 
 import { useEffect, useState } from "react";
@@ -17,7 +17,6 @@ import {
   Popover,
   Nav,
 } from "react-bootstrap";
-
 
 import { ImCross } from "react-icons/im";
 import { chart_create } from "../../auth-reducers/AuthReducers";
@@ -49,13 +48,12 @@ import Pi from "./datapointFunc/Pi";
 import { NumberInputArch } from "./components/NumberInputArch";
 
 // options
-import { datasetOptions } from "./options/datasetOptions";
-import { mainOptions } from "./options/datasetOptions";
+import { datasetOptions, mainOptions } from "./options/options";
 
 function Chart() {
   const dispatch = useDispatch();
 
-  const { chart_type } = useParams();
+  const { chartType } = useParams();
 
   const navigate = useNavigate();
 
@@ -74,11 +72,14 @@ function Chart() {
   //chart options
   const [chartOptions, setChartOptions] = useState([]);
 
+  //chart style
+  const [chartStyle, setChartStyle] = useState({});
+
   //chart titles
   const [datasetTitles, setDatasetTitles] = useState(["Dataset"]);
 
   const [chartTitle, setChartTitle] = useState(
-    `My ${capitalize(chart_type)} Chart`
+    `My ${capitalize(chartType)} Chart`
   );
 
   const basicAxisTitles = {
@@ -257,13 +258,13 @@ function Chart() {
     if (started) {
       setStarted(false);
     }
-  }, [chart_type]);
+  }, [chartType]);
 
   useEffect(() => {
     if (!started) {
       setCurrentDataset(0);
 
-      setChartTitle(`My ${capitalize(chart_type)} Chart`);
+      setChartTitle(`My ${capitalize(chartType)} Chart`);
 
       setAxisTitles(basicAxisTitles);
 
@@ -274,7 +275,9 @@ function Chart() {
 
       setChartLabels([]);
 
-      setChartOptions(BCO[chart_type]);
+      setChartStyle({})
+
+      setChartOptions(BCO[chartType]);
 
       setChartData([BCD]);
 
@@ -294,7 +297,7 @@ function Chart() {
   //change chart titles in real-time
   useEffect(() => {
     if (started) {
-      setChartOptions(BCO[chart_type]);
+      setChartOptions(BCO[chartType]);
     }
   }, [chartTitle, axisTitles.x, axisTitles.y, started]);
 
@@ -306,11 +309,11 @@ function Chart() {
         </Heading>
       </Center>
       <Popover.Body>
-        <Form onSubmit={(e) => ADD_FUNCTIONS[chart_type](e)}>
+        <Form onSubmit={(e) => ADD_FUNCTIONS[chartType](e)}>
           <Wrap spacingY={"3"}>
-            {chart_type === "line" ? (
+            {chartType === "line" ? (
               <Li />
-            ) : chart_type === "bar" ? (
+            ) : chartType === "bar" ? (
               <>
                 <Ba />
                 <HexColorPicker
@@ -319,7 +322,7 @@ function Chart() {
                   style={{ width: "250px", height: "100px" }}
                 />
               </>
-            ) : chart_type === "bubble" ? (
+            ) : chartType === "bubble" ? (
               <>
                 <Bu />
               </>
@@ -436,7 +439,7 @@ function Chart() {
         setAxisTitles(newAxisTitles);
       }
     }
-    setChartOptions(BCO[chart_type]);
+    setChartOptions(BCO[chartType]);
   };
 
   const addDataset = () => {
@@ -459,6 +462,14 @@ function Chart() {
       newChartData[currentDataset][optionName] = e;
     }
     setChartData(newChartData);
+  };
+
+  const mainChange = (e, optionNames) => {
+    let newChartStyle = {...chartStyle}
+    for (let optionName of optionNames) {
+      newChartStyle[optionName] = e;
+    }
+    setChartStyle(newChartStyle);
   };
 
   const RESPONSIVE_W = ["90vw", "80vw", "70vw", "660px", "600px"];
@@ -485,7 +496,7 @@ function Chart() {
                 >
                   <Center>
                     <Heading mb={3} color={"orange.400"}>
-                      {capitalize(chart_type)} Chart
+                      {capitalize(chartType)} Chart
                     </Heading>
                   </Center>
                   <Divider color="orange.300" orientation="horizontal" />
@@ -496,24 +507,20 @@ function Chart() {
                         rounded={"md"}
                         width={
                           //pie chart is square, whereas other charts are rectangles
-                          chart_type !== "pie"
+                          chartType !== "pie"
                             ? ["100%", "100%", "90%", "660px", "600px"]
                             : ["90%", "95%", "90%", "350px", "400px"]
                         }
                         bgColor="gray.100"
                         mt={2}
                         mb={2}
-                        p={2}
                       >
-                        {chart_type === "line" ? (
-                          <Line options={chartOptions} data={data} />
-                        ) : chart_type === "bar" ? (
-                          <Bar options={chartOptions} data={data} />
-                        ) : chart_type === "bubble" ? (
-                          <Bubble options={chartOptions} data={data} />
-                        ) : (
-                          <Pie options={chartOptions} data={data} />
-                        )}
+                        <ChartJS
+                          style={chartStyle}
+                          options={chartOptions}
+                          data={data}
+                          type={chartType}
+                        />
                       </Box>
                     </Center>
 
@@ -525,8 +532,9 @@ function Chart() {
                           onClick={() => {
                             chart_create(
                               dispatch,
-                              chart_type,
+                              chartType,
                               chartOptions,
+                              chartStyle,
                               data,
                               user.name
                             );
@@ -566,7 +574,7 @@ function Chart() {
                   </Center>
                   <Divider color="orange.300" orientation="horizontal" mb={2} />
 
-                  <Nav variant="tabs" defaultActiveKey="0" className="mb-2">
+                  <Nav variant="tabs" defaultActiveKey="main" className="mb-2">
                     <Nav.Link
                       className="me-1"
                       style={{
@@ -628,7 +636,7 @@ function Chart() {
                   <Wrap justify={"center"}>
                     {main ? (
                       <Wrap justify={"center"}>
-                        {mainTitles[chart_type].map((groupItem) => {
+                        {mainTitles[chartType].map((groupItem) => {
                           return (
                             <Wrap justify={"center"} spacing="3">
                               <Form.Group className="mb-3">
@@ -659,10 +667,32 @@ function Chart() {
                             Main Options
                           </Text>
                           <Divider />
-                          <Wrap justify="center">
-                            {/* {mainOptions[chart_type].map((option, i) => {
-                              
-                            })} */}
+                          <Wrap justify="center" spacing={"5"}>
+                            {mainOptions.map((option, k) => {
+                              return (
+                                <VStack key={k * 99 + 99}>
+                                  <Text>{option["name"]}</Text>
+                                  {option["type"] === "color" ? (
+                                    <HexColorPicker
+                                      style={{
+                                        width: "250px",
+                                        height: "100px",
+                                      }}
+                                      onChange={(e) => {
+                                        mainChange(e, option["optionName"]);
+                                      }}
+                                    />
+                                  ) : option["type"] === "number" ? (
+                                    <NumberInputArch
+                                      optionName={option["optionName"]}
+                                      onChange={mainChange}
+                                    />
+                                  ) : (
+                                    <Text>Invalid Type</Text>
+                                  )}
+                                </VStack>
+                              );
+                            })}
                           </Wrap>
                         </VStack>
                       </Wrap>
@@ -750,12 +780,13 @@ function Chart() {
                           p="3"
                           rounded={"xl"}
                           minW="100%"
+                          spacing={"5"}
                         >
                           <Text textShadow={"dark-lg"} fontSize={"xl"}>
                             Dataset Options
                           </Text>
                           <Divider />
-                          {datasetOptions[chart_type].map((option, k) => {
+                          {datasetOptions[chartType].map((option, k) => {
                             return (
                               <VStack key={k * 99 + 99}>
                                 <Text>{option["name"]}</Text>
@@ -769,9 +800,7 @@ function Chart() {
                                 ) : option["type"] === "number" ? (
                                   <NumberInputArch
                                     optionName={option["optionName"]}
-                                    onChange={
-                                      datasetChange
-                                    }
+                                    onChange={datasetChange}
                                   />
                                 ) : (
                                   <Text>Invalid Type</Text>

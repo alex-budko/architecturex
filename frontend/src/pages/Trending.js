@@ -9,7 +9,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { Bar, Bubble, Line, Pie } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import { all_charts_view } from "../auth-reducers/AuthReducers";
 import { Link } from "react-router-dom";
 
@@ -64,31 +64,13 @@ function Trending() {
                         }
                         bgColor="gray.50"
                       >
-                        {chart.chartType === "line" ? (
-                          <Line
-                            options={chart.options}
-                            data={chart.data}
-                            key={chart.id}
-                          />
-                        ) : chart.chartType === "bar" ? (
-                          <Bar
-                            options={chart.options}
-                            data={chart.data}
-                            key={chart.id}
-                          />
-                        ) : chart.chartType === "bubble" ? (
-                          <Bubble
-                            options={chart.options}
-                            data={chart.data}
-                            key={chart.id}
-                          />
-                        ) : (
-                          <Pie
-                            options={chart.options}
-                            data={chart.data}
-                            key={chart.id}
-                          />
-                        )}
+                        <Chart
+                          type={chart.chartType}
+                          options={chart.options}
+                          style={chart.style}
+                          data={chart.data}
+                          key={chart.id}
+                        />
                       </Box>
                     </VStack>
                   </WrapItem>

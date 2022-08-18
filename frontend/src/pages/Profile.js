@@ -22,14 +22,14 @@ import {
   profile_view,
 } from "../auth-reducers/AuthReducers";
 import { useParams } from "react-router-dom";
-import { Line, Bar, Bubble, Pie } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
 
 function Profile() {
   const dispatch = useDispatch();
 
   const [data, setData] = useState({
-    user: "UNDEFINED",
+    user: "",
     description: "",
     email: "",
     avatar: null,
@@ -183,35 +183,21 @@ function Profile() {
                           <Box
                             p="1"
                             rounded={"2xl"}
-                            width={chart.chartType !== 'pie' ? ["100%", "100%", "90%", "480px"] : ["50%", "60%", "70%", "350px"]}
+                            width={
+                              chart.chartType !== "pie"
+                                ? ["100%", "100%", "90%", "480px"]
+                                : ["50%", "60%", "70%", "350px"]
+                            }
                             bgColor={"gray.50"}
                             mt="3"
                           >
-                            {chart.chartType === "line" ? (
-                              <Line
-                                options={chart.options}
-                                data={chart.data}
-                                key={chart.id}
-                              />
-                            ) : chart.chartType === "bar" ? (
-                              <Bar
-                                options={chart.options}
-                                data={chart.data}
-                                key={chart.id}
-                              />
-                            ) : chart.chartType === "bubble" ? (
-                              <Bubble
-                                options={chart.options}
-                                data={chart.data}
-                                key={chart.id}
-                              />
-                            ) : (
-                              <Pie
-                                options={chart.options}
-                                data={chart.data}
-                                key={chart.id}
-                              />
-                            )}
+                            <Chart
+                              type={chart.chartType}
+                              options={chart.options}
+                              data={chart.data}
+                              style={chart.style}
+                              key={chart.id}
+                            />
                           </Box>
                         </Center>
                       )
