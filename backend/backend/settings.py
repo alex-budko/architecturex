@@ -6,15 +6,17 @@ environ.Env.read_env()
 import os
 from pathlib import Path
 from datetime import timedelta
+import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY", '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -24,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'corsheaders',
+    'django_heroku',
     'djoser',
     'auth_system',
     'rest_framework',
@@ -72,12 +75,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+ALLOWED_HOSTS = ['*']
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD =  env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", '')
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", '')
 EMAIL_USE_TLS = True
 
 
@@ -86,12 +90,15 @@ EMAIL_USE_TLS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASS'),
+        'NAME': os.environ.get("DATABASE_NAME", ''),
+        'USER': os.environ.get("DATABASE_USER", ''),
+        'PASSWORD': os.environ.get("DATABASE_PASS", ''),
         'HOST': 'localhost'
     }
 }
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -121,6 +128,8 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+django_heroku.settings(locals())
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
