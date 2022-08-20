@@ -97,7 +97,7 @@ const stats = [
     ),
   },
   {
-    title: "Bar/Line",
+    title: "Bar/Line/Bubble/Pie",
     content: (
       <>
         <StatsText>Charts</StatsText> can be easily and creatively designed
@@ -106,7 +106,7 @@ const stats = [
     ),
   },
   {
-    title: "10+",
+    title: "15+",
     content: (
       <>
         <StatsText>Features</StatsText> are present in the Architecturex

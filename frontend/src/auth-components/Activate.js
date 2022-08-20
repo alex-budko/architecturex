@@ -19,15 +19,15 @@ function Activate() {
       <VStack
         rounded={"3xl"}
         shadow="dark-lg"
-        minH={'180px'}
+        minH={'280px'}
         maxW={"600px"}
         mt="30vh"
         p="10"
-        minW="300px"
+        minW="400px"
         bgColor={"gray.900"}
       >
         <Center>
-          <Heading>Welcome!</Heading>
+          <Heading>Welcome To Our Website!</Heading>
         </Center>
         <Button
           position={'absolute'}
@@ -35,6 +35,7 @@ function Activate() {
           onClick={() => {
             verify(dispatch, uid, token).then(() => {
               setVerified(true)
+              navigate('/login')
             });
           }}
           size="md"
