@@ -17,7 +17,7 @@ function EmailSent({ setShow, message, confirmEmail }) {
   return (
     <Center>
       <VStack
-        bgColor={"blue.800"}
+        bgColor={"blue.900"}
         minH="250px"
         minW={"300px"}
         zIndex={5}
@@ -25,27 +25,30 @@ function EmailSent({ setShow, message, confirmEmail }) {
         shadow={"dark-lg"}
         p="10"
         position="absolute"
-        top={"50%"}
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
       >
         <HStack>
           <Heading>{message} Successful! </Heading>
-          <FiThumbsUp style={{width: 50, height: 50}} />
+          <FiThumbsUp style={{ width: 50, height: 50 }} />
         </HStack>
         {confirmEmail && (
           <>
             <Divider />
-            <Text>
-              {" "}
-              A confirmation email has been sent to your address, you may now
-              close this window.
-            </Text>
+            <Center>
+              <Text>
+                A confirmation email has been sent to your address, you may now
+                close this window.
+              </Text>
+            </Center>
           </>
         )}
         <Button
           position={"absolute"}
           bottom="10"
           size="lg"
-          bgColor="blue.900"
+          bgColor="blue.600"
           onClick={() => handleClose()}
         >
           Close

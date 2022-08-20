@@ -75,11 +75,12 @@ export async function verify(dispatch, uid, token) {
     } catch (err) {
       dispatch(activation_fail());
     }
-
     dispatch(activation_success());
+
   } catch (err) {
-    dispatch(activation_fail());
+    console.log(err)
   }
+  return true
 }
 
 export async function log_user(dispatch, email, password) {
