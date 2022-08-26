@@ -40,8 +40,8 @@ function Charts() {
                     width={
                       chart.chartType !== "pie"
                         ? ["300px", "450px", "500px", "580px"]
-                        : ["50%", "60%", "70%", "400px", "500px"]
-                    }
+                        : ["150px", "200px", "300px", "400px", "500px"]
+                      }
                     bgColor="gray.50"
                     shadow={"dark-lg"}
                     rounded="lg"

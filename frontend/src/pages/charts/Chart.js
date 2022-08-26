@@ -540,7 +540,9 @@ function Chart() {
                               data,
                               user.name
                             );
-                            navigate(`/charts/${user.name}`);
+                            setTimeout(()=> {
+                              navigate(`/charts/${user.name}`);
+                            }, 300)
                           }}
                         >
                           Save
