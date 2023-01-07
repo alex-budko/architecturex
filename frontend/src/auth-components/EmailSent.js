@@ -12,7 +12,6 @@ import {
 import { FiThumbsUp } from "react-icons/fi";
 
 function EmailSent({ setShow, message, confirmEmail }) {
-  // handles the closing of the notificaiton
   const handleClose = () => setShow(false);
 
   return (

@@ -106,7 +106,7 @@ const stats = [
     ),
   },
   {
-    title: "15+",
+    title: "20+",
     content: (
       <>
         <StatsText>Features</StatsText> are present in the Architecturex
